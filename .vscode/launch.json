@@ -9,6 +9,12 @@
             "request": "launch",
             "name": "Launch quiz.html",
             "file": "${workspaceFolder}/quiz/quiz.html"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch index.html",
+            "file": "${workspaceFolder}/index.html"
         }
     ]
 }
