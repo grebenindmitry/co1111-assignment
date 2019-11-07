@@ -8,8 +8,20 @@ async function getHuntList() {
                 //Create and append hunt name
                 let nameElement = document.createElement("li");
                 huntList.appendChild(nameElement);
-                nameElement.innerHTML = ("<a href='https://codecyprus.org/th/api/start?player=Homer&app=simpsons-app&treasure-hunt-id=" + 
-                treasureHunt.uuid + "' alt='Treasure hunt " + treasureHunt.name + "'>" + treasureHunt.name + "</a>")
+                nameElement.innerHTML = ("<a onclick='startSession(\"" + treasureHunt.uuid + "\")' href='https://codecyprus.org/th/api/start?player=Homer&app=simpsons-app&treasure-hunt-id=" +
+                treasureHunt.uuid + "' alt='Treasure hunt " + treasureHunt.name + "'>" + treasureHunt.name + "</a>");
+
+                //enter username if the user click to this link
+
+              function getUsername(){
+
+                var username = prompt("enter username");
+                if (username != null){
+                    document.getElementById("huntList").innerHTML = username;
+                }
+              }
+
+
 
                 //Create and append sublist for hunt info
                 let subList = document.createElement("ul");
