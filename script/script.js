@@ -2,7 +2,7 @@ let sessionID;
 let numOfQuestions;
 
 async function getHuntList() {
-    fetch("https://codecyprus.org/th/api/list")
+    fetch("https://codecyprus.org/th/test-api/list")
         .then(response => response.json())
         .then(responseJSON => {
             for (let treasureHunt of responseJSON.treasureHunts) {
@@ -33,7 +33,7 @@ function timestampFromEpoch(epochTime) {
 }
 
 async function startSession(uuid) {
-    fetch("https://codecyprus.org/th/api/start?player=" + "boi2" + "&app=dac-app&treasure-hunt-id=" + uuid)
+    fetch("https://codecyprus.org/th/test-api/start?player=" + "boi2" + "&app=dac-app&treasure-hunt-id=" + uuid)
         .then(response => response.json()).then(responseJSON => {
             if (responseJSON.status !== "ERROR") {
                 sessionID = responseJSON.session;
