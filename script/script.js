@@ -29,5 +29,13 @@ function timestampFromEpoch(epochTime) {
         .toLocaleString("en-US", {minimumIntegerDigits: 2, useGrouping:false}) + ":" + 
         dateObj.getSeconds().toLocaleString("en-US", {minimumIntegerDigits: 2, useGrouping:false}));
 }
-
+function enterUsername() {
+    let username = prompt("Enter Username : ");
+    if (username == null || "/n") {
+        //document.getElementById("challenges").innerHTML =
+        alert("Please enter a username to continue");
+        username = prompt("Enter Username : ");
+        //"Please enter a username to continue!";
+    }
+}
 getHuntList();
