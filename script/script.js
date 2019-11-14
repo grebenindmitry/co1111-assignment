@@ -78,7 +78,7 @@ function enterUsername(uuid, targetID) {
                             "<span id='errorBox' class='disable' style='padding:2px; margin-left: 10px'></span>";
     target.appendChild(usernameInput);
     document.getElementById('usernameBox').addEventListener("keyup", function(event) {
-        if (event.keyCode == 13) {
+        if (event.key === 13) {
             document.getElementById('submitButton').click();
         }
         });
