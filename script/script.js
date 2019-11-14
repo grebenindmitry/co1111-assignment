@@ -96,7 +96,8 @@ function prepareQuiz() {
                 }
                 alert(errorMessageList);
             } else {
-                document.getElementsByTagName('body')[0].innerHTML = "WIP";
+                //Wipe the screen
+                document.getElementsByTagName('body')[0].innerHTML = "<input type='number'></input>";
             }
         });
 }
