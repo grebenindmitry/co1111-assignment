@@ -1,0 +1,21 @@
+.done {
+    display: inline;
+    background-color: green;
+    color: white;
+}
+
+.loading {
+    display: inline;
+    background-color: orange;
+    color: white;
+}
+
+.error {
+    display: inline;
+    background-color: darkred;
+    color: white;
+}
+
+.disable {
+    display: none;
+}
