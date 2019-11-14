@@ -1,15 +1,19 @@
+const API = "https://codecyprus.org/th/api"
+
 async function getHuntList() {
-    fetch("https://codecyprus.org/th/api/list")
+    fetch(API + "/list")
         .then(response => response.json())
         .then(responseJSON => {
+            let i = 0;
             for (let treasureHunt of responseJSON.treasureHunts) {
                 let huntList = document.getElementById("huntList");
 
                 //Create and append hunt name
                 let nameElement = document.createElement("li");
+                nameElement.id = "thName" + i;
                 huntList.appendChild(nameElement);
-                nameElement.innerHTML = ("<a href='https://codecyprus.org/th/api/start?player=Homer&app=simpsons-app&treasure-hunt-id=" + 
-                treasureHunt.uuid + "' alt='Treasure hunt " + treasureHunt.name + "'>" + treasureHunt.name + "</a>")
+                nameElement.innerHTML = ("<a style='font-weight: bold;' href='javascript:enterUsername(\"" + 
+                    treasureHunt.uuid + "\", \"" + nameElement.id + "\")'>" + treasureHunt.name + "</a>");
 
                 //Create and append sublist for hunt info
                 let subList = document.createElement("ul");
@@ -18,6 +22,7 @@ async function getHuntList() {
                 //Append hunt info
                 subList.innerHTML += ("<li><b>Description: </b>" + treasureHunt.description + "</li>");
                 subList.innerHTML += ("<li><b>Starts On: </b>" + timestampFromEpoch(treasureHunt.startsOn) + "</li>");
+                i++;
             }
         });
 }
@@ -29,13 +34,50 @@ function timestampFromEpoch(epochTime) {
         .toLocaleString("en-US", {minimumIntegerDigits: 2, useGrouping:false}) + ":" + 
         dateObj.getSeconds().toLocaleString("en-US", {minimumIntegerDigits: 2, useGrouping:false}));
 }
-function enterUsername() {
-    let username = prompt("Enter Username : ");
-    if (username == null || "/n") {
-        //document.getElementById("challenges").innerHTML =
-        alert("Please enter a username to continue");
-        username = prompt("Enter Username : ");
-        //"Please enter a username to continue!";
-    }
+
+function startSession(uuid) {
+    let username = document.getElementById('usernameBox').value;
+    fetch(API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid)
+        .then(response => response.json())
+        .then(jsonResponse => {
+            console.log(jsonResponse);
+            if (jsonResponse.status === "ERROR") {
+                document.getElementById('errorBox').style.display = "inline";
+                document.getElementById('errorBox').innerText = "";
+                for (let errorMessage of jsonResponse.errorMessages) {
+                    document.getElementById('errorBox').innerText += errorMessage;
+                }
+            } else {
+                prepareQuiz(jsonResponse.session);
+            }
+        });
 }
+
+function enterUsername(uuid, targetID) {
+    let username = "";
+    
+    let target = document.getElementById(targetID);
+    if (document.getElementById('inputBox') !== null) {
+        document.getElementById('inputBox').remove();
+    }
+    usernameInput = document.createElement("div");
+        usernameInput.id = "inputBox";
+        usernameInput.style.display = "inline-block";
+        usernameInput.style.marginLeft = "10px";
+        usernameInput.innerHTML = "<span>Username: </span>" +
+                                "<input id='usernameBox' type='text'></input>" + 
+                                "<button id='submitButton' onclick='startSession(\""+ uuid + "\")'>OK</button>" +
+                                "<span id='errorBox' style='padding:2px; margin-left: 10px;background-color: red; color: white; display:none'></span>";
+        target.appendChild(usernameInput);
+        document.getElementById('usernameBox').addEventListener("keyup", function(event) {
+            if (event.keyCode == 13) {
+                document.getElementById('submitButton').click();
+            }
+        });
+}
+
+function prepareQuiz(sessionID) {
+    console.log(sessionID);
+}
+
 getHuntList();
