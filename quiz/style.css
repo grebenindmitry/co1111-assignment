@@ -1,0 +1,84 @@
+#intro{
+    border:2px solid olivedrab;
+    text-align:center;
+    background-color: #333;
+    color: white;
+    text-shadow: 2px 2px black;
+
+    text-shadow: darkgrey;
+}
+.stuff{
+    padding-right: 170px;
+}
+#goQuiz{
+    border: 2px solid forestgreen;
+}
+#gitRep{
+    border: 2px solid forestgreen;
+    border-left: 1px;
+}
+#contact{
+    border: 2px solid forestgreen;
+    border-left: 1px;
+
+    padding-right: 31px;
+}
+.members{
+    border: 2px solid forestgreen;
+
+    border-top-width: 10px;
+}
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+
+    text-decoration: none;
+    display: block;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+
+}
+.dropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border:1px solid  #333
+}
+.dropdown-content {
+    color:whitesmoke;
+    display: none;
+    position: absolute;
+    right: 0;
+
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    background-color: #333
+}
+
+.dropdown-content a:hover {background-color: #585858;}
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+
+.topnav {
+    overflow: hidden;
+    background-color: #333;
+    margin-right: 170px;
+}
+
+.topnav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+
+}
