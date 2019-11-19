@@ -1,6 +1,7 @@
 const API = "https://codecyprus.org/th/api"
 let sessionID = "";
 
+
 async function getHuntList() {
     fetch(API + "/list")
         .then(response => response.json())
@@ -24,6 +25,7 @@ async function getHuntList() {
                 subList.innerHTML += ("<li><b>Description: </b>" + treasureHunt.description + "</li>");
                 subList.innerHTML += ("<li><b>Starts On: </b>" + timestampFromEpoch(treasureHunt.startsOn) + "</li>");
                 i++;
+
             }
         });
 }
@@ -100,15 +102,24 @@ function getQuestion() {
                 let body = document.getElementsByTagName('body')[0];
                 body.innerHTML = "";
 
+                let position= jsonResponse.currentQuestionIndex;
+                console.log(position);
+
+
                 if(jsonResponse.canBeSkipped === true)
                 {
-                    console.log("inside skip fun");
-                    let skipBox = document.createElement("button");
+                    console.log("inside-skip fun");
+
+                    let skipBox = document.createElement("BUTTON");
                     skipBox.id = "skipBox";
+                    skipBox.innerText="SKIP >>";
                     document.body.appendChild(skipBox);
                     document.getElementById("skipBox").value="SKIP";
                     document.getElementById("skipBox").name="SKIP";
-                    skipBox.onclick = skipQuestion();
+
+
+                    skipBox.addEventListener('click', function(event) {skipQuestion();});
+                    // skipBox.onclick = skipQuestion();
 
                 }
                 else{
@@ -288,10 +299,13 @@ function sendAnswer(answer) {
         });
 }
 
+
 function skipQuestion(sessionID) {
-    fetch(API + "skip?session="+sessionID)
+    fetch("https://codecyprus.org/th/api/skip?session=ag9nfmNvZGVjeXBydXNvcmdyFAsSB1Nlc3Npb24YgICAoMa0gQoM"+sessionID)
         .then(response => response.json())
         .then(responseJSON => {
+
+            // let result = API.search("something").skip(5).take(10).collect();
             console.log(responseJSON + "here");
         })
 }
