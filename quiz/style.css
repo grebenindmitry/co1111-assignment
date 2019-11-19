@@ -1,3 +1,7 @@
+body{
+
+}
+
 #intro{
     border:2px solid olivedrab;
     text-align:center;
@@ -12,13 +16,18 @@
 }
 #goQuiz{
     border: 2px solid forestgreen;
+    margin-right: auto;
+
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
 }
 #gitRep{
-    border: 2px solid forestgreen;
+    /*border: 2px solid forestgreen;*/
     border-left: 1px;
 }
 #contact{
-    border: 2px solid forestgreen;
+    /*border: 2px solid forestgreen;*/
     border-left: 1px;
 
     padding-right: 31px;
@@ -81,4 +90,18 @@
     text-decoration: none;
     font-size: 17px;
 
+}
+
+#skipBox{
+
+    background-color: #4CAF50;
+    border: none;
+
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+   display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
 }
