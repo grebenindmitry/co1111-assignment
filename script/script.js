@@ -17,7 +17,7 @@ async function getHuntList() {
                     treasureHunt.uuid + "\", \"" + nameElement.id + "\")'>" + treasureHunt.name + "</a>");
 
                 //Create and append sublist for hunt info
-                let subList = document.createElement("ul");
+                let subList  = document.createElement("ul");
                 huntList.appendChild(subList);
 
                 //Append hunt info
@@ -85,6 +85,8 @@ function enterUsername(uuid, targetID) {
         });
 }
 
+
+
 function prepareQuiz() {
     console.log(sessionID);
     fetch(API + "/question?session=" + sessionID)
@@ -101,6 +103,23 @@ function prepareQuiz() {
                 let body = document.getElementsByTagName('body')[0];
                 //Wipe the screen
                 body.innerHTML = "";
+
+                if(jsonResponse.canBeSkipped === true)
+                {
+                    console.log("inside skip fun");
+                    let skipBox = document.createElement("button");
+                    skipBox.id = "skipBox";
+                    document.body.appendChild(skipBox);
+                    document.getElementById("skipBox").value="SKIP";
+                    document.getElementById("skipBox").name="SKIP";
+                    skipBox.onclick = skipQuestion();
+
+                }
+                else{
+                  let errorSkip = document.createElement("P");
+                    errorSkip.innerText = "This question can no be skipped.";
+                    document.body.appendChild(errorSkip);
+                }
 
                 let questionName = document.createElement('h1');
                 questionName.innerHTML = jsonResponse.questionText;
@@ -202,5 +221,21 @@ function sendAnswer(answer) {
             console.log(responseJSON.correct);
         });
 }
+
+function skipQuestion(sessionID) {
+    fetch(API + "skip?session="+sessionID)
+        .then(response => response.json())
+        .then(responseJSON => {
+            console.log(responseJSON + "here");
+        })
+}
+
+
+
+
+
+
+
+
 
 getHuntList();
