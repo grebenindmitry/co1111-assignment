@@ -57,7 +57,7 @@ function startSession(uuid) {
                 document.getElementById('errorBox').classList.add('done');
                 document.getElementById('errorBox').innerText = "Session created!"
                 sessionID = jsonResponse.session;
-                prepareQuiz();
+                getQuestion();
             }
         });
 }
@@ -85,8 +85,7 @@ function enterUsername(uuid, targetID) {
         });
 }
 
-function prepareQuiz() {
-    console.log(sessionID);
+function getQuestion() {
     fetch(API + "/question?session=" + sessionID)
         .then(response => response.json())
         .then(jsonResponse => {
@@ -99,7 +98,6 @@ function prepareQuiz() {
                 alert(errorMessageList);
             } else {
                 let body = document.getElementsByTagName('body')[0];
-                //Wipe the screen
                 body.innerHTML = "";
 
                 let questionName = document.createElement('h1');
@@ -115,8 +113,8 @@ function prepareQuiz() {
                         booleanButtonFalse.innerHTML = "No";
                         booleanButtonTrue.innerHTML = "Yes";
 
-                        booleanButtonTrue.addEventListener('click', sendAnswer, 'true');
-                        booleanButtonFalse.addEventListener('click', sendAnswer, 'false');
+                        booleanButtonTrue.addEventListener('click', function(event) {sendAnswer('true');});
+                        booleanButtonFalse.addEventListener('click', function(event) {sendAnswer('false');});
 
                         body.appendChild(booleanButtonTrue);
                         body.appendChild(booleanButtonFalse);
@@ -136,10 +134,65 @@ function prepareQuiz() {
                         body.appendChild(integerTextBox);
                         body.appendChild(integerSubmitButton);
                         break;
+                    case "NUMERIC":
+                        let numericTextBox = document.createElement('input');
+                        numericTextBox.type = 'number';
+                        
+                        let numericSubmitButton = document.createElement('button');
+                        numericSubmitButton.innerText = 'Submit';
+                        numericSubmitButton.id = 'numberButton';
+                        numericSubmitButton.addEventListener('click', function(event) {sendAnswer(numericTextBox.value);});
+
+                        body.appendChild(numericTextBox);
+                        body.appendChild(numericSubmitButton);
+                        break;
+                    case "MCQ":
+                        let mcqA = document.createElement('button');
+                        let mcqB = document.createElement('button');
+                        let mcqC = document.createElement('button');
+                        let mcqD = document.createElement('button');
+
+                        mcqA.innerText = 'A';
+                        mcqB.innerText = 'B';
+                        mcqC.innerText = 'C';
+                        mcqD.innerText = 'D';
+
+                        mcqA.addEventListener('click', function(event) {sendAnswer('A');});
+                        mcqB.addEventListener('click', function(event) {sendAnswer('B');});
+                        mcqC.addEventListener('click', function(event) {sendAnswer('C');});
+                        mcqD.addEventListener('click', function(event) {sendAnswer('D');});
+
+                        body.appendChild(mcqA);
+                        body.appendChild(mcqB);
+                        body.appendChild(mcqC);
+                        body.appendChild(mcqD);
+                        break;
+                    case "TEXT":
+                        let textBox = document.createElement('input');
+                        textBox.type = 'text';
+                        
+                        let textSubmitButton = document.createElement('button');
+                        textSubmitButton.innerText = 'Submit';
+                        textSubmitButton.id = 'textButton';
+                        textSubmitButton.addEventListener('click', function(event) {sendAnswer(textTextBox.value);});
+                        
+                        body.appendChild(textBox);
+                        body.appendChild(textSubmitButton);
+                        break;
                 }
                 
+                let outputMSG = document.createElement('span');
+                outputMSG.id = 'outputMSG';
+                outputMSG.classList.add('disable', 'outputMSG');
+                body.appendChild(outputMSG);
             }
         });
+}
+
+function handleNumericInput(event) {
+    if (event.code == "Enter" || event.code == "NumpadEnter") {
+        document.getElementById('numberButton').click();
+    }
 }
 
 function handleIntegerInput(event) {
@@ -199,7 +252,22 @@ function sendAnswer(answer) {
     fetch(API + "/answer?session=" + sessionID + "&answer=" + answer)
         .then(response => response.json())
         .then(responseJSON => {
-            console.log(responseJSON.correct);
+            if (responseJSON.status === "OK") {
+                if (responseJSON.correct) {
+                    document.getElementById('outputMSG').classList.remove('disable', 'error');
+                    document.getElementById('outputMSG').classList.add('done');
+                    document.getElementById('outputMSG').innerText = responseJSON.message;
+                    setTimeout(getQuestion(), 5000);
+                } else {
+                    document.getElementById('outputMSG').classList.remove('disable', 'done');
+                    document.getElementById('outputMSG').classList.add('error');
+                    document.getElementById('outputMSG').innerText = responseJSON.message;
+                }
+            } else {
+                document.getElementById('outputMSG').classList.remove('disable', 'done');
+                document.getElementById('outputMSG').classList.add('error');
+                document.getElementById('outputMSG').innerText = responseJSON.errorMessages[0];
+            }
         });
 }
 

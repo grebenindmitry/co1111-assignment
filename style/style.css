@@ -22,3 +22,10 @@
 .disable {
     display: none;
 }
+
+.outputMSG {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+    border-radius: 10%;
+}
