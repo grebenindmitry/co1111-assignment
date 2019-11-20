@@ -20,7 +20,7 @@
     + Dmitry: Finish /question implementation and the TODOs
     + Charalampos: Logo design, /skip implementation
     
-   ### 14/11/2019
+   ### 11/11/2019
 - Alexandros,Charalambos : implement the skip button (with some bugs-going to fix them), gave ideas for marketing,
 create a MindMap for available tasks.
                             
