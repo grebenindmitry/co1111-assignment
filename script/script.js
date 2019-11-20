@@ -48,7 +48,6 @@ function startSession(uuid) {
     fetch(API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid)
         .then(response => response.json())
         .then(jsonResponse => {
-            console.log(jsonResponse);
             if (jsonResponse.status === "ERROR") {
                 document.getElementById('errorBox').classList.remove('done', 'loading');
                 document.getElementById('errorBox').classList.add('error');
@@ -91,7 +90,6 @@ function getQuestion() {
     fetch(API + "/question?session=" + sessionID)
         .then(response => response.json())
         .then(jsonResponse => {
-            console.log(jsonResponse);
             if (jsonResponse.status === "ERROR") {
                 let errorMessageList = "";
                 for (let errorMessage of jsonResponse.errorMessages) {
@@ -99,127 +97,131 @@ function getQuestion() {
                 }
                 alert(errorMessageList);
             } else {
-                let body = document.getElementsByTagName('body')[0];
-                body.innerHTML = "";
+                if (!jsonResponse.completed) {
+                    document.body.innerHTML = "";
 
-                if (jsonResponse.canBeSkipped === true) {
-                    let skipBox = document.createElement("BUTTON");
-                    skipBox.id = "skipBox";
-                    skipBox.classList.add('button');
-                    skipBox.innerText="SKIP";
-                    document.body.appendChild(skipBox);
-                    document.getElementById("skipBox").value="SKIP";
-                    document.getElementById("skipBox").name="SKIP";
+                    if (jsonResponse.canBeSkipped === true) {
+                        let skipBox = document.createElement("BUTTON");
+                        skipBox.id = "skipBox";
+                        skipBox.classList.add('button');
+                        skipBox.innerText="SKIP";
+                        document.body.appendChild(skipBox);
+                        document.getElementById("skipBox").value="SKIP";
+                        document.getElementById("skipBox").name="SKIP";
 
-                    skipBox.addEventListener('click', function(event) {skipQuestion();});
+                        skipBox.addEventListener('click', function(event) {skipQuestion();});
+                    } else {
+                        let errorSkip = document.createElement("p");
+                        errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
+                        document.body.appendChild(errorSkip);
+                    }
+
+                    let questionName = document.createElement('h1');
+                    questionName.innerHTML = jsonResponse.questionText;
+                    document.body.appendChild(questionName);
+
+                    switch (jsonResponse.questionType) {
+                        case "BOOLEAN":
+                            let booleanButtonTrue = document.createElement('button');
+                            let booleanButtonFalse = document.createElement('button');
+
+                            booleanButtonFalse.innerHTML = "False";
+                            booleanButtonTrue.innerHTML = "True";
+
+                            booleanButtonFalse.classList.add('button');
+                            booleanButtonTrue.classList.add('button');
+
+                            booleanButtonTrue.addEventListener('click', function(event) {sendAnswer('true');});
+                            booleanButtonFalse.addEventListener('click', function(event) {sendAnswer('false');});
+
+                            document.body.appendChild(booleanButtonTrue);
+                            document.body.appendChild(booleanButtonFalse);
+                            break;
+
+                        case "INTEGER":
+                            let integerForm = document.createElement('form');
+                            integerForm.action = 'javascript:sendAnswer(document.getElementById("integerTextBox").value)';
+
+                            let integerTextBox = document.createElement('input');
+                            integerTextBox.id = 'integerTextBox';
+                            integerTextBox.type = "number";
+
+                            let integerSubmitButton = document.createElement('input');
+                            integerSubmitButton.type = 'submit';
+                            integerSubmitButton.classList.add('button');
+                            integerSubmitButton.value = "Submit";
+
+                            document.body.appendChild(integerForm);
+                            integerForm.appendChild(integerTextBox);
+                            integerForm.appendChild(integerSubmitButton);
+                            break;
+                        case "NUMERIC":
+                            let numericForm = document.createElement('form');
+                            numericForm.action = 'javascript:sendAnswer(document.getElementById("numericTextBox").value)';
+
+                            let numericTextBox = document.createElement('input');
+                            numericTextBox.id = 'numericTextBox';
+                            numericTextBox.type = 'number';
+
+                            let numericSubmitButton = document.createElement('input');
+                            numericSubmitButton.type = 'submit';
+                            numericSubmitButton.value = 'Submit';
+                            numericSubmitButton.classList.add('button');
+
+                            document.body.appendChild(numericForm);
+                            numericForm.appendChild(numericTextBox);
+                            numericForm.appendChild(numericSubmitButton);
+                            break;
+                        case "MCQ":
+                            let mcqA = document.createElement('button');
+                            let mcqB = document.createElement('button');
+                            let mcqC = document.createElement('button');
+                            let mcqD = document.createElement('button');
+
+                            mcqA.classList.add('button');
+                            mcqB.classList.add('button');
+                            mcqC.classList.add('button');
+                            mcqD.classList.add('button');
+
+                            mcqA.innerText = 'A';
+                            mcqB.innerText = 'B';
+                            mcqC.innerText = 'C';
+                            mcqD.innerText = 'D';
+
+                            mcqA.addEventListener('click', function(event) {sendAnswer('A');});
+                            mcqB.addEventListener('click', function(event) {sendAnswer('B');});
+                            mcqC.addEventListener('click', function(event) {sendAnswer('C');});
+                            mcqD.addEventListener('click', function(event) {sendAnswer('D');});
+
+                            document.body.appendChild(mcqA);
+                            document.body.appendChild(mcqB);
+                            document.body.appendChild(mcqC);
+                            document.body.appendChild(mcqD);
+                            break;
+                        case "TEXT":
+                            let textBox = document.createElement('input');
+                            textBox.type = 'text';
+                            
+                            let textSubmitButton = document.createElement('button');
+                            textSubmitButton.innerText = 'Submit';
+                            textSubmitButton.classList.add('button');
+                            textSubmitButton.id = 'textButton';
+                            textSubmitButton.addEventListener('click', function(event) {sendAnswer(textBox.value);});
+                            
+                            document.body.appendChild(textBox);
+                            document.body.appendChild(textSubmitButton);
+                            break;
+                    }
+                    
+                    let outputMSG = document.createElement('span');
+                    outputMSG.id = 'outputMSG';
+                    outputMSG.classList.add('disable', 'outputMSG');
+                    document.body.appendChild(outputMSG);
                 } else {
-                    let errorSkip = document.createElement("p");
-                    errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
-                    document.body.appendChild(errorSkip);
+                    endSession();
                 }
-
-                let questionName = document.createElement('h1');
-                questionName.innerHTML = jsonResponse.questionText;
-                body.appendChild(questionName);
-
-                console.log(jsonResponse.questionType);
-                switch (jsonResponse.questionType) {
-                    case "BOOLEAN":
-                        let booleanButtonTrue = document.createElement('button');
-                        let booleanButtonFalse = document.createElement('button');
-
-                        booleanButtonFalse.innerHTML = "No";
-                        booleanButtonTrue.innerHTML = "Yes";
-
-                        booleanButtonFalse.classList.add('button');
-                        booleanButtonTrue.classList.add('button');
-
-                        booleanButtonTrue.addEventListener('click', function(event) {sendAnswer('true');});
-                        booleanButtonFalse.addEventListener('click', function(event) {sendAnswer('false');});
-
-                        body.appendChild(booleanButtonTrue);
-                        body.appendChild(booleanButtonFalse);
-                        break;
-
-                    case "INTEGER":
-                        let integerTextBox = document.createElement('input');
-                        integerTextBox.type = "number";
-
-                        let integerSubmitButton = document.createElement('button');
-                        integerSubmitButton.classList.add('button');
-                        integerSubmitButton.innerText = "Submit";
-                        integerSubmitButton.id = "integerButton";
-                        integerSubmitButton.addEventListener('click', function(event) {sendAnswer(integerTextBox.value);});
-
-                        body.appendChild(integerTextBox);
-                        body.appendChild(integerSubmitButton);
-                        break;
-                    case "NUMERIC":
-                        let numericTextBox = document.createElement('input');
-                        numericTextBox.type = 'number';
-
-                        let numericSubmitButton = document.createElement('button');
-                        numericSubmitButton.innerText = 'Submit';
-                        numericSubmitButton.classList.add('button');
-                        numericSubmitButton.id = 'numberButton';
-                        numericSubmitButton.addEventListener('click', function(event) {sendAnswer(numericTextBox.value);});
-
-                        body.appendChild(numericTextBox);
-                        body.appendChild(numericSubmitButton);
-                        break;
-                    case "MCQ":
-                        let mcqA = document.createElement('button');
-                        let mcqB = document.createElement('button');
-                        let mcqC = document.createElement('button');
-                        let mcqD = document.createElement('button');
-
-                        mcqA.classList.add('button');
-                        mcqB.classList.add('button');
-                        mcqC.classList.add('button');
-                        mcqD.classList.add('button');
-
-                        mcqA.innerText = 'A';
-                        mcqB.innerText = 'B';
-                        mcqC.innerText = 'C';
-                        mcqD.innerText = 'D';
-
-                        mcqA.addEventListener('click', function(event) {sendAnswer('A');});
-                        mcqB.addEventListener('click', function(event) {sendAnswer('B');});
-                        mcqC.addEventListener('click', function(event) {sendAnswer('C');});
-                        mcqD.addEventListener('click', function(event) {sendAnswer('D');});
-
-                        body.appendChild(mcqA);
-                        body.appendChild(mcqB);
-                        body.appendChild(mcqC);
-                        body.appendChild(mcqD);
-                        break;
-                    case "TEXT":
-                        let textBox = document.createElement('input');
-                        textBox.type = 'text';
-                        
-                        let textSubmitButton = document.createElement('button');
-                        textSubmitButton.innerText = 'Submit';
-                        textSubmitButton.classList.add('button');
-                        textSubmitButton.id = 'textButton';
-                        textSubmitButton.addEventListener('click', function(event) {sendAnswer(textBox.value);});
-                        
-                        body.appendChild(textBox);
-                        body.appendChild(textSubmitButton);
-                        break;
-                }
-                
-                let outputMSG = document.createElement('span');
-                outputMSG.id = 'outputMSG';
-                outputMSG.classList.add('disable', 'outputMSG');
-                body.appendChild(outputMSG);
             }
         });
-}
-
-function handleEnter(event) {
-    if (event.code == "Enter" || event.code == "NumpadEnter") {
-        document.getElementById('numberButton').click();
-    }
 }
 
 function sendAnswer(answer) {
@@ -268,6 +270,7 @@ function skipQuestion() {
 }
 
 function endSession() {
+    document.body.innerHTML = "end";
     console.log('end');
 }
 
