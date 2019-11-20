@@ -124,7 +124,7 @@ function getQuestion() {
                 }
                 else{
                   let errorSkip = document.createElement("P");
-                    errorSkip.innerText = "This question can no be skipped.";
+                    errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
                     document.body.appendChild(errorSkip);
                 }
 
@@ -202,7 +202,7 @@ function getQuestion() {
                         let textSubmitButton = document.createElement('button');
                         textSubmitButton.innerText = 'Submit';
                         textSubmitButton.id = 'textButton';
-                        textSubmitButton.addEventListener('click', function(event) {sendAnswer(textTextBox.value);});
+                        textSubmitButton.addEventListener('click', function(event) {sendAnswer(textBox.value);});
                         
                         body.appendChild(textBox);
                         body.appendChild(textSubmitButton);
