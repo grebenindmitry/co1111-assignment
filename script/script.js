@@ -301,13 +301,11 @@ function sendAnswer(answer) {
 
 
 function skipQuestion(sessionID) {
-    fetch("https://codecyprus.org/th/api/skip?session=ag9nfmNvZGVjeXBydXNvcmdyFAsSB1Nlc3Npb24YgICAoMa0gQoM"+sessionID)
+    fetch("https://codecyprus.org/th/api/skip?session=" + sessionID)
         .then(response => response.json())
         .then(responseJSON => {
-
-            // let result = API.search("something").skip(5).take(10).collect();
             console.log(responseJSON + "here");
-        })
+        });
 }
 
 
