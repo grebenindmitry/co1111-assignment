@@ -9,6 +9,16 @@ async function getHuntList() {
             let i = 0;
             for (let treasureHunt of responseJSON.treasureHunts) {
                 let huntList = document.getElementById("huntList");
+                let dateObj = new Date(treasureHunt.startsOn);
+                let dateOptions = {
+                    day: 'numeric',
+                    month: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                }
 
                 //Create and append hunt name
                 let nameElement = document.createElement("li");
@@ -23,19 +33,11 @@ async function getHuntList() {
 
                 //Append hunt info
                 subList.innerHTML += ("<li><b>Description: </b>" + treasureHunt.description + "</li>");
-                subList.innerHTML += ("<li><b>Starts On: </b>" + timestampFromEpoch(treasureHunt.startsOn) + "</li>");
+                subList.innerHTML += ("<li><b>Starts On: </b>" + dateObj.toLocaleDateString('en-US', dateOptions) + "</li>");
                 i++;
 
             }
         });
-}
-
-function timestampFromEpoch(epochTime) {
-    let dateObj = new Date(epochTime);
-    return (dateObj.getDate() + "/" + (dateObj.getMonth() + 1) + "/" + dateObj.getFullYear() + 
-        ", " + dateObj.getHours() + ":" + dateObj.getMinutes()
-        .toLocaleString("en-US", {minimumIntegerDigits: 2, useGrouping:false}) + ":" + 
-        dateObj.getSeconds().toLocaleString("en-US", {minimumIntegerDigits: 2, useGrouping:false}));
 }
 
 function startSession(uuid) {
@@ -62,11 +64,10 @@ function startSession(uuid) {
                 getQuestion();
             }
         });
+    // getQuestion();
 }
 
 function enterUsername(uuid, targetID) {
-    let username = "";
-    
     let target = document.getElementById(targetID);
     if (document.getElementById('inputBox') !== null) {
         document.getElementById('inputBox').remove();
@@ -75,16 +76,15 @@ function enterUsername(uuid, targetID) {
     usernameInput.id = "inputBox";
     usernameInput.style.display = "inline-block";
     usernameInput.style.marginLeft = "10px";
-    usernameInput.innerHTML = "<span>Username: </span>" +
-                            "<input id='usernameBox' type='text'></input>" + 
-                            "<button id='submitButton' onclick='startSession(\""+ uuid + "\")'>OK</button>" +
-                            "<span id='errorBox' class='disable' style='padding:2px; margin-left: 10px'></span>";
+    usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\")'>" +
+                                    "<fieldset>" +
+                                        "<legend>Username:</legend>" +
+                                        "<input id='usernameBox' type='text'></input>" + 
+                                        "<input type='submit' class='button'></button>" +
+                                        "<span id='errorBox' class='disable' style='padding:2px; margin-left: 10px'></span>" + 
+                                    "</fieldset>" +
+                                "</form>";
     target.appendChild(usernameInput);
-    document.getElementById('usernameBox').addEventListener("keyup", function(event) {
-        if (event.code === "Enter" || event.code === "NumpadEnter") {
-            document.getElementById('submitButton').click();
-        }
-        });
 }
 
 function getQuestion() {
@@ -102,28 +102,18 @@ function getQuestion() {
                 let body = document.getElementsByTagName('body')[0];
                 body.innerHTML = "";
 
-                let position= jsonResponse.currentQuestionIndex;
-                console.log(position);
-
-
-                if(jsonResponse.canBeSkipped === true)
-                {
-                    console.log("inside-skip fun");
-
+                if (jsonResponse.canBeSkipped === true) {
                     let skipBox = document.createElement("BUTTON");
                     skipBox.id = "skipBox";
-                    skipBox.innerText="SKIP >>";
+                    skipBox.classList.add('button');
+                    skipBox.innerText="SKIP";
                     document.body.appendChild(skipBox);
                     document.getElementById("skipBox").value="SKIP";
                     document.getElementById("skipBox").name="SKIP";
 
-
                     skipBox.addEventListener('click', function(event) {skipQuestion();});
-                    // skipBox.onclick = skipQuestion();
-
-                }
-                else{
-                  let errorSkip = document.createElement("P");
+                } else {
+                    let errorSkip = document.createElement("p");
                     errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
                     document.body.appendChild(errorSkip);
                 }
@@ -141,6 +131,9 @@ function getQuestion() {
                         booleanButtonFalse.innerHTML = "No";
                         booleanButtonTrue.innerHTML = "Yes";
 
+                        booleanButtonFalse.classList.add('button');
+                        booleanButtonTrue.classList.add('button');
+
                         booleanButtonTrue.addEventListener('click', function(event) {sendAnswer('true');});
                         booleanButtonFalse.addEventListener('click', function(event) {sendAnswer('false');});
 
@@ -151,10 +144,9 @@ function getQuestion() {
                     case "INTEGER":
                         let integerTextBox = document.createElement('input');
                         integerTextBox.type = "number";
-                        integerTextBox.readOnly = true;
-                        integerTextBox.addEventListener('keydown', handleIntegerInput);
 
                         let integerSubmitButton = document.createElement('button');
+                        integerSubmitButton.classList.add('button');
                         integerSubmitButton.innerText = "Submit";
                         integerSubmitButton.id = "integerButton";
                         integerSubmitButton.addEventListener('click', function(event) {sendAnswer(integerTextBox.value);});
@@ -165,9 +157,10 @@ function getQuestion() {
                     case "NUMERIC":
                         let numericTextBox = document.createElement('input');
                         numericTextBox.type = 'number';
-                        
+
                         let numericSubmitButton = document.createElement('button');
                         numericSubmitButton.innerText = 'Submit';
+                        numericSubmitButton.classList.add('button');
                         numericSubmitButton.id = 'numberButton';
                         numericSubmitButton.addEventListener('click', function(event) {sendAnswer(numericTextBox.value);});
 
@@ -179,6 +172,11 @@ function getQuestion() {
                         let mcqB = document.createElement('button');
                         let mcqC = document.createElement('button');
                         let mcqD = document.createElement('button');
+
+                        mcqA.classList.add('button');
+                        mcqB.classList.add('button');
+                        mcqC.classList.add('button');
+                        mcqD.classList.add('button');
 
                         mcqA.innerText = 'A';
                         mcqB.innerText = 'B';
@@ -201,6 +199,7 @@ function getQuestion() {
                         
                         let textSubmitButton = document.createElement('button');
                         textSubmitButton.innerText = 'Submit';
+                        textSubmitButton.classList.add('button');
                         textSubmitButton.id = 'textButton';
                         textSubmitButton.addEventListener('click', function(event) {sendAnswer(textBox.value);});
                         
@@ -217,62 +216,9 @@ function getQuestion() {
         });
 }
 
-function handleNumericInput(event) {
+function handleEnter(event) {
     if (event.code == "Enter" || event.code == "NumpadEnter") {
         document.getElementById('numberButton').click();
-    }
-}
-
-function handleIntegerInput(event) {
-    //TODO: mb add numpad
-    switch (event.code) {
-        case "Digit0":
-        case "Numpad0":
-            event.target.value += "0";
-            break;
-        case "Digit1":
-        case "Numpad1":
-            event.target.value += "1";
-            break;
-        case "Digit2":
-        case "Numpad2":
-            event.target.value += "2";
-            break;
-        case "Digit3":
-        case "Numpad3":
-            event.target.value += "3";
-            break;
-        case "Digit4":
-        case "Numpad4":
-            event.target.value += "4";
-            break;
-        case "Digit5":
-        case "Numpad5":
-            event.target.value += "5";
-            break;
-        case "Digit6":
-        case "Numpad6":
-            event.target.value += "6";
-            break;
-        case "Digit7":
-        case "Numpad7":
-            event.target.value += "7";
-            break;
-        case "Digit8":
-        case "Numpad8":
-            event.target.value += "8";
-            break;
-        case "Digit9":
-        case "Numpad9":
-            event.target.value += "9";
-            break;
-        case "Enter":
-        case "NumpadEnter":
-            document.getElementById('integerButton').click();                        
-            break;
-        case "Backspace":
-            event.target.value = event.target.value.slice(0, event.target.value.length - 1);
-            break;
     }
 }
 
@@ -300,20 +246,29 @@ function sendAnswer(answer) {
 }
 
 
-function skipQuestion(sessionID) {
+function skipQuestion() {
     fetch("https://codecyprus.org/th/api/skip?session=" + sessionID)
         .then(response => response.json())
         .then(responseJSON => {
-            console.log(responseJSON + "here");
+            if (responseJSON.status != 'ERROR'){
+                if (!responseJSON.completed) {
+                    document.getElementById('outputMSG').classList.remove('disable', 'error');
+                    document.getElementById('outputMSG').classList.add('done');
+                    document.getElementById('outputMSG').innerText = responseJSON.message;
+                    getQuestion();    
+                } else {
+                    endSession();
+                }
+            } else {
+                document.getElementById('outputMSG').classList.remove('disable', 'done');
+                document.getElementById('outputMSG').classList.add('error');
+                document.getElementById('outputMSG').innerText = responseJSON.errorMessages[0];
+            }
         });
 }
 
-
-
-
-
-
-
-
+function endSession() {
+    console.log('end');
+}
 
 getHuntList();
