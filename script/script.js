@@ -7,12 +7,19 @@ function getHuntList() {
         .then(response => response.json())
         .then(responseJSON => {
             let i = 0;
-            if (getCookie('gamePlaying')) {
+            let huntList = document.getElementById("huntList");
+            if (getCookie('gamePlaying') === 'true') {
+                let cookieSessionID = getCookie('sessionID');
+                let username = getCookie('username');
+                let nameElement = document.createElement('li');
+                nameElement.id = 'savedHuntName';
+                nameElement.innerHTML = '<a style="font-weight: bold" href="javascript:startSession(\'' + cookieSessionID + "\', undefined, true, \'" + username + '\')">Continue previous game</a>'
+                huntList.appendChild(nameElement);
+
 
             }
 
             for (let treasureHunt of responseJSON.treasureHunts) {
-                let huntList = document.getElementById("huntList");
                 let startDateObj = new Date(treasureHunt.startsOn);
                 let dateOptions = {
                     day: 'numeric',
@@ -28,9 +35,9 @@ function getHuntList() {
                 //Create and append hunt name
                 let nameElement = document.createElement("li");
                 nameElement.id = "thName" + i;
-                huntList.appendChild(nameElement);
                 nameElement.innerHTML = ("<a style='font-weight: bold;' href='javascript:enterUsername(\"" +
                     treasureHunt.uuid + "\", \"" + nameElement.id + "\", \"" + endDateObj.toUTCString() + "\")'>" + treasureHunt.name + "</a>");
+                huntList.appendChild(nameElement);
 
                 //Create and append sublist for hunt info
                 let subList  = document.createElement("ul");
@@ -47,33 +54,42 @@ function getHuntList() {
 }
 
 // noinspection JSUnusedGlobalSymbols
-function startSession(uuid, expiryDate) {
-    let username = document.getElementById('usernameBox').value;
-    document.getElementById('errorBox').classList.remove('done', 'error', 'disable');
-    document.getElementById('errorBox').classList.add('loading');
-    document.getElementById('errorBox').innerText = "Loading...";
-    fetch(API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid)
-        .then(response => response.json())
-        .then(jsonResponse => {
-            // noinspection EqualityComparisonWithCoercionJS
-            if (jsonResponse.status == "ERROR") {
-                document.getElementById('errorBox').classList.remove('done', 'loading');
-                document.getElementById('errorBox').classList.add('error');
-                document.getElementById('errorBox').innerText = "";
-                for (let errorMessage of jsonResponse.errorMessages) {
-                    document.getElementById('errorBox').innerText += errorMessage;
+function startSession(uuid, expiryDate, isResume, username) {
+    if (!isResume) {
+        username = document.getElementById('usernameBox').value;
+        document.getElementById('errorBox').classList.remove('done', 'error', 'disable');
+        document.getElementById('errorBox').classList.add('loading');
+        document.getElementById('errorBox').innerText = "Loading...";
+        fetch(API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid)
+            .then(response => response.json())
+            .then(jsonResponse => {
+                // noinspection EqualityComparisonWithCoercionJS
+                if (jsonResponse.status == "ERROR") {
+                    document.getElementById('errorBox').classList.remove('done', 'loading');
+                    document.getElementById('errorBox').classList.add('error');
+                    document.getElementById('errorBox').innerText = "";
+                    for (let errorMessage of jsonResponse.errorMessages) {
+                        document.getElementById('errorBox').innerText += errorMessage;
+                    }
+                } else {
+                    document.getElementById('errorBox').classList.remove('loading', 'error');
+                    document.getElementById('errorBox').classList.add('done');
+                    document.getElementById('errorBox').innerText = "Session created!";
+                    sessionID = jsonResponse.session;
+                    document.cookie = 'gamePlaying=true; expires=' + expiryDate;
+                    document.cookie = 'username=' + username + '; expires=' + expiryDate;
+                    document.cookie = 'sessionID=' + sessionID + '; expires=' + expiryDate;
+                    getQuestion();
                 }
-            } else {
-                document.getElementById('errorBox').classList.remove('loading', 'error');
-                document.getElementById('errorBox').classList.add('done');
-                document.getElementById('errorBox').innerText = "Session created!";
-                sessionID = jsonResponse.session;
-                document.cookie = 'gamePlaying=true; expires=' + expiryDate;
-                document.cookie = 'sessionID=' + sessionID + 'expires=' + expiryDate;
+            });
+    } else {
+        fetch(API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid)
+            .then(response => response.json()
+            .then(responseJSON => {
+                sessionID = uuid;
                 getQuestion();
-            }
-        });
-    // getQuestion();
+            }));
+    }
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -86,7 +102,7 @@ function enterUsername(uuid, targetID, huntEndDate) {
     usernameInput.id = "inputBox";
     usernameInput.style.display = "inline-block";
     usernameInput.style.marginLeft = "10px";
-    usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\", \"" + huntEndDate + "\")'>" +
+    usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\", \"" + huntEndDate + "\", false, undefined)'>" +
                                         "<input id='usernameBox' type='text' placeholder='Enter your username'>" +
                                         "<input type='submit' value='Submit' style='' class='submitButton'>" +
                                         "<span id='errorBox' class='disable' style='padding:2px; margin-left: 10px'></span>" +
@@ -296,6 +312,7 @@ function skipQuestion() {
 
 function endSession() {
     document.cookie = 'gamePlaying=; expires=Thu 01 Jan 1970';
+    document.cookie = 'username=; expires=Thu 01 Jan 1970';
     document.cookie = 'sessionID=; expires=Thu 01 Jan 1970';
     document.body.innerHTML = "end";
     console.log('end');
