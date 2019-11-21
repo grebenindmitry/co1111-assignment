@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu&display=swap');
+
+* {
+    font-family: Ubuntu, sans-serif;
+}
+
 .done {
     display: inline;
     background-color: green;
@@ -128,7 +134,7 @@
 
 .submitButton{
     border: none;
-    margin: 3px;
+    margin: 3px 0;
     padding: 15px 0;
     width: 75%;
     text-align: center;
