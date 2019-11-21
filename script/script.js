@@ -39,6 +39,7 @@ function getHuntList() {
         });
 }
 
+// noinspection JSUnusedGlobalSymbols
 function startSession(uuid) {
     let username = document.getElementById('usernameBox').value;
     document.getElementById('errorBox').classList.remove('done', 'error', 'disable');
@@ -47,7 +48,8 @@ function startSession(uuid) {
     fetch(API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid)
         .then(response => response.json())
         .then(jsonResponse => {
-            if (jsonResponse.status === "ERROR") {
+            // noinspection EqualityComparisonWithCoercionJS
+            if (jsonResponse.status == "ERROR") {
                 document.getElementById('errorBox').classList.remove('done', 'loading');
                 document.getElementById('errorBox').classList.add('error');
                 document.getElementById('errorBox').innerText = "";
@@ -65,6 +67,7 @@ function startSession(uuid) {
     // getQuestion();
 }
 
+// noinspection JSUnusedGlobalSymbols
 function enterUsername(uuid, targetID) {
     let target = document.getElementById(targetID);
     if (document.getElementById('inputBox') !== null) {
@@ -77,7 +80,7 @@ function enterUsername(uuid, targetID) {
     usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\")'>" +
                                     "<fieldset>" +
                                         "<legend>Username:</legend>" +
-                                        "<input id='usernameBox' type='text' placeholder='username'>" +
+                                        "<input id='usernameBox' type='text' placeholder='Enter your username'>" +
                                         "<input type='submit' class='button'></button>" +
                                         "<span id='errorBox' class='disable' style='padding:2px; margin-left: 10px'></span>" + 
                                     "</fieldset>" +
@@ -89,7 +92,8 @@ function getQuestion() {
     fetch(API + "/question?session=" + sessionID)
         .then(response => response.json())
         .then(responseJSON => {
-            if (responseJSON.status === "ERROR") {
+            // noinspection EqualityComparisonWithCoercionJS
+            if (responseJSON.status == "ERROR") {
                 let errorMessageList = "";
                 for (let errorMessage of responseJSON.errorMessages) {
                     errorMessageList += errorMessage + "\n";
@@ -211,7 +215,13 @@ function getQuestion() {
                             document.body.appendChild(textSubmitButton);
                             break;
                     }
-                    
+
+                    let questionNumBox = document.createElement('span');
+                    questionNumBox.innerText = 'Question: ' + (responseJSON.currentQuestionIndex + 1) +
+                        "/" + responseJSON.numOfQuestions;
+                    questionNumBox.classList.add('questionNum');
+                    document.body.appendChild(questionNumBox);
+
                     let outputMSG = document.createElement('span');
                     outputMSG.id = 'outputMSG';
                     outputMSG.classList.add('disable', 'outputMSG');
@@ -231,7 +241,8 @@ function sendAnswer(answer) {
     fetch(API + "/answer?session=" + sessionID + "&answer=" + answer)
         .then(response => response.json())
         .then(responseJSON => {
-            if (responseJSON.status === "OK") {
+            // noinspection EqualityComparisonWithCoercionJS
+            if (responseJSON.status == "OK") {
                 if (responseJSON.correct) {
                     document.getElementById('outputMSG').classList.remove('disable', 'error');
                     document.getElementById('outputMSG').classList.add('done');
@@ -255,7 +266,8 @@ function skipQuestion() {
     fetch("https://codecyprus.org/th/api/skip?session=" + sessionID)
         .then(response => response.json())
         .then(responseJSON => {
-            if (responseJSON.status !== 'ERROR'){
+            // noinspection EqualityComparisonWithCoercionJS
+            if (responseJSON.status != 'ERROR'){
                 if (!responseJSON.completed) {
                     document.getElementById('outputMSG').classList.remove('disable', 'error');
                     document.getElementById('outputMSG').classList.add('done');

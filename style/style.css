@@ -23,9 +23,9 @@
 .outputMSG {
     padding: 10px;
     position: absolute;
-    top: 2%;
+    bottom: 2%;
     right: 2%;
-    border-radius: 10%;
+    opacity: 80%;
 }
 
 #intro{
@@ -33,8 +33,7 @@
     text-align:center;
     background-color: #333;
     color: white;
-    text-shadow: 2px 2px black;
-    text-shadow: darkgrey;
+    text-shadow: 2px 2px darkgrey;
 }
 
 .stuff{
@@ -44,18 +43,14 @@
 #goQuiz{
     border: 2px solid forestgreen;
     margin-right: auto;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
+    background: no-repeat fixed center;
 }
 
 #gitRep{
-    /*border: 2px solid forestgreen;*/
     border-left: 1px;
 }
 
 #contact{
-    /*border: 2px solid forestgreen;*/
     border-left: 1px;
     padding-right: 31px;
 }
@@ -85,7 +80,6 @@
     font-size: 16px;
     border: none;
     cursor: pointer;
-    border:1px solid  #333
 }
 
 .dropdown-content {
@@ -94,7 +88,7 @@
     position: absolute;
     right: 0;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     z-index: 1;
     background-color: #333
 }
@@ -129,4 +123,11 @@
     display: inline-block;
     font-size: 16px;
     cursor: pointer;
+}
+
+.questionNum {
+    border-width: 1px;
+    position: absolute;
+    bottom: 2%;
+    left: 2%;
 }
