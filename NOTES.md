@@ -32,10 +32,12 @@ create a MindMap for available tasks.
    + Marketing(last week)
      
         ### 21/11/2019
-Alexandros: Implementation of the leaderboard
-Charalambos: Help with the leaderboard
-Dmitry: Geoloacation, coockies attempt
-->Error500, problem with se server(probably), couldn work anymore
+    + Alexandros: Implementation of the leaderboard
+    + Dmitry: Geoloacation, coockies attempt
+    + Charalambos: Help with the leaderboard
+    + ->Error500, problem with se server(probably), couldn work anymore
+
+
                             
 * Tasks availabe:
    + Testing
