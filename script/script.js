@@ -31,7 +31,6 @@ function getHuntList() {
                     hour12: false
                 };
                 let endDateObj = new Date(treasureHunt.endsOn);
-
                 //Create and append hunt name
                 let nameElement = document.createElement("li");
                 nameElement.id = "thName" + i;
@@ -316,6 +315,7 @@ function endSession() {
     document.cookie = 'sessionID=; expires=Thu 01 Jan 1970';
     document.body.innerHTML = "end";
     console.log('end');
+    getLeaderboard()
 }
 
 function getLocation() {
@@ -353,6 +353,37 @@ function getCookie(cookieName) {
         }
     }
     return "";
+}
+
+
+// function getLeaderboard() {
+//
+//     fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID, { method: "GET" })
+//         .then(response => response.json())
+//         .then(json => handleLeaderboard(json));
+// }
+
+function getLeaderboard() {
+    fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID)
+        .then(response => response.json())
+        .then(responseJSON => {
+
+            //  console.log("i am in");
+            //  let tableScore = document.createElement("TABLE");
+            // document.body.innerHTML="hre";
+
+            let score = responseJSON.leaderboard;
+            score.id = "score";
+
+            // document.body.innerText = score.
+            console.log(score);
+            document.createElement("table");
+
+            let jasonScore = JSON.stringify(score);
+            document.body.innerText = jasonScore;
+
+
+        });
 }
 
 getHuntList();
