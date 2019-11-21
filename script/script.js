@@ -118,13 +118,16 @@ function getQuestion() {
                     document.getElementById("skipBox").name="SKIP";
 
 
-                    skipBox.addEventListener('click', function(event) {skipQuestion();});
+                    skipBox.addEventListener('click', function(event) {
+                      //  window.confirm("-5 points for skipping")
+                        skipQuestion(sessionID);});
                     // skipBox.onclick = skipQuestion();
+
 
                 }
                 else{
                   let errorSkip = document.createElement("P");
-                    errorSkip.innerText = "This question can no be skipped.";
+                    errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped";
                     document.body.appendChild(errorSkip);
                 }
 
@@ -202,7 +205,7 @@ function getQuestion() {
                         let textSubmitButton = document.createElement('button');
                         textSubmitButton.innerText = 'Submit';
                         textSubmitButton.id = 'textButton';
-                        textSubmitButton.addEventListener('click', function(event) {sendAnswer(textTextBox.value);});
+                        textSubmitButton.addEventListener('click', function(event) {sendAnswer(textSubmitButton.value);});
                         
                         body.appendChild(textBox);
                         body.appendChild(textSubmitButton);
@@ -218,7 +221,7 @@ function getQuestion() {
 }
 
 function handleNumericInput(event) {
-    if (event.code == "Enter" || event.code == "NumpadEnter") {
+    if (event.code === "Enter" || event.code === "NumpadEnter") {
         document.getElementById('numberButton').click();
     }
 }
@@ -281,6 +284,12 @@ function sendAnswer(answer) {
         .then(response => response.json())
         .then(responseJSON => {
             if (responseJSON.status === "OK") {
+
+                let statusSkip = responseJSON.completed;
+                console.log(statusSkip);
+                let completeSkip = responseJSON.scoreAdjustment;
+                console.log(completeSkip);
+
                 if (responseJSON.correct) {
                     document.getElementById('outputMSG').classList.remove('disable', 'error');
                     document.getElementById('outputMSG').classList.add('done');
@@ -301,10 +310,17 @@ function sendAnswer(answer) {
 
 
 function skipQuestion(sessionID) {
+
     fetch("https://codecyprus.org/th/api/skip?session=" + sessionID)
         .then(response => response.json())
         .then(responseJSON => {
-            console.log(responseJSON + "here");
+            if(window.confirm("-5 points to skip question")) //informs users the score if he skips
+            {
+                console.log(responseJSON + "here");
+               getQuestion(); // ask for new question
+            }
+
+
         });
 }
 
