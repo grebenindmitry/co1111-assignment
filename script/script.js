@@ -1,8 +1,8 @@
-const API = "https://codecyprus.org/th/api"
+const API = "https://codecyprus.org/th/api";
 let sessionID = "";
 
 
-async function getHuntList() {
+function getHuntList() {
     fetch(API + "/list")
         .then(response => response.json())
         .then(responseJSON => {
@@ -18,13 +18,12 @@ async function getHuntList() {
                     minute: '2-digit',
                     second: '2-digit',
                     hour12: false
-                }
-
+                };
                 //Create and append hunt name
                 let nameElement = document.createElement("li");
                 nameElement.id = "thName" + i;
                 huntList.appendChild(nameElement);
-                nameElement.innerHTML = ("<a style='font-weight: bold;' href='javascript:enterUsername(\"" + 
+                nameElement.innerHTML = ("<a style='font-weight: bold;' href='javascript:enterUsername(\"" +
                     treasureHunt.uuid + "\", \"" + nameElement.id + "\")'>" + treasureHunt.name + "</a>");
 
                 //Create and append sublist for hunt info
@@ -58,7 +57,7 @@ function startSession(uuid) {
             } else {
                 document.getElementById('errorBox').classList.remove('loading', 'error');
                 document.getElementById('errorBox').classList.add('done');
-                document.getElementById('errorBox').innerText = "Session created!"
+                document.getElementById('errorBox').innerText = "Session created!";
                 sessionID = jsonResponse.session;
                 getQuestion();
             }
@@ -71,14 +70,14 @@ function enterUsername(uuid, targetID) {
     if (document.getElementById('inputBox') !== null) {
         document.getElementById('inputBox').remove();
     }
-    usernameInput = document.createElement("div");
+    let usernameInput = document.createElement("div");
     usernameInput.id = "inputBox";
     usernameInput.style.display = "inline-block";
     usernameInput.style.marginLeft = "10px";
     usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\")'>" +
                                     "<fieldset>" +
                                         "<legend>Username:</legend>" +
-                                        "<input id='usernameBox' type='text'></input>" + 
+                                        "<input id='usernameBox' type='text' placeholder='username'>" +
                                         "<input type='submit' class='button'></button>" +
                                         "<span id='errorBox' class='disable' style='padding:2px; margin-left: 10px'></span>" + 
                                     "</fieldset>" +
@@ -89,18 +88,18 @@ function enterUsername(uuid, targetID) {
 function getQuestion() {
     fetch(API + "/question?session=" + sessionID)
         .then(response => response.json())
-        .then(jsonResponse => {
-            if (jsonResponse.status === "ERROR") {
+        .then(responseJSON => {
+            if (responseJSON.status === "ERROR") {
                 let errorMessageList = "";
-                for (let errorMessage of jsonResponse.errorMessages) {
+                for (let errorMessage of responseJSON.errorMessages) {
                     errorMessageList += errorMessage + "\n";
                 }
                 alert(errorMessageList);
             } else {
-                if (!jsonResponse.completed) {
+                if (!responseJSON.completed) {
                     document.body.innerHTML = "";
 
-                    if (jsonResponse.canBeSkipped === true) {
+                    if (responseJSON.canBeSkipped === true) {
                         let skipBox = document.createElement("BUTTON");
                         skipBox.id = "skipBox";
                         skipBox.classList.add('button');
@@ -109,7 +108,7 @@ function getQuestion() {
                         document.getElementById("skipBox").value="SKIP";
                         document.getElementById("skipBox").name="SKIP";
 
-                        skipBox.addEventListener('click', function(event) {skipQuestion();});
+                        skipBox.addEventListener('click', skipQuestion);
                     } else {
                         let errorSkip = document.createElement("p");
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
@@ -117,10 +116,10 @@ function getQuestion() {
                     }
 
                     let questionName = document.createElement('h1');
-                    questionName.innerHTML = jsonResponse.questionText;
+                    questionName.innerHTML = responseJSON.questionText;
                     document.body.appendChild(questionName);
 
-                    switch (jsonResponse.questionType) {
+                    switch (responseJSON.questionType) {
                         case "BOOLEAN":
                             let booleanButtonTrue = document.createElement('button');
                             let booleanButtonFalse = document.createElement('button');
@@ -131,8 +130,8 @@ function getQuestion() {
                             booleanButtonFalse.classList.add('button');
                             booleanButtonTrue.classList.add('button');
 
-                            booleanButtonTrue.addEventListener('click', function(event) {sendAnswer('true');});
-                            booleanButtonFalse.addEventListener('click', function(event) {sendAnswer('false');});
+                            booleanButtonTrue.addEventListener('click', function() {sendAnswer('true');});
+                            booleanButtonFalse.addEventListener('click', function() {sendAnswer('false');});
 
                             document.body.appendChild(booleanButtonTrue);
                             document.body.appendChild(booleanButtonFalse);
@@ -188,10 +187,10 @@ function getQuestion() {
                             mcqC.innerText = 'C';
                             mcqD.innerText = 'D';
 
-                            mcqA.addEventListener('click', function(event) {sendAnswer('A');});
-                            mcqB.addEventListener('click', function(event) {sendAnswer('B');});
-                            mcqC.addEventListener('click', function(event) {sendAnswer('C');});
-                            mcqD.addEventListener('click', function(event) {sendAnswer('D');});
+                            mcqA.addEventListener('click', function() {sendAnswer('A');});
+                            mcqB.addEventListener('click', function() {sendAnswer('B');});
+                            mcqC.addEventListener('click', function() {sendAnswer('C');});
+                            mcqD.addEventListener('click', function() {sendAnswer('D');});
 
                             document.body.appendChild(mcqA);
                             document.body.appendChild(mcqB);
@@ -206,7 +205,7 @@ function getQuestion() {
                             textSubmitButton.innerText = 'Submit';
                             textSubmitButton.classList.add('button');
                             textSubmitButton.id = 'textButton';
-                            textSubmitButton.addEventListener('click', function(event) {sendAnswer(textBox.value);});
+                            textSubmitButton.addEventListener('click', function() {sendAnswer(textBox.value);});
                             
                             document.body.appendChild(textBox);
                             document.body.appendChild(textSubmitButton);
@@ -217,6 +216,10 @@ function getQuestion() {
                     outputMSG.id = 'outputMSG';
                     outputMSG.classList.add('disable', 'outputMSG');
                     document.body.appendChild(outputMSG);
+                    if (responseJSON.requiresLocation) {
+                        getLocation();
+                        setInterval(getLocation, 31000);
+                    }
                 } else {
                     endSession();
                 }
@@ -252,7 +255,7 @@ function skipQuestion() {
     fetch("https://codecyprus.org/th/api/skip?session=" + sessionID)
         .then(response => response.json())
         .then(responseJSON => {
-            if (responseJSON.status != 'ERROR'){
+            if (responseJSON.status !== 'ERROR'){
                 if (!responseJSON.completed) {
                     document.getElementById('outputMSG').classList.remove('disable', 'error');
                     document.getElementById('outputMSG').classList.add('done');
@@ -272,6 +275,25 @@ function skipQuestion() {
 function endSession() {
     document.body.innerHTML = "end";
     console.log('end');
+}
+
+function getLocation() {
+    if (navigator.geolocation) {
+        fetch(API + "/location?session=" + sessionID + "&latitude=" + navigator.coords.latitude + "&longitude=" + navigator.coords.longitude)
+        .then(response => response.json()
+        .then(responseJSON => {
+            if (responseJSON.status === 'ERROR') {
+                document.getElementById('outputMSG').classList.remove('disable', 'done');
+                document.getElementById('outputMSG').classList.add('error');
+                document.getElementById('outputMSG').innerText = '';
+                for (let message of responseJSON.errorMessages) {
+                    document.getElementById('outputMSG').innerText += message;
+                }
+            } else {
+                console.log(responseJSON.message);
+            }
+        }));
+    }
 }
 
 getHuntList();
