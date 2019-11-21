@@ -299,6 +299,7 @@ function endSession() {
     document.cookie = 'sessionID=; expires=Thu 01 Jan 1970';
     document.body.innerHTML = "end";
     console.log('end');
+    getLeaderboard()
 }
 
 function getLocation() {
@@ -336,6 +337,46 @@ function getCookie(cookieName) {
         }
     }
     return "";
+}
+function getLeaderboard() {
+    fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID)
+        .then(response => response.json())
+        .then(responseJSON => {
+
+            //  console.log("i am in");
+            //  let tableScore = document.createElement("TABLE");
+            // document.body.innerHTML="hre";
+
+            let score = responseJSON.leaderboard;
+            score.id= "score";
+            let scoreStatus = responseJSON.status;
+            console.log(scoreStatus);
+            let numOFplayes = responseJSON.numOfPlayers;
+            console.log(numOFplayes);
+
+            // let hasPrize = responseJSON.hasPrice;
+            // console.log(hasPrize);
+            let limit = responseJSON.limit;
+            limit=10;
+            console.log(limit);
+
+            // document.body.innerText = score.
+            console.log(score);
+            document.createElement("table");
+
+            //  let jasonScore = JSON.stringify(score);
+            // document.body.innerText = jasonScore;
+
+            for  (let scoreObject of score){
+                console.log(scoreObject);
+                let jasonScore = JSON.stringify(score);
+                document.body.innerText = jasonScore;
+
+            }
+            // let playrName = jasonScore.player;
+            // console.log(playrName);
+
+        });
 }
 
 getHuntList();
