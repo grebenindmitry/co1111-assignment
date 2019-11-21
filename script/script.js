@@ -261,7 +261,6 @@ function sendAnswer(answer) {
         });
 }
 
-
 function skipQuestion() {
     fetch("https://codecyprus.org/th/api/skip?session=" + sessionID)
         .then(response => response.json())
@@ -291,20 +290,22 @@ function endSession() {
 
 function getLocation() {
     if (navigator.geolocation) {
-        fetch(API + "/location?session=" + sessionID + "&latitude=" + navigator.coords.latitude + "&longitude=" + navigator.coords.longitude)
-        .then(response => response.json()
-        .then(responseJSON => {
-            if (responseJSON.status === 'ERROR') {
-                document.getElementById('outputMSG').classList.remove('disable', 'done');
-                document.getElementById('outputMSG').classList.add('error');
-                document.getElementById('outputMSG').innerText = '';
-                for (let message of responseJSON.errorMessages) {
-                    document.getElementById('outputMSG').innerText += message;
-                }
-            } else {
-                console.log(responseJSON.message);
-            }
-        }));
+        navigator.geolocation.getCurrentPosition(function(position) {
+            fetch(API + "/location?session=" + sessionID + "&latitude=" + position.coords.latitude +
+                "&longitude=" + position.coords.longitude).then(response => response.json()
+                .then(responseJSON => {
+                    if (responseJSON.status === 'ERROR') {
+                        document.getElementById('outputMSG').classList.remove('disable', 'done');
+                        document.getElementById('outputMSG').classList.add('error');
+                        document.getElementById('outputMSG').innerText = '';
+                        for (let message of responseJSON.errorMessages) {
+                            document.getElementById('outputMSG').innerText += message;
+                        }
+                    } else {
+                        console.log(responseJSON.message);
+                    }
+            }));
+        });
     }
 }
 
