@@ -119,12 +119,13 @@ function getQuestion() {
 
 
                     skipBox.addEventListener('click', function(event) {skipQuestion();});
+
                     // skipBox.onclick = skipQuestion();
 
                 }
                 else{
                   let errorSkip = document.createElement("P");
-                    errorSkip.innerText = "This question can no be skipped.";
+                    errorSkip.innerText = "This question can not be skipped.";
                     document.body.appendChild(errorSkip);
                 }
 
@@ -296,6 +297,8 @@ function sendAnswer(answer) {
                 document.getElementById('outputMSG').classList.add('error');
                 document.getElementById('outputMSG').innerText = responseJSON.errorMessages[0];
             }
+
+
         });
 }
 
@@ -304,9 +307,15 @@ function skipQuestion(sessionID) {
     fetch("https://codecyprus.org/th/api/skip?session=" + sessionID)
         .then(response => response.json())
         .then(responseJSON => {
+
+            getQuestion();
+
+           // let skipAnswer = "skip";
+            
             console.log(responseJSON + "here");
         });
 }
+
 
 
 
