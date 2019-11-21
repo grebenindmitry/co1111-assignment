@@ -289,6 +289,7 @@ function skipQuestion() {
 function endSession() {
     document.body.innerHTML = "end";
     console.log('end');
+    getLeaderboard()
 }
 
 function getLocation() {
@@ -311,5 +312,39 @@ function getLocation() {
         });
     }
 }
+
+function getLeaderboard() {
+    fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID)
+        .then(response => response.json())
+        .then(responseJSON => {
+
+           //  console.log("i am in");
+           //  let tableScore = document.createElement("TABLE");
+           // document.body.innerHTML="hre";
+
+            let score = responseJSON.leaderboard;
+            score.id= "score";
+
+            // document.body.innerText = score.
+            console.log(score);
+            document.createElement("table");
+
+            let jasonScore = JSON.stringify(score);
+           document.body.innerText = jasonScore;
+
+
+
+
+
+        });
+}
+
+// function getLeaderboard() {
+//
+//     fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID, { method: "GET" })
+//         .then(response => response.json())
+//         .then(json => handleLeaderboard(json));
+// }
+
 
 getHuntList();
