@@ -9,7 +9,7 @@ function getHuntList() {
             let i = 0;
             for (let treasureHunt of responseJSON.treasureHunts) {
                 let huntList = document.getElementById("huntList");
-                let dateObj = new Date(treasureHunt.startsOn);
+                let startDateObj = new Date(treasureHunt.startsOn);
                 let dateOptions = {
                     day: 'numeric',
                     month: 'numeric',
@@ -19,6 +19,7 @@ function getHuntList() {
                     second: '2-digit',
                     hour12: false
                 };
+                let endDateObj = new Date(treasureHunt.endsOn);
                 //Create and append hunt name
                 let nameElement = document.createElement("li");
                 nameElement.id = "thName" + i;
@@ -32,7 +33,8 @@ function getHuntList() {
 
                 //Append hunt info
                 subList.innerHTML += ("<li><b>Description: </b>" + treasureHunt.description + "</li>");
-                subList.innerHTML += ("<li><b>Starts On: </b>" + dateObj.toLocaleDateString('en-US', dateOptions) + "</li>");
+                subList.innerHTML += ("<li><b>Starts On: </b>" + startDateObj.toLocaleDateString('en-US', dateOptions) + "</li>");
+                subList.innerHTML += ("<li><b>Ends On: </b>" + endDateObj.toLocaleDateString('en-US', dateOptions) + "</li>");
                 i++;
 
             }
@@ -78,12 +80,9 @@ function enterUsername(uuid, targetID) {
     usernameInput.style.display = "inline-block";
     usernameInput.style.marginLeft = "10px";
     usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\")'>" +
-                                    "<fieldset>" +
-                                        "<legend>Username:</legend>" +
                                         "<input id='usernameBox' type='text' placeholder='Enter your username'>" +
-                                        "<input type='submit' class='button'></button>" +
-                                        "<span id='errorBox' class='disable' style='padding:2px; margin-left: 10px'></span>" + 
-                                    "</fieldset>" +
+                                        "<input type='submit' style='' class='submitButton'>" +
+                                        "<span id='errorBox' class='disable' style='padding:2px; margin-left: 10px'></span>" +
                                 "</form>";
     target.appendChild(usernameInput);
 }
@@ -202,6 +201,9 @@ function getQuestion() {
                             document.body.appendChild(mcqD);
                             break;
                         case "TEXT":
+                            let textForm = document.createElement('form');
+                            textForm.action = 'javascript:sendAnswer(document.getElementById("textBox").value)'
+
                             let textBox = document.createElement('input');
                             textBox.type = 'text';
                             
@@ -210,9 +212,10 @@ function getQuestion() {
                             textSubmitButton.classList.add('button');
                             textSubmitButton.id = 'textButton';
                             textSubmitButton.addEventListener('click', function() {sendAnswer(textBox.value);});
-                            
-                            document.body.appendChild(textBox);
-                            document.body.appendChild(textSubmitButton);
+
+                            document.body.appendChild(textForm);
+                            textForm.appendChild(textBox);
+                            textForm.appendChild(textSubmitButton);
                             break;
                     }
 

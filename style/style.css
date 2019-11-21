@@ -26,6 +26,7 @@
     bottom: 2%;
     right: 2%;
     opacity: 80%;
+    max-width: 60%;
 }
 
 #intro{
@@ -117,7 +118,19 @@
 .button{
     border: none;
     margin: 3px;
-    padding: 10px;
+    padding: 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submitButton{
+    border: none;
+    margin: 3px;
+    padding: 15px 0;
+    width: 75%;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -130,4 +143,8 @@
     position: absolute;
     bottom: 2%;
     left: 2%;
+}
+
+input[type='text'], input[type='number'] {
+    font-size: large;
 }
