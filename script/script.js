@@ -15,8 +15,6 @@ function getHuntList() {
                 nameElement.id = 'savedHuntName';
                 nameElement.innerHTML = '<a style="font-weight: bold" href="javascript:startSession(\'' + cookieSessionID + "\', undefined, true, \'" + username + '\')">Continue previous game</a>'
                 huntList.appendChild(nameElement);
-
-
             }
 
             for (let treasureHunt of responseJSON.treasureHunts) {
