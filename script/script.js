@@ -6,7 +6,6 @@ function getHuntList() {
     fetch(API + "/list")
         .then(response => response.json())
         .then(responseJSON => {
-            let i = 0;
             let huntList = document.getElementById("huntList");
             if (getCookie('gamePlaying') === 'true') {
                 let cookieSessionID = getCookie('sessionID');
@@ -18,6 +17,7 @@ function getHuntList() {
             }
 
             for (let treasureHunt of responseJSON.treasureHunts) {
+                let huntList = document.getElementById("huntList");
                 let startDateObj = new Date(treasureHunt.startsOn);
                 let dateOptions = {
                     day: 'numeric',
@@ -29,12 +29,13 @@ function getHuntList() {
                     hour12: false
                 };
                 let endDateObj = new Date(treasureHunt.endsOn);
+
                 //Create and append hunt name
                 let nameElement = document.createElement("li");
                 nameElement.id = "thName" + i;
+                huntList.appendChild(nameElement);
                 nameElement.innerHTML = ("<a style='font-weight: bold;' href='javascript:enterUsername(\"" +
                     treasureHunt.uuid + "\", \"" + nameElement.id + "\", \"" + endDateObj.toUTCString() + "\")'>" + treasureHunt.name + "</a>");
-                huntList.appendChild(nameElement);
 
                 //Create and append sublist for hunt info
                 let subList  = document.createElement("ul");
@@ -51,42 +52,33 @@ function getHuntList() {
 }
 
 // noinspection JSUnusedGlobalSymbols
-function startSession(uuid, expiryDate, isResume, username) {
-    if (!isResume) {
-        username = document.getElementById('usernameBox').value;
-        document.getElementById('errorBox').classList.remove('done', 'error', 'disable');
-        document.getElementById('errorBox').classList.add('loading');
-        document.getElementById('errorBox').innerText = "Loading...";
-        fetch(API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid)
-            .then(response => response.json())
-            .then(jsonResponse => {
-                // noinspection EqualityComparisonWithCoercionJS
-                if (jsonResponse.status == "ERROR") {
-                    document.getElementById('errorBox').classList.remove('done', 'loading');
-                    document.getElementById('errorBox').classList.add('error');
-                    document.getElementById('errorBox').innerText = "";
-                    for (let errorMessage of jsonResponse.errorMessages) {
-                        document.getElementById('errorBox').innerText += errorMessage;
-                    }
-                } else {
-                    document.getElementById('errorBox').classList.remove('loading', 'error');
-                    document.getElementById('errorBox').classList.add('done');
-                    document.getElementById('errorBox').innerText = "Session created!";
-                    sessionID = jsonResponse.session;
-                    document.cookie = 'gamePlaying=true; expires=' + expiryDate;
-                    document.cookie = 'username=' + username + '; expires=' + expiryDate;
-                    document.cookie = 'sessionID=' + sessionID + '; expires=' + expiryDate;
-                    getQuestion();
+function startSession(uuid, expiryDate) {
+    let username = document.getElementById('usernameBox').value;
+    document.getElementById('errorBox').classList.remove('done', 'error', 'disable');
+    document.getElementById('errorBox').classList.add('loading');
+    document.getElementById('errorBox').innerText = "Loading...";
+    fetch(API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid)
+        .then(response => response.json())
+        .then(jsonResponse => {
+            // noinspection EqualityComparisonWithCoercionJS
+            if (jsonResponse.status == "ERROR") {
+                document.getElementById('errorBox').classList.remove('done', 'loading');
+                document.getElementById('errorBox').classList.add('error');
+                document.getElementById('errorBox').innerText = "";
+                for (let errorMessage of jsonResponse.errorMessages) {
+                    document.getElementById('errorBox').innerText += errorMessage;
                 }
-            });
-    } else {
-        fetch(API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid)
-            .then(response => response.json()
-            .then(responseJSON => {
-                sessionID = uuid;
+            } else {
+                document.getElementById('errorBox').classList.remove('loading', 'error');
+                document.getElementById('errorBox').classList.add('done');
+                document.getElementById('errorBox').innerText = "Session created!";
+                sessionID = jsonResponse.session;
+                document.cookie = 'gamePlaying=true; expires=' + expiryDate;
+                document.cookie = 'sessionID=' + sessionID + 'expires=' + expiryDate;
                 getQuestion();
-            }));
-    }
+            }
+        });
+    // getQuestion();
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -99,7 +91,7 @@ function enterUsername(uuid, targetID, huntEndDate) {
     usernameInput.id = "inputBox";
     usernameInput.style.display = "inline-block";
     usernameInput.style.marginLeft = "10px";
-    usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\", \"" + huntEndDate + "\", false, undefined)'>" +
+    usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\", \"" + huntEndDate + "\")'>" +
                                         "<input id='usernameBox' type='text' placeholder='Enter your username'>" +
                                         "<input type='submit' value='Submit' style='' class='submitButton'>" +
                                         "<span id='errorBox' class='disable' style='padding:2px; margin-left: 10px'></span>" +
@@ -309,7 +301,6 @@ function skipQuestion() {
 
 function endSession() {
     document.cookie = 'gamePlaying=; expires=Thu 01 Jan 1970';
-    document.cookie = 'username=; expires=Thu 01 Jan 1970';
     document.cookie = 'sessionID=; expires=Thu 01 Jan 1970';
     document.body.innerHTML = "end";
     console.log('end');
@@ -352,15 +343,6 @@ function getCookie(cookieName) {
     }
     return "";
 }
-
-
-// function getLeaderboard() {
-//
-//     fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID, { method: "GET" })
-//         .then(response => response.json())
-//         .then(json => handleLeaderboard(json));
-// }
-
 function getLeaderboard() {
     fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID)
         .then(response => response.json())
@@ -371,15 +353,33 @@ function getLeaderboard() {
             // document.body.innerHTML="hre";
 
             let score = responseJSON.leaderboard;
-            score.id = "score";
+            score.id= "score";
+            let scoreStatus = responseJSON.status;
+            console.log(scoreStatus);
+            let numOFplayes = responseJSON.numOfPlayers;
+            console.log(numOFplayes);
+
+            // let hasPrize = responseJSON.hasPrice;
+            // console.log(hasPrize);
+            let limit = responseJSON.limit;
+            limit=10;
+            console.log(limit);
 
             // document.body.innerText = score.
             console.log(score);
             document.createElement("table");
 
-            let jasonScore = JSON.stringify(score);
-            document.body.innerText = jasonScore;
+            //  let jasonScore = JSON.stringify(score);
+            // document.body.innerText = jasonScore;
 
+            for  (let scoreObject of score){
+                console.log(scoreObject);
+                let jasonScore = JSON.stringify(score);
+                document.body.innerText = jasonScore;
+
+            }
+            // let playrName = jasonScore.player;
+            // console.log(playrName);
 
         });
 }
