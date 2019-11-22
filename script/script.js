@@ -6,9 +6,14 @@ function getHuntList() {
     fetch(API + "/list")
         .then(response => response.json())
         .then(responseJSON => {
-            let i = 0;
-            if (getCookie('gamePlaying')) {
-
+            let huntList = document.getElementById("huntList");
+            if (getCookie('gamePlaying') === 'true') {
+                let cookieSessionID = getCookie('sessionID');
+                let username = getCookie('username');
+                let nameElement = document.createElement('li');
+                nameElement.id = 'savedHuntName';
+                nameElement.innerHTML = '<a style="font-weight: bold" href="javascript:startSession(\'' + cookieSessionID + "\', undefined, true, \'" + username + '\')">Continue previous game</a>'
+                huntList.appendChild(nameElement);
             }
 
             for (let treasureHunt of responseJSON.treasureHunts) {
