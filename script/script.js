@@ -318,12 +318,9 @@ function getLeaderboard() {
         .then(response => response.json())
         .then(responseJSON => {
 
-           //  console.log("i am in");
-           //  let tableScore = document.createElement("TABLE");
-           // document.body.innerHTML="hre";
-
             let score = responseJSON.leaderboard;
             score.id= "score";
+            score.size=10;
 
             let object;
             // document.body.innerText = score.
@@ -331,33 +328,30 @@ function getLeaderboard() {
             document.createElement("table");
 
            let jasonScore = JSON.stringify(score);
-          document.body.innerText = jasonScore;
-
-
-        //   console.log(array);
+          // document.body.innerText = jasonScore;
 
             // score.sort();
             // score.reverse();
             // object = document.getElementById("score");
             // -->DONT DELETE YET
 
-           for (let i=0; i<10; i++){
+
+            var clonedArray = JSON.parse(JSON.stringify(score))
+            console.log(clonedArray[0]);
+
+           for (let i=0; i<10; i++ ){
                console.log(score[i]);
-               document.body.innerText = jasonScore[i];
+               let leader = [score[i]];
+               document.write(JSON.stringify(score[i],null,2));  //PRINTS 10 PLAYERS-NOT SORTED
+
+               // document.body.innerText = JSON.stringify(clonedArray[i],null,2);
+               //  document.body.innerText = JSON.stringify(score[i],null,2);
+               // console.log(leader[score[i]]);
            }
-
-
-
-
-        });
+         })
 }
 
-// function getLeaderboard() {
-//
-//     fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID, { method: "GET" })
-//         .then(response => response.json())
-//         .then(json => handleLeaderboard(json));
-// }
+
 
 
 getHuntList();
