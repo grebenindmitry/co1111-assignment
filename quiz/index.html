@@ -8,9 +8,55 @@
         <link rel="stylesheet" href="../style/style.css" type="text/css">
         <script defer src="../script/script.js" type="text/javascript"></script>
         <link rel="icon" type="image/x-icon" href="../favicon.ico">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
     </head>
     <body>
-        <h1>Treasure Hunts: </h1>
+    <h1 class="landingTop">DAC TREASURE-HUNT</h1>
+
+    <button class="accordion"><i class="fa fa-info-circle" style="font-size:20px"></i></button>
+    <div class="panel">
+        <table>
+            <tr>
+                <td>Click on the TreasureHunt Section and enter a username</td>
+            </tr>
+            <tr>
+                <td>Answer the questions and go to the next.</td>
+            </tr>
+            <tr>
+                <td>You can reach the next question Only if you answer CORRECT.</td>
+            </tr>
+            <tr>
+                <td>If you don't know the answer, SKIP the question.</td>
+            </tr>
+            <tr>
+                <td> <u>ATTENTION:</u> Some questions can not be skipped</td>
+            </tr>
+            <tr>
+                <td> <u>ATTENTION:</u>Some questions should be answer in a specific LOCATION.</td>
+            </tr>
+        </table>
+    </div>
+
+
         <ul id="huntList"></ul>
+
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+    </script>
     </body>
 </html>
