@@ -9,10 +9,9 @@ function getHuntList() {
             let huntList = document.getElementById("huntList");
             if (getCookie('gamePlaying') === 'true') {
                 let cookieSessionID = getCookie('sessionID');
-                let username = getCookie('username');
                 let nameElement = document.createElement('li');
                 nameElement.id = 'savedHuntName';
-                nameElement.innerHTML = '<a style="font-weight: bold" href="javascript:startSession(\'' + cookieSessionID + "\', undefined, true, \'" + username + '\')">Continue previous game</a>'
+                nameElement.innerHTML = '<a style="font-weight: bold" href="javascript:resumeSession(\'' + cookieSessionID + '\')">Continue previous game</a>'
                 huntList.appendChild(nameElement);
             }
 
@@ -46,14 +45,23 @@ function getHuntList() {
                 subList.innerHTML += ("<li><b>Starts On: </b>" + startDateObj.toLocaleDateString('en-US', dateOptions) + "</li>");
                 subList.innerHTML += ("<li><b>Ends On: </b>" + endDateObj.toLocaleDateString('en-US', dateOptions) + "</li>");
                 i++;
-
             }
+            let errorBox = document.createElement('span');
+            errorBox.classList.add('disable', 'outputMSG');
+            errorBox.id = 'errorBox';
+            document.body.appendChild(errorBox);
         });
 }
 
+function resumeSession(uuid) {
+    sessionID = uuid;
+    getQuestion();
+}
+
 // noinspection JSUnusedGlobalSymbols
-function startSession(uuid, expiryDate) {
+function startSession(uuid, expiryDate, isContinue) {
     let username = document.getElementById('usernameBox').value;
+
     document.getElementById('errorBox').classList.remove('done', 'error', 'disable');
     document.getElementById('errorBox').classList.add('loading');
     document.getElementById('errorBox').innerText = "Loading...";
@@ -74,7 +82,7 @@ function startSession(uuid, expiryDate) {
                 document.getElementById('errorBox').innerText = "Session created!";
                 sessionID = jsonResponse.session;
                 document.cookie = 'gamePlaying=true; expires=' + expiryDate;
-                document.cookie = 'sessionID=' + sessionID + 'expires=' + expiryDate;
+                document.cookie = 'sessionID=' + sessionID + ';expires=' + expiryDate;
                 getQuestion();
             }
         });
@@ -91,10 +99,9 @@ function enterUsername(uuid, targetID, huntEndDate) {
     usernameInput.id = "inputBox";
     usernameInput.style.display = "inline-block";
     usernameInput.style.marginLeft = "10px";
-    usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\", \"" + huntEndDate + "\")'>" +
+    usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\", \"" + huntEndDate + "\", false)'>" +
                                         "<input id='usernameBox' type='text' placeholder='Enter your username'>" +
                                         "<input type='submit' value='Submit' style='' class='submitButton'>" +
-                                        "<span id='errorBox' class='disable' style='padding:2px; margin-left: 10px'></span>" +
                                 "</form>";
     target.appendChild(usernameInput);
 }
