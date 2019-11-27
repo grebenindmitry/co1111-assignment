@@ -1,7 +1,3 @@
-
-
-
-
 const API = "https://codecyprus.org/th/api";
 let sessionID = "";
 
@@ -10,7 +6,16 @@ function getHuntList() {
     fetch(API + "/list")
         .then(response => response.json())
         .then(responseJSON => {
-            let i = 0;
+            let huntList = document.getElementById("huntList");
+            if (getCookie('gamePlaying') === 'true') {
+                let cookieSessionID = getCookie('sessionID');
+                let username = getCookie('username');
+                let nameElement = document.createElement('li');
+                nameElement.id = 'savedHuntName';
+                nameElement.innerHTML = '<a style="font-weight: bold" href="javascript:startSession(\'' + cookieSessionID + "\', undefined, true, \'" + username + '\')">Continue previous game</a>'
+                huntList.appendChild(nameElement);
+            }
+
             for (let treasureHunt of responseJSON.treasureHunts) {
                 let huntList = document.getElementById("huntList");
                 let startDateObj = new Date(treasureHunt.startsOn);
@@ -24,12 +29,13 @@ function getHuntList() {
                     hour12: false
                 };
                 let endDateObj = new Date(treasureHunt.endsOn);
+
                 //Create and append hunt name
                 let nameElement = document.createElement("li");
                 nameElement.id = "thName" + i;
                 huntList.appendChild(nameElement);
                 nameElement.innerHTML = ("<a style='font-weight: bold;' href='javascript:enterUsername(\"" +
-                    treasureHunt.uuid + "\", \"" + nameElement.id + "\")'>" + treasureHunt.name + "</a>");
+                    treasureHunt.uuid + "\", \"" + nameElement.id + "\", \"" + endDateObj.toUTCString() + "\")'>" + treasureHunt.name + "</a>");
 
                 //Create and append sublist for hunt info
                 let subList  = document.createElement("ul");
@@ -46,7 +52,7 @@ function getHuntList() {
 }
 
 // noinspection JSUnusedGlobalSymbols
-function startSession(uuid) {
+function startSession(uuid, expiryDate) {
     let username = document.getElementById('usernameBox').value;
     document.getElementById('errorBox').classList.remove('done', 'error', 'disable');
     document.getElementById('errorBox').classList.add('loading');
@@ -67,6 +73,8 @@ function startSession(uuid) {
                 document.getElementById('errorBox').classList.add('done');
                 document.getElementById('errorBox').innerText = "Session created!";
                 sessionID = jsonResponse.session;
+                document.cookie = 'gamePlaying=true; expires=' + expiryDate;
+                document.cookie = 'sessionID=' + sessionID + 'expires=' + expiryDate;
                 getQuestion();
             }
         });
@@ -74,7 +82,7 @@ function startSession(uuid) {
 }
 
 // noinspection JSUnusedGlobalSymbols
-function enterUsername(uuid, targetID) {
+function enterUsername(uuid, targetID, huntEndDate) {
     let target = document.getElementById(targetID);
     if (document.getElementById('inputBox') !== null) {
         document.getElementById('inputBox').remove();
@@ -83,9 +91,9 @@ function enterUsername(uuid, targetID) {
     usernameInput.id = "inputBox";
     usernameInput.style.display = "inline-block";
     usernameInput.style.marginLeft = "10px";
-    usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\")'>" +
+    usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\", \"" + huntEndDate + "\")'>" +
                                         "<input id='usernameBox' type='text' placeholder='Enter your username'>" +
-                                        "<input type='submit' style='' class='submitButton'>" +
+                                        "<input type='submit' value='Submit' style='' class='submitButton'>" +
                                         "<span id='errorBox' class='disable' style='padding:2px; margin-left: 10px'></span>" +
                                 "</form>";
     target.appendChild(usernameInput);
@@ -206,7 +214,7 @@ function getQuestion() {
                             break;
                         case "TEXT":
                             let textForm = document.createElement('form');
-                            textForm.action = 'javascript:sendAnswer(document.getElementById("textBox").value)'
+                            textForm.action = 'javascript:sendAnswer(document.getElementById("textBox").value)';
 
                             let textBox = document.createElement('input');
                             textBox.type = 'text';
@@ -264,6 +272,7 @@ function sendAnswer(answer) {
                 document.getElementById('outputMSG').classList.remove('disable', 'done');
                 document.getElementById('outputMSG').classList.add('error');
                 document.getElementById('outputMSG').innerText = responseJSON.errorMessages[0];
+                endSession();
             }
         });
 }
@@ -291,6 +300,8 @@ function skipQuestion() {
 }
 
 function endSession() {
+    document.cookie = 'gamePlaying=; expires=Thu 01 Jan 1970';
+    document.cookie = 'sessionID=; expires=Thu 01 Jan 1970';
     document.body.innerHTML = "end";
     console.log('end');
     getLeaderboard()
@@ -317,45 +328,60 @@ function getLocation() {
     }
 }
 
+function getCookie(cookieName) {
+    let name = cookieName + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) === 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
 function getLeaderboard() {
     fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID)
         .then(response => response.json())
         .then(responseJSON => {
 
+            //  console.log("i am in");
+            //  let tableScore = document.createElement("TABLE");
+            // document.body.innerHTML="hre";
+
             let score = responseJSON.leaderboard;
             score.id= "score";
-            score.size=10;
+            let scoreStatus = responseJSON.status;
+            console.log(scoreStatus);
+            let numOFplayes = responseJSON.numOfPlayers;
+            console.log(numOFplayes);
 
-            let object;
+            // let hasPrize = responseJSON.hasPrice;
+            // console.log(hasPrize);
+            let limit = responseJSON.limit;
+            limit=10;
+            console.log(limit);
+
             // document.body.innerText = score.
             console.log(score);
             document.createElement("table");
 
-           let jasonScore = JSON.stringify(score);
-          // document.body.innerText = jasonScore;
+            //  let jasonScore = JSON.stringify(score);
+            // document.body.innerText = jasonScore;
 
-            // score.sort();
-            // score.reverse();
-            // object = document.getElementById("score");
-            // -->DONT DELETE YET
+            for  (let scoreObject of score){
+                console.log(scoreObject);
+                let jasonScore = JSON.stringify(score);
+                document.body.innerText = jasonScore;
 
+            }
+            // let playrName = jasonScore.player;
+            // console.log(playrName);
 
-            var clonedArray = JSON.parse(JSON.stringify(score))
-            console.log(clonedArray[0]);
-
-           for (let i=0; i<10; i++ ){
-               console.log(score[i]);
-               let leader = [score[i]];
-               document.write(JSON.stringify(score[i],null,2));  //PRINTS 10 PLAYERS-NOT SORTED
-
-               // document.body.innerText = JSON.stringify(clonedArray[i],null,2);
-               //  document.body.innerText = JSON.stringify(score[i],null,2);
-               // console.log(leader[score[i]]);
-           }
-         })
+        });
 }
-
-
-
 
 getHuntList();
