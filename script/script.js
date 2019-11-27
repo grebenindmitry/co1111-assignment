@@ -107,6 +107,7 @@ function enterUsername(uuid, targetID, huntEndDate) {
 }
 
 function getQuestion() {
+    setInterval(sendLocation, 31000);
     fetch(API + "/question?session=" + sessionID)
         .then(response => response.json())
         .then(responseJSON => {
@@ -120,6 +121,7 @@ function getQuestion() {
             } else {
                 if (!responseJSON.completed) {
                     document.body.innerHTML = "";
+                    document.body.classList.remove('margin-free');
 
                     if (responseJSON.canBeSkipped === true) {
                         let skipBox = document.createElement("BUTTON");
@@ -134,6 +136,7 @@ function getQuestion() {
                     } else {
                         let errorSkip = document.createElement("p");
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
+                        errorSkip.style.maxWidth = '60%';
                         document.body.appendChild(errorSkip);
                     }
 
@@ -244,14 +247,22 @@ function getQuestion() {
                     questionNumBox.classList.add('questionNum');
                     document.body.appendChild(questionNumBox);
 
+                    let scoreBox = document.createElement('span');
+                    scoreBox.innerText = 'Loading...';
+                    scoreBox.classList.add('scoreBox');
+                    document.body.appendChild(scoreBox);
+                    fetch(API + '/score?session=' + sessionID)
+                        .then(response => response.json())
+                        .then(scoreJSON => {
+                            if (scoreJSON.status !== 'ERROR') {
+                                scoreBox.innerText = 'Your score is: ' + scoreJSON.score;
+                            }
+                        });
+
                     let outputMSG = document.createElement('span');
                     outputMSG.id = 'outputMSG';
                     outputMSG.classList.add('disable', 'outputMSG');
                     document.body.appendChild(outputMSG);
-                    if (responseJSON.requiresLocation) {
-                        getLocation();
-                        setInterval(getLocation, 31000);
-                    }
                 } else {
                     endSession();
                 }
@@ -269,17 +280,20 @@ function sendAnswer(answer) {
                     document.getElementById('outputMSG').classList.remove('disable', 'error');
                     document.getElementById('outputMSG').classList.add('done');
                     document.getElementById('outputMSG').innerText = responseJSON.message;
-                    setTimeout(getQuestion(), 5000);
+                    window.setTimeout(getQuestion, 600);
                 } else {
                     document.getElementById('outputMSG').classList.remove('disable', 'done');
                     document.getElementById('outputMSG').classList.add('error');
                     document.getElementById('outputMSG').innerText = responseJSON.message;
+                    window.setTimeout(getQuestion, 600);
                 }
             } else {
                 document.getElementById('outputMSG').classList.remove('disable', 'done');
                 document.getElementById('outputMSG').classList.add('error');
                 document.getElementById('outputMSG').innerText = responseJSON.errorMessages[0];
-                endSession();
+                if (responseJSON.errorMessages[0] === 'Finished session. The specified session has run out of time.') {
+                    endSession();
+                }
             }
         });
 }
@@ -314,7 +328,7 @@ function endSession() {
     getLeaderboard()
 }
 
-function getLocation() {
+function sendLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
             fetch(API + "/location?session=" + sessionID + "&latitude=" + position.coords.latitude +

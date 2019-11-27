@@ -64,10 +64,16 @@
     left: 2%;
 }
 
+.scoreBox {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+}
+
 input[type='text'], input[type='number'] {
     font-size: large;
 }
-body{
+.margin-free{
     margin: 0;
 }
 .titleHeading{
