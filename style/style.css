@@ -154,7 +154,7 @@ li {
     font-size: 30px !important;
 }
 
-li a, .dropbtn {
+.linkList>li>a, .dropbtn {
     display: inline-block;
     color: white;
     text-align: center;
@@ -166,7 +166,7 @@ li a, .dropbtn {
     padding-top: 6px;
 }
 
-li a:hover, .dropdown:hover .dropbtn {
+.linkList>li>a:hover, .dropdown:hover .dropbtn {
     background-color: #e6e600;
 }
 
