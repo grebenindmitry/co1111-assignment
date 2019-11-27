@@ -344,44 +344,33 @@ function getCookie(cookieName) {
     return "";
 }
 function getLeaderboard() {
-    fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID)
+    fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID +  "&sorted&limit=10")
         .then(response => response.json())
         .then(responseJSON => {
 
-            //  console.log("i am in");
-            //  let tableScore = document.createElement("TABLE");
-            // document.body.innerHTML="hre";
-
             let score = responseJSON.leaderboard;
-            score.id= "score";
-            let scoreStatus = responseJSON.status;
-            console.log(scoreStatus);
-            let numOFplayes = responseJSON.numOfPlayers;
-            console.log(numOFplayes);
 
-            // let hasPrize = responseJSON.hasPrice;
-            // console.log(hasPrize);
             let limit = responseJSON.limit;
-            limit=10;
-            console.log(limit);
+            let tableOfScores = "<table>";
 
-            // document.body.innerText = score.
-            console.log(score);
-            document.createElement("table");
+             console.log(score);
 
-            //  let jasonScore = JSON.stringify(score);
-            // document.body.innerText = jasonScore;
+              for (let i=0; i < limit; i++ )
+                {
+                    tableOfScores += "<tr>" +
+                                "<td>" + score[i].player + "</td>" +
+                                "<td>" + score[i].completionTime + "</td>" +
+                                "<td>" + score[i].score + "</td>" +
+                                "</tr>";
+                        }
 
-            for  (let scoreObject of score){
-                console.log(scoreObject);
-                let jasonScore = JSON.stringify(score);
-                document.body.innerText = jasonScore;
+              tableOfScores += "</table>";
 
-            }
-            // let playrName = jasonScore.player;
-            // console.log(playrName);
+              document.body = document.createElement("body");
+              document.body.innerHTML = tableOfScores;
 
-        });
+
+        })
 }
 
 getHuntList();
