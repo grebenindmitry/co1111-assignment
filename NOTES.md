@@ -45,3 +45,4 @@
        + Testing
        + Test Plan
        + Table of feedbacks(from lecture week10 slide 36)
+       + convert completion time to real (human) time
