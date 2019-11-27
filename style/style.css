@@ -146,7 +146,7 @@ body{
     padding: 0;
 }
 
-li {
+.linkList li {
     float: left;
 }
 
