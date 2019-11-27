@@ -7,61 +7,42 @@
     <link rel="stylesheet" type="text/css" href="./style/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>CO1111</title>
-    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="icon" type="image/png" href="./images/dac.png">
 </head>
 <body>
-<!--    <div class="stuff">-->
-<!--        <h1 id="intro">Sum stuff</h1>-->
-<!--    </div>-->
-<!--    <div class="topnav" id="myTopnav">-->
-<!--        <a id="goQuiz"  href="quiz/">Go to quiz</a>-->
-<!--        <a id="gitRep"  href="https://github.com/dgrebenin/co1111-assignment">GitHub Repository</a>-->
-<!--        <a id="contact" href=mailto:achristou4@uclan.ac.uk>Contact</a>-->
-<!--    </div>-->
-<!--    <br/>-->
-<!--    <div class="dropdown">-->
-<!--        <button class="dropbtn">Team Members</button>-->
-<!--        <div class="dropdown-content" style="left:0;">-->
-<!--            <a class="members" href="https://github.com/DGrebenin"> Dmitry Grebenin</a>-->
-<!--            <a class="members" href="https://github.com/CMouskovia">Charalampos Mouskovia</a>-->
-<!--            <a class="members" href="https://github.com/AChristou4">Alexandros Christou</a>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div class="header">
+        <h1 class="titleHeading">DAC Treasure Hunt</h1>
+        <ul class="linkList">
+            <li><a href="#"><img style="height: 30px;" src="images/icons/instagram.png"></a></li>
+            <li><a href="#"><img style="height: 30px;" src="images/icons/facebook.png"></a></li>
+            <li><a href="#"><img style="height: 30px;" src="images/icons/twitter.png"></a></li>
+            <li><a href="https://github.com/dgrebenin/co1111-assignment">
+                <img style="height: 30px;" src="images/icons/github.png"></a></li>
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn">Creators</a>
+                <div class="dropdown-content">
+                    <a href="#"> Dmitry Grebenin </a>
+                    <a href="#">Alexandros Christou</a>
+                    <a href="#">Charalampos Mouskovia</a>
+                </div>
+            </li>
+        </ul>
+    </div>
 
-    <h1 class="landingTop">DAC TREASURE-HUNT</h1>
-<div class="menuBar">
-<ul class="firstPage">
-    <li><a href="#home"><i class="fa fa-instagram" style="font-size:24px"></i></a></li>
-    <li><a href="#news"><i class="fa fa-facebook-square" style="font-size:24px"></i></a></li>
-    <li><a href="#news"><i class="fa fa-twitter-square" style="font-size:24px"></i></a></li>
-    <li><a href="https://github.com/dgrebenin/co1111-assignment"><i class="fa fa-github" style="font-size:24px"></i></a></li>
-    <li class="dropdown">
-        <a href="javascript:void(0)" class="dropbtn">Creators</a>
-
-        <div class="dropdown-content">
-            <a href="#"> Dmitry Grebenin </a>
-            <a href="#">Alexandros Christou</a>
-            <a href="#">Charalampos Mouskovia</a>
-        </div>
-    </li>
-    <li><a href="https://github.com/dgrebenin/co1111-assignment">GitHub Repository</a></li>
-</ul>
-</div>
-
-    <img id="treasure" src="treasure-chest.jpg" alt="treasure>">
+    <img id="treasure" src="./images/treasure.png" alt="treasure>">
 
     <h2 id="introduction">Introduction:</h2>
-    <p id="welcoming">Welcome to "DAC Treasure-Hunt".
-        You will be asked to answer different questions. At the end, your score will be show up and the player
-        with the HIGHEST score will win special prizes.
-       Pay attention to the questions and answer ONLY what is needed.
-        Be careful of the question type.</p>
-    <p></p>
-
-    <img id="joker" src="530937_1.jpg" alt="playGame">
-    <br>
-<br>
-    <a id="goQuiz"  href="quiz/">PLAY QUIZ</a>
+    <div id="welcoming">
+        <h4 style="margin: 0">Welcome to "DAC Treasure Hunt"</h4>
+        <p style="margin: 4px 0">You will be asked different questions, some of which will require
+            you to be at a specific location.</p>
+        <p style="margin: 4px 0">At the end, your score will be shown on the leaderboard
+            and the player with the HIGHEST score will win a special prizes.</p>
+        <p style="margin: 4px 0">Pay attention to the questions and answer ONLY
+            what is needed (wrong answers deduct points).</p>
+    </div>
+    <img id="joker" src="./images/joker.jpg" alt="playGame">
+    <a id="goQuiz"  href="./quiz/">PLAY QUIZ</a>
 
 
 

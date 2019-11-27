@@ -68,81 +68,102 @@ input[type='text'], input[type='number'] {
     font-size: large;
 }
 body{
-    background-image: linear-gradient(saddlebrown, yellow);
+    margin: 0;
 }
-.landingTop{
-    border: 2px solid black;
+.titleHeading{
+    color: white;
+    text-shadow: 1px 1px 1px #cccccc;
+    text-transform: uppercase;
     text-align: center;
-    background-color: ghostwhite;
-
 }
+
 #treasure{
     height: 100px;
     width: 100px;
-    border-radius: 50%;
-    border:1px solid black;
-    margin-left: 120px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 10px;
 }
+
 #introduction{
     font-size: 20px;
-
     border: 2px solid black;
-    background-color: white;
+    background-color: #fcffbe;
     color: black;
     text-shadow: 2px 2px #bfbfbf;
     text-align: center;
-    margin-right: 190px;
-    margin-left: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%
 }
+
 #welcoming{
-    background-color: #ffff80;
+    background-color: #fcffbe;
     border: 2px solid black;
-    margin-left: 20px;
-    margin-right: 50px;
+    margin: auto;
+    width: 80%;
     padding-left: 2px;
 }
+
 #joker{
     height: 100px;
     width: 100px;
     border: 1px solid white;
     border-radius: 30%;
-    margin-left: 110px;
+    margin: 20px auto;
+    display: block;
 }
 
 #goQuiz{
+    text-align: center;
+    box-shadow: 5px 5px 10px #333333;
     border: 2px solid black;
-    margin-right: auto;
     background: whitesmoke;
-    margin-left: 90px;
+    text-decoration: none;
+    color: #000000;
+    display: block;
+    margin: auto;
+    width: 50%;
     font-size: 30px;
-
+    border-radius: 10px;
 }
-.menuBar{
-    margin-top: -10px;
 
+#goQuiz:active {
+    box-shadow: none;
+    transform: translate(3px, 3px);
 }
-.firstPage {
-    list-style-type: none;
-    padding: 0;
+
+.header{
     overflow: hidden;
-    background-color: #333;
-    margin-left: 10px;
-    margin-right: 10px;
+    background-color: #865114;
+    box-shadow: 1px 1px 10px black;
+}
+.linkList {
+    list-style-type: none;
     height: 35px;
+    margin: 0;
+    padding: 0;
 }
 
 li {
     float: left;
 }
 
+.fa {
+    font-size: 30px !important;
+}
+
 li a, .dropbtn {
     display: inline-block;
     color: white;
-    text-shadow: 0 0 3px black;
     text-align: center;
-    padding: 7px 16px;
     text-decoration: none;
+    margin: 0 5px;
+}
 
+.dropbtn {
+    padding-top: 6px;
 }
 
 li a:hover, .dropdown:hover .dropbtn {
@@ -158,9 +179,10 @@ li.dropdown {
     position: absolute;
     background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 3px 3px 10px black;
     z-index: 1;
     margin-left: -30px;
+
 }
 
 .dropdown-content a {
@@ -179,7 +201,6 @@ li.dropdown {
 
 #huntList{
     list-style-type: none;
-
 }
 
 .accordion {
