@@ -20,26 +20,28 @@
     + Dmitry: Finish /question implementation and the TODOs
     + Charalampos: Logo design, /skip implementation
     
-   ### 19/11/2019
-- Alexandros,Charalambos : implement the skip button (with some bugs-going to fix them), gave ideas for marketing,
-create a MindMap for available tasks.
+### 19/11/2019
+    - Alexandros,Charalambos : implement the skip button (with some bugs-going to fix them), gave ideas for marketing,
+    create a MindMap for available tasks.
                             
-* Tasks availabe:
-   + Cookies
-   + Testing
-   + Test Plan
-   + LeaderBoard
-   + Marketing(last week)
+    Tasks availabe:
+       + Cookies
+       + Testing
+       + Test Plan
+       + LeaderBoard
+       + Marketing(last week)
      
-        ### 21/11/2019
+### 21/11/2019
     + Alexandros: Implementation of the leaderboard
     + Dmitry: Geoloacation, coockies attempt
     + Charalambos: Help with the leaderboard
     + ->Error500, problem with se server(probably), couldn work anymore
 
-
+ ### 27/11/2019
+    + Alexandros: Leaderboard ready,set up a limit and sorting, output table with players
+    + Dmitry: Coockies ready, fix some styling &  coding bugs
                             
-* Tasks availabe:
-   + Testing
-   + Test Plan
-   + Marketing(last week)
+    Next meeting:
+       + Testing
+       + Test Plan
+       + Table of feedbacks(from lecture week10 slide 36)
