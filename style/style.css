@@ -5,19 +5,19 @@
 }
 
 .done {
-    display: inline;
+    display: block;
     background-color: green;
     color: white;
 }
 
 .loading {
-    display: inline;
+    display: block;
     background-color: orange;
     color: white;
 }
 
 .error {
-    display: inline;
+    display: block;
     background-color: darkred;
     color: white;
 }
@@ -32,9 +32,9 @@
     bottom: 2%;
     right: 2%;
     opacity: 80%;
-    max-width: 60%;
+    max-width: 35%;
 }
-.button{
+.button {
     border: none;
     margin: 3px;
     padding: 30px;
@@ -43,6 +43,7 @@
     display: inline-block;
     font-size: 16px;
     cursor: pointer;
+    background-color:#d8d6d6;
 }
 
 .submitButton{
@@ -57,11 +58,16 @@
     cursor: pointer;
 }
 
-.questionNum {
+.questionInfo {
     border-width: 1px;
     position: absolute;
     bottom: 2%;
-    left: 2%;
+    width: 95%;
+}
+
+.questionInfo>p {
+    max-width: 100%;
+    margin: 15px 0;
 }
 
 .scoreBox {
@@ -152,24 +158,19 @@ input[type='text'], input[type='number'] {
     padding: 0;
 }
 
-.linkList li {
+.linkList>li {
     float: left;
 }
 
-.fa {
-    font-size: 30px !important;
-}
-
-.linkList>li>a, .dropbtn {
-    display: inline-block;
-    color: white;
-    text-align: center;
+.linkList>li>a{
     text-decoration: none;
     margin: 0 5px;
 }
 
 .dropbtn {
+    display: inline-block;
     padding-top: 6px;
+    color: black;
 }
 
 .linkList>li>a:hover, .dropdown:hover .dropbtn {
@@ -253,4 +254,7 @@ tr:nth-child(even){background-color: #f2f2f2}
 th {
     background-color: #4CAF50;
     color: white;
+}
+#qrCode{
+   background-color:#d8d6d6;
 }

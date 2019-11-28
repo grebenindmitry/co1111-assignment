@@ -131,8 +131,17 @@ function getQuestion() {
                         document.body.appendChild(skipBox);
                         document.getElementById("skipBox").value="SKIP";
                         document.getElementById("skipBox").name="SKIP";
-
                         skipBox.addEventListener('click', skipQuestion);
+
+                        let qrCode = document.createElement("qrCode");
+                        qrCode.id = "qrCode";
+                        qrCode.classList.add('button');
+                        qrCode.innerText="QR Code";
+                        document.body.appendChild(qrCode);
+                        document.getElementById("qrCode").value="qrCode";
+                        document.getElementById("qrCode").name="qrCode";
+                        qrCode.addEventListener('click', QRCode);
+
                     } else {
                         let errorSkip = document.createElement("p");
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
@@ -241,11 +250,27 @@ function getQuestion() {
                             break;
                     }
 
-                    let questionNumBox = document.createElement('span');
+                    let questionInfo = document.createElement('div');
+
+                    questionInfo.classList.add('questionInfo');
+
+                    let questionNumBox = document.createElement('p');
                     questionNumBox.innerText = 'Question: ' + (responseJSON.currentQuestionIndex + 1) +
                         "/" + responseJSON.numOfQuestions;
-                    questionNumBox.classList.add('questionNum');
-                    document.body.appendChild(questionNumBox);
+                    questionInfo.appendChild(questionNumBox);
+
+                    let scoresBox = document.createElement('p');
+                    scoresBox.innerText = 'Correct answer: ' + responseJSON.correctScore + ' points\n' +
+                        'Incorrect answer: ' + responseJSON.wrongScore + ' points\n' +
+                        'Skip: ' + responseJSON.skipScore + ' points';
+                    questionInfo.appendChild(scoresBox);
+
+                    let outputMSG = document.createElement('span');
+                    outputMSG.id = 'outputMSG';
+                    outputMSG.classList.add('disable', 'outputMSG');
+                    questionInfo.appendChild(outputMSG);
+
+                    document.body.appendChild(questionInfo);
 
                     let scoreBox = document.createElement('span');
                     scoreBox.innerText = 'Loading...';
@@ -258,11 +283,6 @@ function getQuestion() {
                                 scoreBox.innerText = 'Your score is: ' + scoreJSON.score;
                             }
                         });
-
-                    let outputMSG = document.createElement('span');
-                    outputMSG.id = 'outputMSG';
-                    outputMSG.classList.add('disable', 'outputMSG');
-                    document.body.appendChild(outputMSG);
                 } else {
                     endSession();
                 }
@@ -323,7 +343,7 @@ function skipQuestion() {
 function endSession() {
     document.cookie = 'gamePlaying=; expires=Thu 01 Jan 1970';
     document.cookie = 'sessionID=; expires=Thu 01 Jan 1970';
-    document.body.innerHTML = "end";
+    document.body.innerHTML = "End of treasure hunt. Loading the leaderboard...";
     console.log('end');
     getLeaderboard()
 }
