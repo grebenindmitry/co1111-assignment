@@ -131,8 +131,17 @@ function getQuestion() {
                         document.body.appendChild(skipBox);
                         document.getElementById("skipBox").value="SKIP";
                         document.getElementById("skipBox").name="SKIP";
-
                         skipBox.addEventListener('click', skipQuestion);
+
+                        let qrCode = document.createElement("qrCode");
+                        qrCode.id = "qrCode";
+                        qrCode.classList.add('button');
+                        qrCode.innerText="QR Code";
+                        document.body.appendChild(qrCode);
+                        document.getElementById("qrCode").value="qrCode";
+                        document.getElementById("qrCode").name="qrCode";
+                        qrCode.addEventListener('click', QRCode);
+
                     } else {
                         let errorSkip = document.createElement("p");
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
