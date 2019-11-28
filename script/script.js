@@ -147,14 +147,14 @@ function getQuestion() {
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
                         errorSkip.style.maxWidth = '60%';
                         document.body.appendChild(errorSkip);
-                        qrCode = document.createElement("qrCode");
-                        qrCode.id = "qrCode";
-                        qrCode.classList.add('button');
-                        qrCode.innerText="QR Code";
-                        document.body.appendChild(qrCode);
-                        document.getElementById("qrCode").value="qrCode";
-                        document.getElementById("qrCode").name="qrCode";
-                        qrCode.addEventListener('click', QRCode);
+                        let qrCode2 = document.createElement("qrCode2");
+                        qrCode2.id = "qrCode2";
+                        qrCode2.classList.add('button');
+                        qrCode2.innerText="QR Code";
+                        document.body.appendChild(qrCode2);
+                        document.getElementById("qrCode2").value="qrCode2";
+                        document.getElementById("qrCode2").name="qrCode2";
+                        qrCode2.addEventListener('click', QRCode);
                     }
 
                     let questionName = document.createElement('h1');
