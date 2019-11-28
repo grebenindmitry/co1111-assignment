@@ -394,4 +394,36 @@ function getLeaderboard() {
         })
 }
 
+function testingLeaderboard() {
+
+        fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID +  "&sorted&limit=10")
+            .then(response => response.json())
+            .then(responseJSON => {
+
+                let score = responseJSON.leaderboard;
+
+                let limit = responseJSON.limit;
+                let tableOfScores = "<table>";
+
+                console.log(score);
+
+                for (let i=0; i < limit; i++ )
+                {
+                    tableOfScores += "<tr>" +
+                        "<td>" + score[i].player + "</td>" +
+                        "<td>" + score[i].completionTime + "</td>" +
+                        "<td>" + score[i].score + "</td>" +
+                        "</tr>";
+                }
+
+                tableOfScores += "</table>";
+
+                document.body = document.createElement("body");
+                document.body.innerHTML = tableOfScores;
+
+
+            })
+
+}
+
 getHuntList();
