@@ -21,9 +21,10 @@
     + Charalampos: Logo design, /skip implementation
     
 ### 19/11/2019
-    - Alexandros,Charalambos : implement the skip button (with some bugs-going to fix them), gave ideas for marketing,
+    - Alexandros: implement the skip button (with some bugs-going to fix them), gave ideas for marketing,
     create a MindMap for available tasks.
-                            
+     - Charalambos:gave ideas for marketing, logo   
+          
     Tasks availabe:
        + Cookies
        + Testing
@@ -46,3 +47,10 @@
        + Test Plan
        + Table of feedbacks(from lecture week10 slide 36)
        + convert completion time to real (human) time
+       
+ ### 28/11/2019
+    - Alexandros: implement testing page for leaderboard
+     - Charalambos: create google analytics, qr code
+     -Dmitry : fix some styling issues, put question's score in app
+          
+   
