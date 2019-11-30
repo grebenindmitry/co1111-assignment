@@ -222,12 +222,21 @@ li.dropdown {
     font-size: 10px;
     transition: 0.4s;
 }
-
+.dropInfo{
+    width:45px;
+}
+#contentInfo{
+    width: 370px;
+}
+.dropInfo:hover .panel{
+    display: contents;
+}
 .panel {
     padding: 0 18px;
     background-color: white;
     max-height: 0;
-    overflow: hidden;
+    display: none;
+    position: absolute;
     transition: max-height 0.2s ease-out;
 }
 .guidance{
