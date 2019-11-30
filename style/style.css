@@ -173,7 +173,7 @@ input[type='text'], input[type='number'] {
     color: black;
 }
 
-.linkList>li>a:hover, .dropdown:hover .dropbtn {
+.linkList>li:hover, .dropdown:hover .dropbtn {
     background-color: #e6e600;
 }
 
