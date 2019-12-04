@@ -533,10 +533,9 @@ function prepareQR() {
 }
 
 function decode(codeReader, device) {
-    codeReader.decodeFromInputDeviceContinuously(device, 'videoOut')
-        .then((result, err) => {
+    codeReader.decodeFromInputVideoDeviceContinuously(device, 'videoOut', (result, err) => {
             if (result) {
                 console.log(result);
             } 
-        })
+        });
 }
