@@ -277,4 +277,9 @@ th {
     right: 10px;
     background-color: #a8a8a8;
     box-shadow: 2px 2px 2px black;
+    padding: 5px
+}
+
+.cameraExit {
+    display: block;
 }

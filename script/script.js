@@ -109,6 +109,20 @@ function enterUsername(uuid, targetID, huntEndDate) {
     target.appendChild(usernameInput);
 }
 
+function showScore() {
+    let scoreBox = document.createElement('span');
+    scoreBox.innerText = 'Loading...';
+    scoreBox.classList.add('scoreBox');
+    document.body.appendChild(scoreBox);
+    fetch(API + '/score?session=' + sessionID)
+        .then(response => response.json())
+        .then(scoreJSON => {
+            if (scoreJSON.status !== 'ERROR') {
+                scoreBox.innerText = 'Your score is: ' + scoreJSON.score;
+            }
+        });
+}
+
 function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tRequireLocation) {
     let fetchURL = '';
     if (!isTesting) {
@@ -287,17 +301,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
 
                     document.body.appendChild(questionInfo);
 
-                    let scoreBox = document.createElement('span');
-                    scoreBox.innerText = 'Loading...';
-                    scoreBox.classList.add('scoreBox');
-                    document.body.appendChild(scoreBox);
-                    fetch(API + '/score?session=' + sessionID)
-                        .then(response => response.json())
-                        .then(scoreJSON => {
-                            if (scoreJSON.status !== 'ERROR') {
-                                scoreBox.innerText = 'Your score is: ' + scoreJSON.score;
-                            }
-                        });
+                    showScore();
                 } else {
                     endSession();
                 }
@@ -428,18 +432,29 @@ function getLeaderboard() {
         })
 }
 
+function stopQR() {
+    document.getElementById('qrWindow').style.display = 'none';
+}
+
 function prepareQR() {
-    let qrReader = document.createElement('div');
-    qrReader.classList.add('qrWindow');
-    document.body.append(qrReader);
+    let qrWindow = document.createElement('div');
+    qrWindow.id = 'qrWindow';
+    qrWindow.classList.add('qrWindow');
+    document.body.append(qrWindow);
+
+    let exitBtn = document.createElement('button');
+    exitBtn.innerText = 'X';
+    exitBtn.addEventListener('click', stopQR);
+    exitBtn.classList.add('cameraExit');
+    qrWindow.append(exitBtn);
 
     let videoOut = document.createElement('video');
     videoOut.id = 'videoOut';
-
-    qrReader.append(videoOut);
+    qrWindow.append(videoOut);
 
     let sourceSelect = document.createElement('select');
-    qrReader.append(sourceSelect);
+    sourceSelect.classList.add('cameraSelect');
+    qrWindow.append(sourceSelect);
 
     let deviceID;
     const codeReader = new ZXing.BrowserQRCodeReader();
@@ -451,6 +466,7 @@ function prepareQR() {
                     videoInputDevices.forEach(element => {
                         const sourceOption = document.createElement('option');
                         sourceOption.text = element.label;
+                        sourceOption.classList.add('cameraOption');
                         sourceOption.value = element.deviceId;
                         sourceSelect.appendChild(sourceOption);
                     });
@@ -460,6 +476,10 @@ function prepareQR() {
                     });
                 }
             } else {
+                const sourceOption = document.createElement('option');
+                sourceOption.text = 'No cameras found';
+                sourceOption.classList.add('cameraOption');
+                sourceSelect.appendChild(sourceOption);
                 console.error("No cameras found!");
             }
         })
