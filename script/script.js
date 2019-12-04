@@ -403,7 +403,7 @@ function getCookie(cookieName) {
     return "";
 }
 function getLeaderboard() {
-    fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID +  "&sorted&limit=20")
+    fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID +  "&sorted&limit=10")
         .then(response => response.json())
         .then(responseJSON => {
 
@@ -412,32 +412,15 @@ function getLeaderboard() {
             let limit = responseJSON.limit;
             let tableOfScores = "<table>";
 
-
              console.log(score);
-
-            let player = "PLAYER";
-            let pos = "POS."
-            let time = "TIME";
-            let scores = "SCORE";
-
-            tableOfScores += "<tr style='border: 2px solid black; background-color:#666666;font-weight: bold; color: white;'>" +
-                "<td>" + pos + "</td>" +
-                "<td>" + player + "</td>" +
-                "<td>" + time + "</td>" +
-                "<td>" + scores + "</td>" +
-                "</tr>";
 
               for (let i=0; i < limit; i++ )
                 {
-
                     tableOfScores += "<tr>" +
-
-                                "<td>" + (i+1) + "</td>" +
                                 "<td>" + score[i].player + "</td>" +
                                 "<td>" + score[i].completionTime + "</td>" +
                                 "<td>" + score[i].score + "</td>" +
                                 "</tr>";
-
                         }
 
               tableOfScores += "</table>";
