@@ -519,6 +519,7 @@ function prepareQR() {
 
                     sourceSelect.addEventListener('change', function () {
                         deviceID = sourceSelect.value;
+                        decode(codeReader, deviceID);
                     });
                 }
                 decode(codeReader, deviceID);
