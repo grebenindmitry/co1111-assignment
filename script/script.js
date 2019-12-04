@@ -402,15 +402,34 @@ function getLeaderboard() {
             let limit = responseJSON.limit;
             let tableOfScores = "<table>";
 
+
              console.log(score);
+
+            let player = "PLAYER";
+            let pos = "POS."
+            let time = "TIME";
+            let scores = "SCORE";
+
+            let position = [1,2,3,4,5,6,7,8,9,10];
+
+            tableOfScores += "<tr class='styling'>" +
+                "<td>" + pos + "</td>" +
+                "<td>" + player + "</td>" +
+                "<td>" + time + "</td>" +
+                "<td>" + scores + "</td>" +
+                "</tr>";
 
               for (let i=0; i < limit; i++ )
                 {
+
                     tableOfScores += "<tr>" +
+
+                                "<td>" + position[i] + "</td>" +
                                 "<td>" + score[i].player + "</td>" +
                                 "<td>" + score[i].completionTime + "</td>" +
                                 "<td>" + score[i].score + "</td>" +
                                 "</tr>";
+
                         }
 
               tableOfScores += "</table>";
