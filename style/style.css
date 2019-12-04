@@ -259,9 +259,14 @@ th {
     background-color: #4CAF50;
     color: white;
 }
+
 #qrCode{
    background-color:#d8d6d6;
+    position: absolute;
+    top: 2%;
+    left: 35%;
 }
+
 #preview{
     width: 300px;
     height: 300px;
@@ -282,4 +287,14 @@ th {
 
 .cameraExit {
     display: block;
+}
+
+#skipBox, #errorSkip {
+    display: inline-block;
+    left: 2%;
+    max-width: 30%;
+}
+
+#videoOut {
+    max-width: 100%;
 }
