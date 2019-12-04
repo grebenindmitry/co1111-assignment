@@ -4,18 +4,22 @@ function testingLeaderboard() {
         .then(responseJSON => {
 
             let score = responseJSON.leaderboard;
-
-            let size = 42;
+            //let size = responseJSON.size;
+            let size = responseJSON.numOfPlayers;
             let hasPrize = responseJSON.hasPrize;
+            console.log(size);
             console.log(responseJSON);
             let tableOfScores = "<table>";
 
-            console.log(size);
+
+
+
 
 
             for (let i=0; i < size; i++ )
             {
                 tableOfScores += "<tr>" +
+                    "<td>" + (i+1) + "</td>" +
                     "<td>" + score[i].player + "</td>" +
                     "<td>" + score[i].completionTime + "</td>" +
                     "<td>" + score[i].score + "</td>" +
