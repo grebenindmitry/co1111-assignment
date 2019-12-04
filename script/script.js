@@ -71,6 +71,7 @@ function resumeSession(uuid) {
 // noinspection JSUnusedGlobalSymbols
 function startSession(uuid, expiryDate,isTesting,player) {
 
+    let username = document.getElementById('usernameBox').value;
     let fetchURL = '';
     if (!isTesting) {
         fetchURL = API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid;
@@ -78,8 +79,6 @@ function startSession(uuid, expiryDate,isTesting,player) {
         fetchURL =   API + "/start?player=" + player + "&app=dac-name&treasure-hunt-id=";
 
     }
-
-    let username = document.getElementById('usernameBox').value;
 
     sendLocation();
     setInterval(sendLocation, 31000);
