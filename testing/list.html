@@ -5,10 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-
+<ul id="huntList"></ul>
 <script src="../script/script.js"></script>
 <script>
-    getHuntList();
+    const params = new URLSearchParams(location.search);
+    //params.get('')
+    getHuntList(true, params.get('quantity'));
 </script>
 </body>
 </html>
