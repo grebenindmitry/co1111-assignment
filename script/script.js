@@ -109,8 +109,15 @@ function enterUsername(uuid, targetID, huntEndDate) {
     target.appendChild(usernameInput);
 }
 
-function getQuestion() {
-    fetch(API + "/question?session=" + sessionID)
+function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tRequireLocation) {
+    let fetchURL = '';
+    if (!isTesting) {
+        fetchURL = API + "/question?session=" + sessionID;
+    } else {
+
+    }
+
+    fetch(fetchURL)
         .then(response => response.json())
         .then(responseJSON => {
             // noinspection EqualityComparisonWithCoercionJS
