@@ -201,9 +201,9 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                     qrCode.id = "qrCode";
                     qrCode.classList.add('button');
                     qrCode.innerText="QR Code";
+                    qrCode.value="qrCode";
+                    qrCode.name="qrCode";
                     skipField.appendChild(qrCode);
-                    document.getElementById("qrCode").value="qrCode";
-                    document.getElementById("qrCode").name="qrCode";
                     qrCode.addEventListener('click', prepareQR);
 
                     let questionName = document.createElement('h1');
@@ -539,5 +539,3 @@ function decode(codeReader, device) {
             } 
         })
 }
-
-getHuntList();
