@@ -1,7 +1,6 @@
 const API = "https://codecyprus.org/th/api";
 let sessionID = "";
 
-
 function getHuntList() {
     fetch(API + "/list")
         .then(response => response.json())
@@ -11,7 +10,7 @@ function getHuntList() {
                 let cookieSessionID = getCookie('sessionID');
                 let nameElement = document.createElement('li');
                 nameElement.id = 'savedHuntName';
-                nameElement.innerHTML = '<a style="font-weight: bold" href="javascript:resumeSession(\'' + cookieSessionID + '\')">Continue previous game</a>'
+                nameElement.innerHTML = '<a style="font-weight: bold" href="javascript:resumeSession(\'' + cookieSessionID + '\')">Continue previous game</a>';
                 huntList.appendChild(nameElement);
             }
 
@@ -53,14 +52,18 @@ function getHuntList() {
         });
 }
 
+// noinspection JSUnusedGlobalSymbols
 function resumeSession(uuid) {
     sessionID = uuid;
     getQuestion();
 }
 
 // noinspection JSUnusedGlobalSymbols
-function startSession(uuid, expiryDate, isContinue) {
+function startSession(uuid, expiryDate) {
     let username = document.getElementById('usernameBox').value;
+
+    sendLocation();
+    setInterval(sendLocation, 31000);
 
     document.getElementById('errorBox').classList.remove('done', 'error', 'disable');
     document.getElementById('errorBox').classList.add('loading');
@@ -107,7 +110,6 @@ function enterUsername(uuid, targetID, huntEndDate) {
 }
 
 function getQuestion() {
-    setInterval(sendLocation, 31000);
     fetch(API + "/question?session=" + sessionID)
         .then(response => response.json())
         .then(responseJSON => {
@@ -141,17 +143,6 @@ function getQuestion() {
                         document.getElementById("qrCode").value="qrCode";
                         document.getElementById("qrCode").name="qrCode";
                         qrCode.addEventListener('click', QRCode);
-
-                        let switchC = document.createElement("switchC");
-                        switchC.id = "switchC";
-                        switchC.classList.add('button');
-                        switchC.innerText="Switch the camera";
-                        document.body.appendChild(switchC);
-                        document.getElementById("switchC").value="switchC";
-                        document.getElementById("switchC").name="switchC";
-                        switchC.addEventListener('click', changeCam);
-
-
                     } else {
                         let errorSkip = document.createElement("p");
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
@@ -260,7 +251,6 @@ function getQuestion() {
                             textSubmitButton.innerText = 'Submit';
                             textSubmitButton.classList.add('button');
                             textSubmitButton.id = 'textButton';
-                            textSubmitButton.addEventListener('click', function() {sendAnswer(textBox.value);});
 
                             document.body.appendChild(textForm);
                             textForm.appendChild(textBox);
@@ -403,7 +393,7 @@ function getCookie(cookieName) {
     return "";
 }
 function getLeaderboard() {
-    fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID +  "&sorted&limit=10")
+    fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID + "&sorted&limit=10")
         .then(response => response.json())
         .then(responseJSON => {
 
@@ -412,83 +402,60 @@ function getLeaderboard() {
             let limit = responseJSON.limit;
             let tableOfScores = "<table>";
 
-             console.log(score);
+            console.log(score);
 
-              for (let i=0; i < limit; i++ )
-                {
-                    tableOfScores += "<tr>" +
-                                "<td>" + score[i].player + "</td>" +
-                                "<td>" + score[i].completionTime + "</td>" +
-                                "<td>" + score[i].score + "</td>" +
-                                "</tr>";
-                        }
+            for (let i = 0; i < limit; i++) {
+                tableOfScores += "<tr>" +
+                    "<td>" + score[i].player + "</td>" +
+                    "<td>" + score[i].completionTime + "</td>" +
+                    "<td>" + score[i].score + "</td>" +
+                    "</tr>";
+            }
 
-              tableOfScores += "</table>";
+            tableOfScores += "</table>";
 
-              document.body = document.createElement("body");
-              document.body.innerHTML = tableOfScores;
+            document.body = document.createElement("body");
+            document.body.innerHTML = tableOfScores;
 
 
         })
 }
-function changeCam(){
-    let getVideo = document.createElement("video");
-    getVideo.id = 'preview';
-    document.body.appendChild(getVideo);
 
-    let opts = {
-        // Whether to scan continuously for QR codes. If false, use scanner.scan() to manually scan.
-        // If true, the scanner emits the "scan" event when a QR code is scanned. Default true.
-        continuous: true,
+function prepareQR() {
+    let videoOut = document.createElement('video');
+    videoOut.id = 'videoOut';
+    document.body.append(videoOut);
 
-        // The HTML element to use for the camera's video preview. Must be a <video> element.
-        // When the camera is active, this element will have the "active" CSS class, otherwise,
-        // it will have the "inactive" class. By default, an invisible element will be created to
-        // host the video.
-        video: document.getElementById('preview'),
+    let sourceSelect = document.createElement('select');
+    document.body.append(sourceSelect);
 
-        // Whether to horizontally mirror the video preview. This is helpful when trying to
-        // scan a QR code with a user-facing camera. Default true.
-        mirror: false,
+    let deviceID;
+    const codeReader = new ZXing.BrowserQRCodeReader();
+    codeReader.getVideoInputDevices()
+        .then(videoInputDevices => {
+            deviceID = videoInputDevices[0].deviceId;
+            if (videoInputDevices.length >= 1) {
+                videoInputDevices.forEach(element => {
+                    const sourceOption = document.createElement('option');
+                    sourceOption.text = element.label;
+                    sourceOption.value = element.deviceId;
+                    sourceSelect.appendChild(sourceOption);
+                });
 
-        // Whether to include the scanned image data as part of the scan result. See the "scan" event
-        // for image format details. Default false.
-        captureImage: false,
-
-        // Only applies to continuous mode. Whether to actively scan when the tab is not active.
-        // When false, this reduces CPU usage when the tab is not active. Default true.
-        backgroundScan: true,
-
-        // Only applies to continuous mode. The period, in milliseconds, before the same QR code
-        // will be recognized in succession. Default 5000 (5 seconds).
-        refractoryPeriod: 5000,
-
-        // Only applies to continuous mode. The period, in rendered frames, between scans. A lower scan period
-        // increases CPU usage but makes scan response faster. Default 1 (i.e. analyze every frame).
-        scanPeriod: 1
-    };
-
-    let scanner = new Instascan.Scanner(opts);
-
-
-    Instascan.Camera.getCameras().then(function (cameras) {
-        if (cameras.length > 0) {
-            console.log(cameras);
-            scanner.start(cameras[0]);
-        } else {
-            console.error('No cameras found.');
-        }
-    }).catch(function (e) {
-        console.error(e);
-    });
-
-    scanner.addListener('scan', function (content) {
-        console.log(content);
-    });
-
+                sourceSelect.addEventListener('change', function () {
+                    deviceID = sourceSelect.value;
+                });
+            }
+        })
 }
 
-
-
+function decode(codeReader, device) {
+    codeReader.decodeFromInputDeviceContinuously(device, 'videoOut')
+        .then((result, err) => {
+            if (result) {
+                console.log(result);
+            } 
+        })
+}
 
 getHuntList();
