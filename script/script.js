@@ -5,7 +5,7 @@ let sessionID = "";
 function getHuntList(isTesting,tNumberOfThs) {
     console.log("I am in testing");
     console.log(isTesting);
-    let fetchURL = '';
+    let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/list";
     } else {
@@ -74,7 +74,7 @@ function resumeSession(uuid) {
 function startSession(uuid, expiryDate,isTesting,player) {
 
     let username = document.getElementById('usernameBox').value;
-    let fetchURL = '';
+    let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid;
     } else {
@@ -130,7 +130,7 @@ function enterUsername(uuid, targetID, huntEndDate) {
 }
 
 function showScore(isTesting,score,completed,finished,error) {
-    let fetchURL = '';
+    let fetchURL;
     if (!isTesting) {
         fetchURL = API + '/score?session=' + sessionID;
     } else {
@@ -153,7 +153,7 @@ function showScore(isTesting,score,completed,finished,error) {
 }
 
 function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tRequireLocation) {
-    let fetchURL = '';
+    let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/question?session=" + sessionID;
     } else {
@@ -338,7 +338,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
 
 function sendAnswer(answer,isTesting,correct,completed) {
 
-    let fetchURL = '';
+    let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/answer?session=" + sessionID + "&answer=" + answer
     } else {
@@ -441,7 +441,7 @@ function getCookie(cookieName) {
 }
 function getLeaderboard(isTesting,size,sorted,hasPrize) {
 
-    let fetchURL = '';
+    let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/leaderboard?session=" + sessionID + "&sorted&limit=10";
     } else {
