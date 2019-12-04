@@ -142,7 +142,7 @@ function getQuestion() {
                         document.body.appendChild(qrCode);
                         document.getElementById("qrCode").value="qrCode";
                         document.getElementById("qrCode").name="qrCode";
-                        qrCode.addEventListener('click', QRCode);
+                        qrCode.addEventListener('click', prepareQR);
                     } else {
                         let errorSkip = document.createElement("p");
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
