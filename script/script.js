@@ -1,8 +1,18 @@
 const API = "https://codecyprus.org/th/api";
+const TEST_API = "https://codecyprus.org/th/test-api";
 let sessionID = "";
 
-function getHuntList() {
-    fetch(API + "/list")
+function getHuntList(isTesting,tNumberOfThs) {
+
+    let fetchURL = '';
+    if (!isTesting) {
+        fetchURL = API + "/list";
+    } else {
+        fetchURL =   TEST_API + tNumberOfThs;
+
+    }
+
+    fetch(fetchURL)
         .then(response => response.json())
         .then(responseJSON => {
             let huntList = document.getElementById("huntList");
@@ -59,8 +69,16 @@ function resumeSession(uuid) {
 }
 
 // noinspection JSUnusedGlobalSymbols
-function startSession(uuid, expiryDate) {
+function startSession(uuid, expiryDate,isTesting,player) {
+
     let username = document.getElementById('usernameBox').value;
+    let fetchURL = '';
+    if (!isTesting) {
+        fetchURL = API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid;
+    } else {
+        fetchURL =   API + "/start?player=" + player + "&app=dac-name&treasure-hunt-id=";
+
+    }
 
     sendLocation();
     setInterval(sendLocation, 31000);
@@ -68,7 +86,7 @@ function startSession(uuid, expiryDate) {
     document.getElementById('errorBox').classList.remove('done', 'error', 'disable');
     document.getElementById('errorBox').classList.add('loading');
     document.getElementById('errorBox').innerText = "Loading...";
-    fetch(API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid)
+    fetch(fetchURL)
         .then(response => response.json())
         .then(jsonResponse => {
             // noinspection EqualityComparisonWithCoercionJS
@@ -128,6 +146,8 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
     if (!isTesting) {
         fetchURL = API + "/question?session=" + sessionID;
     } else {
+        fetchURL =   TEST_API + "/question?session=" + sessionID + "?completed&question-type="
+            + tQuestionType +"&can-be-skipped=" + tCanBeSkipped +  "&requires-location=" +tRequireLocation ;
 
     }
 
@@ -301,8 +321,17 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
         });
 }
 
-function sendAnswer(answer) {
-    fetch(API + "/answer?session=" + sessionID + "&answer=" + answer)
+function sendAnswer(answer,isTesting,correct,completed) {
+
+    let fetchURL = '';
+    if (!isTesting) {
+        fetchURL = API + "/answer?session=" + sessionID + "&answer=" + answer
+    } else {
+        fetchURL =   TEST_API + "/answer?" + "correct=" + correct + "&completed=" + completed;
+
+    }
+
+    fetch(fetchURL)
         .then(response => response.json())
         .then(responseJSON => {
             // noinspection EqualityComparisonWithCoercionJS
@@ -395,8 +424,18 @@ function getCookie(cookieName) {
     }
     return "";
 }
-function getLeaderboard() {
-    fetch("https://codecyprus.org/th/api/leaderboard?session=" + sessionID + "&sorted&limit=10")
+function getLeaderboard(isTesting,size,sorted,hasPrize) {
+
+    let fetchURL = '';
+    if (!isTesting) {
+        fetchURL = API + "/leaderboard?session=" + sessionID + "&sorted&limit=10";
+    } else {
+        fetchURL =   TEST_API + "/leaderboard?session=" + sessionID + "?sorted=" + sorted +
+            "&hasPrize="+hasPrize + "&size=" +size;
+
+    }
+
+    fetch(fetchURL)
         .then(response => response.json())
         .then(responseJSON => {
 
