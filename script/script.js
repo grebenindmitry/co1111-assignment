@@ -142,7 +142,7 @@ function showScore(isTesting,score,completed,finished,error) {
     let scoreBox = document.createElement('span');
     scoreBox.innerText = 'Loading...';
     scoreBox.classList.add('scoreBox');
-    document.body.appendChild(scoreBox);
+    document.getElementById('skipField').appendChild(scoreBox);
     fetch(fetchURL)
         .then(response => response.json())
         .then(scoreJSON => {
@@ -178,8 +178,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                     document.body.classList.remove('margin-free');
 
                     let skipField = document.createElement('div');
-                    skipField.style.position = 'absolute';
-
+                    skipField.id = 'skipField';
                     document.body.append(skipField);
 
                     if (responseJSON.canBeSkipped === true) {
@@ -187,14 +186,14 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                         skipBox.id = "skipBox";
                         skipBox.classList.add('button');
                         skipBox.innerText="SKIP";
+                        skipBox.value="SKIP";
+                        skipBox.name="SKIP";
                         skipField.appendChild(skipBox);
-                        document.getElementById("skipBox").value="SKIP";
-                        document.getElementById("skipBox").name="SKIP";
                         skipBox.addEventListener('click', skipQuestion);
                     } else {
                         let errorSkip = document.createElement("span");
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
-                        errorSkip.style.maxWidth = '30%';
+                        errorSkip.id = 'errorSkip';
                         skipField.appendChild(errorSkip);
                     }
 
@@ -522,6 +521,7 @@ function prepareQR() {
                         deviceID = sourceSelect.value;
                     });
                 }
+                decode(codeReader, deviceID);
             } else {
                 const sourceOption = document.createElement('option');
                 sourceOption.text = 'No cameras found';

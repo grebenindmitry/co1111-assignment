@@ -290,6 +290,7 @@ th {
 }
 
 #skipBox, #errorSkip {
+    display: inline-block;
     left: 2%;
     max-width: 30%;
 }
