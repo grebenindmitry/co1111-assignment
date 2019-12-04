@@ -338,7 +338,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
 }
 
 function sendAnswer(answer,isTesting,correct,completed) {
-
+    console.log(answer + isTesting + correct+completed);
     let fetchURL = '';
     if (!isTesting) {
         fetchURL = API + "/answer?session=" + sessionID + "&answer=" + answer
@@ -361,7 +361,6 @@ function sendAnswer(answer,isTesting,correct,completed) {
                     document.getElementById('outputMSG').classList.remove('disable', 'done');
                     document.getElementById('outputMSG').classList.add('error');
                     document.getElementById('outputMSG').innerText = responseJSON.message;
-                    window.setTimeout(getQuestion, 600);
                 }
             } else {
                 document.getElementById('outputMSG').classList.remove('disable', 'done');
@@ -370,6 +369,11 @@ function sendAnswer(answer,isTesting,correct,completed) {
                 if (responseJSON.errorMessages[0] === 'Finished session. The specified session has run out of time.') {
                     endSession();
                 }
+            }
+            if (!isTesting){
+                window.setTimeout(getQuestion, 600);
+            }else{
+                console.log("Get the next question");
             }
         });
 }

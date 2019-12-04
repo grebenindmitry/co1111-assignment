@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Testing - TreasureHunt</title>
+    <link rel="stylesheet" href="../style/style.css" type="text/css">
 </head>
 <body>
 
@@ -14,12 +15,41 @@
     <br>
     <hr>
     <p>Enter type of question</p>
-    <select>
-
-        <option> Leaderboard</option>
+    <select id="type">
+        <option value="BOOLEAN">BOOLEAN</option>
+        <option value="INTEGER">INTEGER</option>
+        <option value="NUMERIC">NUMERIC</option>
+        <option value="MCQ">MCQ</option>
+        <option value="TEXT">TEXT</option>
     </select>
+    <button onclick="startQuestionTest()">Go to</button>
+    <br>
+    <hr>
+    <select id="answerOption">
+        <option value="true">TRUE</option>
+        <option value="false">FALSE</option>
+    </select>
+    <button id="ans" onclick="startAnswerTest()">Send Answer</button>
+
+    <script src="../script/script.js"></script>
+<script>
+    function startQuestionTest() {
+        let type = document.getElementById('type').value;
+        window.location.href = "./question.html?type=" + type;
+    }
+
+    function startAnswerTest() {
+        let ans= document.getElementById('answerOption').value;
+        let outputMSG = document.createElement('span');
+        outputMSG.id = 'outputMSG';
+        outputMSG.classList.add('disable', 'outputMSG');
+        document.body.appendChild(outputMSG);
+        sendAnswer(undefined,true,ans==='true',true); //
 
 
+    }
+
+</script>
 
 </body>
 </html>

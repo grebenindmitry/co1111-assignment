@@ -2,14 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Answer</title>
 </head>
 <body>
-<ul id="huntList"></ul>
+
 <script src="../script/script.js"></script>
 <script>
+
     const params = new URLSearchParams(location.search);
-    getHuntList(true, params.get('quantity'));
+    sendAnswer(true, params.get('answer'));
 </script>
+
 </body>
 </html>
