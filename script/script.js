@@ -128,12 +128,21 @@ function enterUsername(uuid, targetID, huntEndDate) {
     target.appendChild(usernameInput);
 }
 
-function showScore() {
+function showScore(isTesting,score,completed,finished,error) {
+    let fetchURL = '';
+    if (!isTesting) {
+        fetchURL = API + '/score?session=' + sessionID;
+    } else {
+        fetchURL =   TEST_API + "?score=" + score + "&completed=" + completed + "&finished=" + finished +
+            "&error=" + error;
+
+    }
+
     let scoreBox = document.createElement('span');
     scoreBox.innerText = 'Loading...';
     scoreBox.classList.add('scoreBox');
     document.body.appendChild(scoreBox);
-    fetch(API + '/score?session=' + sessionID)
+    fetch(fetchURL)
         .then(response => response.json())
         .then(scoreJSON => {
             if (scoreJSON.status !== 'ERROR') {
