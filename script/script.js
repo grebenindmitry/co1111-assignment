@@ -16,6 +16,7 @@ function getHuntList(isTesting,tNumberOfThs) {
         .then(response => response.json())
         .then(responseJSON => {
             let huntList = document.getElementById("huntList");
+            let i = 0;
             if (getCookie('gamePlaying') === 'true') {
                 let cookieSessionID = getCookie('sessionID');
                 let nameElement = document.createElement('li');
@@ -71,6 +72,7 @@ function resumeSession(uuid) {
 // noinspection JSUnusedGlobalSymbols
 function startSession(uuid, expiryDate,isTesting,player) {
 
+    let username = document.getElementById('usernameBox').value;
     let fetchURL = '';
     if (!isTesting) {
         fetchURL = API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid;
@@ -78,8 +80,6 @@ function startSession(uuid, expiryDate,isTesting,player) {
         fetchURL =   API + "/start?player=" + player + "&app=dac-name&treasure-hunt-id=";
 
     }
-
-    let username = document.getElementById('usernameBox').value;
 
     sendLocation();
     setInterval(sendLocation, 31000);
@@ -176,38 +176,35 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                     document.body.innerHTML = "";
                     document.body.classList.remove('margin-free');
 
+                    let skipField = document.createElement('div');
+                    skipField.style.position = 'absolute';
+
+                    document.body.append(skipField);
+
                     if (responseJSON.canBeSkipped === true) {
                         let skipBox = document.createElement("BUTTON");
                         skipBox.id = "skipBox";
                         skipBox.classList.add('button');
                         skipBox.innerText="SKIP";
-                        document.body.appendChild(skipBox);
+                        skipField.appendChild(skipBox);
                         document.getElementById("skipBox").value="SKIP";
                         document.getElementById("skipBox").name="SKIP";
                         skipBox.addEventListener('click', skipQuestion);
-
-                        let qrCode = document.createElement("qrCode");
-                        qrCode.id = "qrCode";
-                        qrCode.classList.add('button');
-                        qrCode.innerText="QR Code";
-                        document.body.appendChild(qrCode);
-                        document.getElementById("qrCode").value="qrCode";
-                        document.getElementById("qrCode").name="qrCode";
-                        qrCode.addEventListener('click', prepareQR);
                     } else {
-                        let errorSkip = document.createElement("p");
+                        let errorSkip = document.createElement("span");
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
-                        errorSkip.style.maxWidth = '60%';
-                        document.body.appendChild(errorSkip);
-                        let qrCode2 = document.createElement("qrCode2");
-                        qrCode2.id = "qrCode2";
-                        qrCode2.classList.add('button');
-                        qrCode2.innerText="QR Code";
-                        document.body.appendChild(qrCode2);
-                        document.getElementById("qrCode2").value="qrCode2";
-                        document.getElementById("qrCode2").name="qrCode2";
-                        qrCode2.addEventListener('click', QRCode);
+                        errorSkip.style.maxWidth = '30%';
+                        skipField.appendChild(errorSkip);
                     }
+
+                    let qrCode = document.createElement("qrCode");
+                    qrCode.id = "qrCode";
+                    qrCode.classList.add('button');
+                    qrCode.innerText="QR Code";
+                    skipField.appendChild(qrCode);
+                    document.getElementById("qrCode").value="qrCode";
+                    document.getElementById("qrCode").name="qrCode";
+                    qrCode.addEventListener('click', prepareQR);
 
                     let questionName = document.createElement('h1');
                     questionName.innerHTML = responseJSON.questionText;
@@ -478,11 +475,11 @@ function getLeaderboard(isTesting,size,sorted,hasPrize) {
             document.body.innerHTML = tableOfScores;
 
 
-        })
+        });
 }
 
 function stopQR() {
-    document.getElementById('qrWindow').style.display = 'none';
+    document.getElementById('qrWindow').remove();
 }
 
 function prepareQR() {
