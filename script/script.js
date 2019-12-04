@@ -169,14 +169,6 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
                         errorSkip.style.maxWidth = '60%';
                         document.body.appendChild(errorSkip);
-                        let qrCode2 = document.createElement("qrCode2");
-                        qrCode2.id = "qrCode2";
-                        qrCode2.classList.add('button');
-                        qrCode2.innerText="QR Code";
-                        document.body.appendChild(qrCode2);
-                        document.getElementById("qrCode2").value="qrCode2";
-                        document.getElementById("qrCode2").name="qrCode2";
-                        qrCode2.addEventListener('click', QRCode);
                     }
 
                     let questionName = document.createElement('h1');
@@ -429,11 +421,11 @@ function getLeaderboard() {
             document.body.innerHTML = tableOfScores;
 
 
-        })
+        });
 }
 
 function stopQR() {
-    document.getElementById('qrWindow').style.display = 'none';
+    document.getElementById('qrWindow').remove();
 }
 
 function prepareQR() {
