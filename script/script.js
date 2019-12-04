@@ -429,29 +429,38 @@ function getLeaderboard() {
 }
 
 function prepareQR() {
+    let qrReader = document.createElement('div');
+    qrReader.classList.add('qrWindow');
+    document.body.append(qrReader);
+
     let videoOut = document.createElement('video');
     videoOut.id = 'videoOut';
-    document.body.append(videoOut);
+
+    qrReader.append(videoOut);
 
     let sourceSelect = document.createElement('select');
-    document.body.append(sourceSelect);
+    qrReader.append(sourceSelect);
 
     let deviceID;
     const codeReader = new ZXing.BrowserQRCodeReader();
     codeReader.getVideoInputDevices()
         .then(videoInputDevices => {
-            deviceID = videoInputDevices[0].deviceId;
-            if (videoInputDevices.length >= 1) {
-                videoInputDevices.forEach(element => {
-                    const sourceOption = document.createElement('option');
-                    sourceOption.text = element.label;
-                    sourceOption.value = element.deviceId;
-                    sourceSelect.appendChild(sourceOption);
-                });
+            if (videoInputDevices.length !== 0) {
+                deviceID = videoInputDevices[0].deviceId;
+                if (videoInputDevices.length >= 1) {
+                    videoInputDevices.forEach(element => {
+                        const sourceOption = document.createElement('option');
+                        sourceOption.text = element.label;
+                        sourceOption.value = element.deviceId;
+                        sourceSelect.appendChild(sourceOption);
+                    });
 
-                sourceSelect.addEventListener('change', function () {
-                    deviceID = sourceSelect.value;
-                });
+                    sourceSelect.addEventListener('change', function () {
+                        deviceID = sourceSelect.value;
+                    });
+                }
+            } else {
+                console.error("No cameras found!");
             }
         })
 }
