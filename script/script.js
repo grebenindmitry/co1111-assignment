@@ -355,12 +355,10 @@ function sendAnswer(answer,isTesting,correct,completed) {
                     document.getElementById('outputMSG').classList.remove('disable', 'error');
                     document.getElementById('outputMSG').classList.add('done');
                     document.getElementById('outputMSG').innerText = responseJSON.message;
-                    window.setTimeout(getQuestion, 600);
                 } else {
                     document.getElementById('outputMSG').classList.remove('disable', 'done');
                     document.getElementById('outputMSG').classList.add('error');
                     document.getElementById('outputMSG').innerText = responseJSON.message;
-                    window.setTimeout(getQuestion, 600);
                 }
             } else {
                 document.getElementById('outputMSG').classList.remove('disable', 'done');
@@ -369,6 +367,11 @@ function sendAnswer(answer,isTesting,correct,completed) {
                 if (responseJSON.errorMessages[0] === 'Finished session. The specified session has run out of time.') {
                     endSession();
                 }
+            }
+            if (!isTesting) {
+                window.setTimeout(getQuestion, 600);
+            } else {
+                console.log('Get the next question');
             }
         });
 }
@@ -478,11 +481,8 @@ function getLeaderboard(isTesting,size,sorted,hasPrize) {
         });
 }
 
-function stopQR() {
-    document.getElementById('qrWindow').remove();
-}
-
 function prepareQR() {
+    const codeReader = new ZXing.BrowserQRCodeReader();
     let qrWindow = document.createElement('div');
     qrWindow.id = 'qrWindow';
     qrWindow.classList.add('qrWindow');
@@ -490,7 +490,10 @@ function prepareQR() {
 
     let exitBtn = document.createElement('button');
     exitBtn.innerText = 'X';
-    exitBtn.addEventListener('click', stopQR);
+    exitBtn.addEventListener('click', function () {
+        codeReader.reset();
+        qrWindow.remove();
+    });
     exitBtn.classList.add('cameraExit');
     qrWindow.append(exitBtn);
 
@@ -503,7 +506,6 @@ function prepareQR() {
     qrWindow.append(sourceSelect);
 
     let deviceID;
-    const codeReader = new ZXing.BrowserQRCodeReader();
     codeReader.getVideoInputDevices()
         .then(videoInputDevices => {
             if (videoInputDevices.length !== 0) {
@@ -519,6 +521,7 @@ function prepareQR() {
 
                     sourceSelect.addEventListener('change', function () {
                         deviceID = sourceSelect.value;
+                        codeReader.reset();
                         decode(codeReader, deviceID);
                     });
                 }

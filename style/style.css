@@ -294,3 +294,7 @@ th {
     left: 2%;
     max-width: 30%;
 }
+
+#videoOut {
+    max-width: 100%;
+}
