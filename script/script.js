@@ -3,12 +3,13 @@ const TEST_API = "https://codecyprus.org/th/test-api";
 let sessionID = "";
 
 function getHuntList(isTesting,tNumberOfThs) {
-
+    console.log("I am in testing");
+    console.log(isTesting);
     let fetchURL = '';
     if (!isTesting) {
         fetchURL = API + "/list";
     } else {
-        fetchURL =   TEST_API + tNumberOfThs;
+        fetchURL =   TEST_API + "/list?number-of-ths=" + tNumberOfThs;
 
     }
 
