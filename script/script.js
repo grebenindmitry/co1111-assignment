@@ -192,6 +192,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                     } else {
                         let errorSkip = document.createElement("span");
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
+                        errorSkip.style.display = 'inline-block';
                         errorSkip.style.maxWidth = '30%';
                         skipField.appendChild(errorSkip);
                     }
