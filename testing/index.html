@@ -25,11 +25,20 @@
     <button onclick="startQuestionTest()">Go to</button>
     <br>
     <hr>
+    <p>Check the if an answer is correct/incorrect</p>
     <select id="answerOption">
         <option value="true">TRUE</option>
         <option value="false">FALSE</option>
     </select>
     <button id="ans" onclick="startAnswerTest()">Send Answer</button>
+    <br>
+    <hr>
+    <p>Check the score</p>
+    <form action="./score.html">
+        Score is : <input type="number" name="score">
+        <input type="submit">
+    </form>
+
 
     <script src="../script/script.js"></script>
 <script>
@@ -44,7 +53,10 @@
         outputMSG.id = 'outputMSG';
         outputMSG.classList.add('disable', 'outputMSG');
         document.body.appendChild(outputMSG);
-        sendAnswer(undefined,true,ans==='true',true); //
+        sendAnswer(undefined,true,ans==='true',true);
+    }
+    function startScoreTest() {
+
 
 
     }

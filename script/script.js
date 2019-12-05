@@ -444,7 +444,7 @@ function getLeaderboard(isTesting,size,sorted,hasPrize) {
 
     let fetchURL = '';
     if (!isTesting) {
-        fetchURL = API + "/leaderboard?session=" + sessionID + "&sorted&limit=10";
+        fetchURL = API + "/leaderboard?session=" + sessionID + "&sorted&limit=20";
     } else {
         fetchURL =   TEST_API + "/leaderboard?session=" + sessionID + "?sorted=" + sorted +
             "&hasPrize="+hasPrize + "&size=" +size;
@@ -458,12 +458,23 @@ function getLeaderboard(isTesting,size,sorted,hasPrize) {
             let score = responseJSON.leaderboard;
 
             let limit = responseJSON.limit;
+            let player ='Player';
+            let position = 'Pos.';
+            let time = 'Time';
+            let points = 'Score';
             let tableOfScores = "<table>";
 
-            console.log(score);
+           // tableOfScores += "<tr class='styling'>" +
+            tableOfScores += "<tr style='border: 2px solid black; background-color:#666666;font-weight: bold; color: white;'>" +
+                "<td>" + position + "</td>" +
+                "<td>" + player + "</td>" +
+                "<td>" + time + "</td>" +
+                "<td>" + points + "</td>" +
+                "</tr>";
 
             for (let i = 0; i < limit; i++) {
                 tableOfScores += "<tr>" +
+                    "<td>" + (i+1) + "</td>" +
                     "<td>" + score[i].player + "</td>" +
                     "<td>" + score[i].completionTime + "</td>" +
                     "<td>" + score[i].score + "</td>" +

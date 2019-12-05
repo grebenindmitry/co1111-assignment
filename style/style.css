@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu&display=swap');
 
+body{
+
+    background-color: white;
+}
+
 * {
     font-family: Ubuntu, sans-serif;
 }
@@ -87,6 +92,8 @@ input[type='text'], input[type='number'] {
     text-shadow: 1px 1px 1px #cccccc;
     text-transform: uppercase;
     text-align: center;
+    border: 2px solid white;
+    padding: 1px;
 }
 
 #treasure{
@@ -154,7 +161,8 @@ input[type='text'], input[type='number'] {
 .linkList {
     list-style-type: none;
     height: 35px;
-    margin: 0;
+
+   margin: 0;
     padding: 0;
 }
 

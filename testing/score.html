@@ -2,16 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Answer</title>
+    <title>Score</title>
 </head>
 <body>
 
+
 <script src="../script/script.js"></script>
 <script>
-
     const params = new URLSearchParams(location.search);
-    sendAnswer(true, params.get('answer'));
+    showScore(true, params.get('score'),false,false,false);
 </script>
-
 </body>
 </html>
