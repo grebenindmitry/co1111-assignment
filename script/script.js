@@ -178,6 +178,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                     document.body.classList.remove('margin-free');
 
                     let skipField = document.createElement('div');
+                    skipField.style.minHeight = '80px';
                     document.body.append(skipField);
 
                     if (responseJSON.canBeSkipped === true) {
@@ -482,6 +483,7 @@ function getLeaderboard(isTesting,size,sorted,hasPrize) {
 }
 
 function prepareQR() {
+    const codeReader = new ZXing.BrowserQRCodeReader();
     let qrWindow = document.createElement('div');
     qrWindow.id = 'qrWindow';
     qrWindow.classList.add('qrWindow');
@@ -489,7 +491,6 @@ function prepareQR() {
 
     let exitBtn = document.createElement('button');
     exitBtn.innerText = 'X';
-    exitBtn.id = 'exitBtn';
     exitBtn.addEventListener('click', function () {
         codeReader.reset();
         qrWindow.remove();
@@ -506,7 +507,6 @@ function prepareQR() {
     qrWindow.append(sourceSelect);
 
     let deviceID;
-    const codeReader = new ZXing.BrowserQRCodeReader();
     codeReader.getVideoInputDevices()
         .then(videoInputDevices => {
             if (videoInputDevices.length !== 0) {
@@ -522,8 +522,11 @@ function prepareQR() {
 
                     sourceSelect.addEventListener('change', function () {
                         deviceID = sourceSelect.value;
+                        codeReader.reset();
+                        decode(codeReader, deviceID);
                     });
                 }
+                decode(codeReader, deviceID);
             } else {
                 const sourceOption = document.createElement('option');
                 sourceOption.text = 'No cameras found';
@@ -535,8 +538,7 @@ function prepareQR() {
 }
 
 function decode(codeReader, device) {
-    codeReader.decodeFromInputDeviceContinuously(device, 'videoOut')
-        .then((result, err) => {
+    codeReader.decodeFromInputVideoDeviceContinuously(device, 'videoOut', (result, err) => {
             if (result) {
                 let isValidURL;
                 try {
