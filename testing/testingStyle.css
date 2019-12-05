@@ -1,16 +1,17 @@
-table {
+#heuristic {
     font-size: x-large;
 }
-th{
+.heuristicTH{
     background-color:#865114;
 }
-td{
+.heuristicTD{
     background-color:#fcffbe;
 }
 .exist{
     text-align: center;
+    background-color:#fcffbe;
 }
-#title{
+.title{
     text-align: center;
     text-decoration: underline;
     font-size: 65px;

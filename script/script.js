@@ -2,10 +2,10 @@ const API = "https://codecyprus.org/th/api";
 const TEST_API = "https://codecyprus.org/th/test-api";
 let sessionID = "";
 
-function getHuntList(isTesting,tNumberOfThs) {
+function getHuntList(isTesting, tNumberOfThs) {
     console.log("I am in testing");
     console.log(isTesting);
-    let fetchURL = '';
+    let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/list";
     } else {
@@ -63,18 +63,16 @@ function getHuntList(isTesting,tNumberOfThs) {
             document.body.appendChild(errorBox);
         });
 }
-
 // noinspection JSUnusedGlobalSymbols
 function resumeSession(uuid) {
     sessionID = uuid;
     getQuestion();
 }
-
 // noinspection JSUnusedGlobalSymbols
-function startSession(uuid, expiryDate,isTesting,player) {
+function startSession(uuid, expiryDate, isTesting, player) {
 
     let username = document.getElementById('usernameBox').value;
-    let fetchURL = '';
+    let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid;
     } else {
@@ -111,7 +109,6 @@ function startSession(uuid, expiryDate,isTesting,player) {
         });
     // getQuestion();
 }
-
 // noinspection JSUnusedGlobalSymbols
 function enterUsername(uuid, targetID, huntEndDate) {
     let target = document.getElementById(targetID);
@@ -129,13 +126,13 @@ function enterUsername(uuid, targetID, huntEndDate) {
     target.appendChild(usernameInput);
 }
 
-function showScore(isTesting,score,completed,finished,error) {
-    let fetchURL = '';
+function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
+    let fetchURL;
     if (!isTesting) {
         fetchURL = API + '/score?session=' + sessionID;
     } else {
-        fetchURL =   TEST_API + "?score=" + score + "&completed=" + completed + "&finished=" + finished +
-            "&error=" + error;
+        fetchURL =   TEST_API + "?score=" + tScore + "&completed=" + tCompleted + "&finished=" + tFinished +
+            "&error=" + tError;
 
     }
 
@@ -153,7 +150,7 @@ function showScore(isTesting,score,completed,finished,error) {
 }
 
 function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tRequireLocation) {
-    let fetchURL = '';
+    let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/question?session=" + sessionID;
     } else {
@@ -340,13 +337,13 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
         });
 }
 
-function sendAnswer(answer,isTesting,correct,completed) {
+function sendAnswer(answer, isTesting, tCorrect, tCompleted) {
 
-    let fetchURL = '';
+    let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/answer?session=" + sessionID + "&answer=" + answer
     } else {
-        fetchURL =   TEST_API + "/answer?" + "correct=" + correct + "&completed=" + completed;
+        fetchURL =   TEST_API + "/answer?" + "correct=" + tCorrect + "&completed=" + tCompleted;
 
     }
 
@@ -443,13 +440,14 @@ function getCookie(cookieName) {
     }
     return "";
 }
-function getLeaderboard(isTesting, size, sorted, hasPrize) {
 
-    let fetchURL = '';
+function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
+
+    let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/leaderboard?session=" + sessionID + "&sorted&limit=20";
     } else {
-        fetchURL = TEST_API + "/leaderboard?sorted=" + sorted + "&hasPrize=" + hasPrize + "&size=" + size;
+        fetchURL = TEST_API + "/leaderboard?sorted=" + tSorted + "&hasPrize=" + tHasPrize + "&size=" + tSize;
     }
 
     fetch(fetchURL)
@@ -493,6 +491,7 @@ function getLeaderboard(isTesting, size, sorted, hasPrize) {
 }
 
 function prepareQR() {
+    // noinspection JSUnresolvedFunction
     const codeReader = new ZXing.BrowserQRCodeReader();
     let qrWindow = document.createElement('div');
     qrWindow.id = 'qrWindow';
@@ -501,6 +500,7 @@ function prepareQR() {
 
     let exitBtn = document.createElement('button');
     exitBtn.innerText = 'X';
+    exitBtn.id = 'exitBtn';
     exitBtn.addEventListener('click', function () {
         codeReader.reset();
         qrWindow.remove();
@@ -517,6 +517,7 @@ function prepareQR() {
     qrWindow.append(sourceSelect);
 
     let deviceID;
+    // noinspection JSUnresolvedFunction
     codeReader.getVideoInputDevices()
         .then(videoInputDevices => {
             if (videoInputDevices.length !== 0) {
@@ -548,6 +549,7 @@ function prepareQR() {
 }
 
 function decode(codeReader, device) {
+    // noinspection JSUnresolvedFunction
     codeReader.decodeFromInputVideoDeviceContinuously(device, 'videoOut', (result, err) => {
             if (result) {
                 let isValidURL;
@@ -557,34 +559,59 @@ function decode(codeReader, device) {
                 } catch (_) {
                     isValidURL = false;
                 }
-                if (isValidURL) { //if the QR code is a URL
-                    let copyURLButton = document.createElement('button');
+                try {
+                    if (/^\d+\.\d+$/.test(result.text)) { //if a number
+                        document.getElementById('numericTextBox').value = result.text;
+                        document.getElementById('exitBtn').click();
+                    } else if (/^\d+$/.test(result.text)) { //if an integer
+                        document.getElementById('integerTextBox').value = result.text;
+                        document.getElementById('exitBtn').click();
+                    } else { //if not a number
+                        document.getElementById('textBox').value = result.text;
+                        document.getElementById('exitBtn').click();
+                    }
+                } catch (e) {
+                    if (document.getElementById('copyButton') === null) {
+                        let resultDiv = document.createElement('div');
 
-                    document.getElementById('qrWindow').append(copyURLButton);
-                } else { //if not a URL
-                    try {
-                        if (/^\d+\.\d+$/.test(result.text)) { //if a number
-                            document.getElementById('numericTextBox').value = result.text;
-                        } else if (/^\d+$/.test(result.text)) { //if an integer
-                            document.getElementById('integerTextBox').value = result.text;
-                        } else { //if not a number
-                            document.getElementById('textBox').value = result.text;
-                        }
+                        let resultBox = document.createElement('p');
+                        resultBox.innerText = result.text;
+                        resultBox.id = 'resultBox';
+                        resultBox.style.backgroundColor = 'black';
+                        resultBox.style.color = 'white';
+                        resultDiv.append(resultBox);
 
-                    } catch (e) {
                         let copyButton = document.createElement('button');
+                        copyButton.innerText = 'Copy';
+                        copyButton.id = 'copyButton';
                         copyButton.addEventListener('click', function () {
                             navigator.clipboard.writeText(result.text)
                                 .then(function () {
                                     document.getElementById('exitBtn').click();
                                     document.getElementById('outputMSG').classList.remove('disable', 'error');
                                     document.getElementById('outputMSG').classList.add('done');
-                                    document.getElementById('outputMSG').value = 'Copied to clipboard';
+                                    document.getElementById('outputMSG').innerText = 'Copied to clipboard';
                                 });
                         });
-                        document.getElementById('qrWindow').append(copyButton);
+                        resultDiv.append(copyButton);
+
+                        if (isValidURL) {
+                            let openURLButton = document.createElement('button');
+                            openURLButton.innerText = 'Open URL';
+                            openURLButton.id = 'openURLButton';
+                            openURLButton.addEventListener('click', function () {
+                                window.open(result.text, '_blank').focus();
+                            });
+                            resultDiv.append(openURLButton);
+                        }
+
+                        document.getElementById('qrWindow').append(resultDiv);
+                    } else {
+                        document.getElementById('resultBox').innerText = result.text;
                     }
                 }
+            } else {
+                console.error(err);
             }
         });
 }
