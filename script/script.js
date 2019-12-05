@@ -501,6 +501,7 @@ function prepareQR() {
 
     let exitBtn = document.createElement('button');
     exitBtn.innerText = 'X';
+    exitBtn.id = 'exitBtn';
     exitBtn.addEventListener('click', function () {
         codeReader.reset();
         qrWindow.remove();
@@ -557,32 +558,55 @@ function decode(codeReader, device) {
                 } catch (_) {
                     isValidURL = false;
                 }
-                if (isValidURL) { //if the QR code is a URL
-                    let copyURLButton = document.createElement('button');
+                try {
+                    if (/^\d+\.\d+$/.test(result.text)) { //if a number
+                        document.getElementById('numericTextBox').value = result.text;
+                        document.getElementById('exitBtn').click();
+                    } else if (/^\d+$/.test(result.text)) { //if an integer
+                        document.getElementById('integerTextBox').value = result.text;
+                        document.getElementById('exitBtn').click();
+                    } else { //if not a number
+                        document.getElementById('textBox').value = result.text;
+                        document.getElementById('exitBtn').click();
+                    }
+                } catch (e) {
+                    if (document.getElementById('copyButton') === null) {
+                        let resultDiv = document.createElement('div');
 
-                    document.getElementById('qrWindow').append(copyURLButton);
-                } else { //if not a URL
-                    try {
-                        if (/^\d+\.\d+$/.test(result.text)) { //if a number
-                            document.getElementById('numericTextBox').value = result.text;
-                        } else if (/^\d+$/.test(result.text)) { //if an integer
-                            document.getElementById('integerTextBox').value = result.text;
-                        } else { //if not a number
-                            document.getElementById('textBox').value = result.text;
-                        }
+                        let resultBox = document.createElement('p');
+                        resultBox.innerText = result.text;
+                        resultBox.id = 'resultBox';
+                        resultBox.style.backgroundColor = 'black';
+                        resultBox.style.color = 'white';
+                        resultDiv.append(resultBox);
 
-                    } catch (e) {
                         let copyButton = document.createElement('button');
+                        copyButton.innerText = 'Copy';
+                        copyButton.id = 'copyButton';
                         copyButton.addEventListener('click', function () {
                             navigator.clipboard.writeText(result.text)
                                 .then(function () {
                                     document.getElementById('exitBtn').click();
                                     document.getElementById('outputMSG').classList.remove('disable', 'error');
                                     document.getElementById('outputMSG').classList.add('done');
-                                    document.getElementById('outputMSG').value = 'Copied to clipboard';
+                                    document.getElementById('outputMSG').innerText = 'Copied to clipboard';
                                 });
                         });
-                        document.getElementById('qrWindow').append(copyButton);
+                        resultDiv.append(copyButton);
+
+                        if (isValidURL) {
+                            let openURLButton = document.createElement('button');
+                            openURLButton.innerText = 'Open URL';
+                            openURLButton.id = 'openURLButton';
+                            openURLButton.addEventListener('click', function () {
+                                window.open(result.text, '_blank').focus();
+                            });
+                            resultDiv.append(openURLButton);
+                        }
+
+                        document.getElementById('qrWindow').append(resultDiv);
+                    } else {
+                        document.getElementById('resultBox').innerText = result.text;
                     }
                 }
             }
