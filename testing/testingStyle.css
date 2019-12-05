@@ -1,0 +1,23 @@
+table {
+    font-size: x-large;
+}
+th{
+    background-color:#865114;
+}
+td{
+    background-color:#fcffbe;
+}
+.exist{
+    text-align: center;
+}
+#title{
+    text-align: center;
+    text-decoration: underline;
+    font-size: 65px;
+}
+.headers{
+    font-size: 50px;
+}
+p{
+    font-size: 30px ;
+}
