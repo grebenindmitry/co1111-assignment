@@ -178,8 +178,6 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                     document.body.classList.remove('margin-free');
 
                     let skipField = document.createElement('div');
-                    skipField.style.position = 'absolute';
-
                     document.body.append(skipField);
 
                     if (responseJSON.canBeSkipped === true) {
@@ -228,13 +226,13 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                             document.body.appendChild(booleanButtonTrue);
                             document.body.appendChild(booleanButtonFalse);
                             break;
-
                         case "INTEGER":
                             let integerForm = document.createElement('form');
                             integerForm.action = 'javascript:sendAnswer(document.getElementById("integerTextBox").value)';
 
                             let integerTextBox = document.createElement('input');
                             integerTextBox.id = 'integerTextBox';
+                            integerTextBox.classList.add('inputField');
                             integerTextBox.type = "number";
 
                             let integerSubmitButton = document.createElement('input');
@@ -252,6 +250,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
 
                             let numericTextBox = document.createElement('input');
                             numericTextBox.id = 'numericTextBox';
+                            numericTextBox.classList.add('inputField');
                             numericTextBox.type = 'number';
 
                             let numericSubmitButton = document.createElement('input');
@@ -294,6 +293,8 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                             textForm.action = 'javascript:sendAnswer(document.getElementById("textBox").value)';
 
                             let textBox = document.createElement('input');
+                            textBox.id = 'textBox';
+                            textBox.classList.add('inputField');
                             textBox.type = 'text';
                             
                             let textSubmitButton = document.createElement('button');
@@ -479,10 +480,6 @@ function getLeaderboard(isTesting,size,sorted,hasPrize) {
         });
 }
 
-function stopQR() {
-    document.getElementById('qrWindow').remove();
-}
-
 function prepareQR() {
     let qrWindow = document.createElement('div');
     qrWindow.id = 'qrWindow';
@@ -491,7 +488,11 @@ function prepareQR() {
 
     let exitBtn = document.createElement('button');
     exitBtn.innerText = 'X';
-    exitBtn.addEventListener('click', stopQR);
+    exitBtn.id = 'exitBtn';
+    exitBtn.addEventListener('click', function () {
+        codeReader.reset();
+        qrWindow.remove();
+    });
     exitBtn.classList.add('cameraExit');
     qrWindow.append(exitBtn);
 
@@ -536,7 +537,41 @@ function decode(codeReader, device) {
     codeReader.decodeFromInputDeviceContinuously(device, 'videoOut')
         .then((result, err) => {
             if (result) {
-                console.log(result);
-            } 
-        })
+                let isValidURL;
+                try {
+                    new URL(result.text);
+                    isValidURL = true;
+                } catch (_) {
+                    isValidURL = false;
+                }
+                if (isValidURL) { //if the QR code is a URL
+                    let copyURLButton = document.createElement('button');
+
+                    document.getElementById('qrWindow').append(copyURLButton);
+                } else { //if not a URL
+                    try {
+                        if (/^\d+\.\d+$/.test(result.text)) { //if a number
+                            document.getElementById('numericTextBox').value = result.text;
+                        } else if (/^\d+$/.test(result.text)) { //if an integer
+                            document.getElementById('integerTextBox').value = result.text;
+                        } else { //if not a number
+                            document.getElementById('textBox').value = result.text;
+                        }
+
+                    } catch (e) {
+                        let copyButton = document.createElement('button');
+                        copyButton.addEventListener('click', function () {
+                            navigator.clipboard.writeText(result.text)
+                                .then(function () {
+                                    document.getElementById('exitBtn').click();
+                                    document.getElementById('outputMSG').classList.remove('disable', 'error');
+                                    document.getElementById('outputMSG').classList.add('done');
+                                    document.getElementById('outputMSG').value = 'Copied to clipboard';
+                                });
+                        });
+                        document.getElementById('qrWindow').append(copyButton);
+                    }
+                }
+            }
+        });
 }
