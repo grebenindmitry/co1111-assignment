@@ -1,4 +1,4 @@
-# co1111-assignment
+# DAC Treasure Hunt
 
 UCLan Cyprus Module CO1111 Team project by Dmitry Grebenin, Alexandros Christou, Charalampos Mouskovia
 
