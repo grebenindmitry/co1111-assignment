@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leaderboard</title>
+</head>
+<body>
+<script src="../script/script.js"></script>
+<script>
+    const params = new URLSearchParams(location.search);
+    getLeaderboard(true, params.get('size'),params.get('sorted'),params.get('hasPrize'));
+</script>
+</body>
+</html>

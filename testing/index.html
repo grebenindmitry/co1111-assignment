@@ -79,6 +79,7 @@
     </tr>
 </table>
 <hr>
+    <div style="font-size: 40px">
     <p>Enter number of TreasureHunts : </p>
     <form action="./list.html">
         Quantity : <input type="number" name="quantity">
@@ -110,7 +111,24 @@
         Score is : <input type="number" name="score">
         <input type="submit">
     </form>
+    <br>
+    <hr>
+     <p>Check leaderboard's functionaliies</p>
+        <span>Size: </span><input type="number" id="sizes" name="sizes">
+        <p>Table sorted:</p>
+        <select id="sort">
+            <option>TRUE</option>
+            <option>FALSE</option>
+        </select>
+        <p>Has Prize:</p>
+        <select id="prize">
+            <option>TRUE</option>
+            <option>FALSE</option>
+        </select>
+        <br>
+        <button onclick="StartLeadeboardTest()">Try it</button>
 
+    </div>
 
     <script src="../script/script.js"></script>
 <script>
@@ -129,7 +147,15 @@
     }
     function startScoreTest() {
 
-
+    }
+    function StartLeadeboardTest() {
+        let size = document.getElementById("sizes").value;
+        console.log(size);
+        let sort = document.getElementById("sort").value;
+        console.log(sort);
+        let prize = document.getElementById("prize").value;
+        console.log(prize);
+        getLeaderboard(true, size, sort, prize);
 
     }
 

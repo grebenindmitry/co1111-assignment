@@ -443,25 +443,22 @@ function getCookie(cookieName) {
     }
     return "";
 }
-function getLeaderboard(isTesting,size,sorted,hasPrize) {
+function getLeaderboard(isTesting, size, sorted, hasPrize) {
 
     let fetchURL = '';
     if (!isTesting) {
         fetchURL = API + "/leaderboard?session=" + sessionID + "&sorted&limit=20";
     } else {
-        fetchURL =   TEST_API + "/leaderboard?session=" + sessionID + "?sorted=" + sorted +
-            "&hasPrize="+hasPrize + "&size=" +size;
-
+        fetchURL = TEST_API + "/leaderboard?sorted=" + sorted + "&hasPrize=" + hasPrize + "&size=" + size;
     }
 
     fetch(fetchURL)
         .then(response => response.json())
         .then(responseJSON => {
-
-            let score = responseJSON.leaderboard;
-
-            let limit = responseJSON.limit;
-            let player ='Player';
+            console.log(responseJSON);
+            let scores = responseJSON.leaderboard;
+            //console.log(score);
+            let players ='Player';
             let position = 'Pos.';
             let time = 'Time';
             let points = 'Score';
@@ -470,18 +467,20 @@ function getLeaderboard(isTesting,size,sorted,hasPrize) {
            // tableOfScores += "<tr class='styling'>" +
             tableOfScores += "<tr style='border: 2px solid black; background-color:#666666;font-weight: bold; color: white;'>" +
                 "<td>" + position + "</td>" +
-                "<td>" + player + "</td>" +
+                "<td>" + players + "</td>" +
                 "<td>" + time + "</td>" +
                 "<td>" + points + "</td>" +
                 "</tr>";
 
-            for (let i = 0; i < limit; i++) {
+            let i = 0;
+            for (score of scores) {
                 tableOfScores += "<tr>" +
                     "<td>" + (i+1) + "</td>" +
-                    "<td>" + score[i].player + "</td>" +
-                    "<td>" + score[i].completionTime + "</td>" +
-                    "<td>" + score[i].score + "</td>" +
+                    "<td>" + score.player + "</td>" +
+                    "<td>" + score.completionTime + "</td>" +
+                    "<td>" + score.score + "</td>" +
                     "</tr>";
+                i++;
             }
 
             tableOfScores += "</table>";
