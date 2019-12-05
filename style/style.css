@@ -2,9 +2,18 @@
 
 body{
 
-    background-color: white;
+    /*background-color: white;*/
+    background-image: url("th.jpg");
 }
-
+.ladningPagecolo{
+    border: 2px solid black;
+    background: white;
+    margin-left: 70px;
+    margin-right: 70px;
+    margin-top: 20px;
+    padding: 2px;
+    margin-bottom: 5px;
+}
 * {
     font-family: Ubuntu, sans-serif;
 }
@@ -89,11 +98,14 @@ input[type='text'], input[type='number'] {
 }
 .titleHeading{
     color: white;
-    text-shadow: 1px 1px 1px #cccccc;
+    text-shadow: 4px 4px 4px black;
     text-transform: uppercase;
     text-align: center;
     border: 2px solid white;
     padding: 1px;
+    background-color: #e68a00;
+    margin-right: 70px;
+    margin-left: 70px;
 }
 
 #treasure{
@@ -155,14 +167,15 @@ input[type='text'], input[type='number'] {
 
 .header{
     overflow: hidden;
+
     background-color: #865114;
     box-shadow: 1px 1px 10px black;
 }
 .linkList {
     list-style-type: none;
     height: 35px;
-
-   margin: 0;
+    background-color: #e68a00;
+     margin: 0;
     padding: 0;
 }
 
@@ -174,11 +187,16 @@ input[type='text'], input[type='number'] {
     text-decoration: none;
     margin: 0 5px;
 }
-
+#linklistRow{
+    background-color: #bfbfbf;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
 .dropbtn {
     display: inline-block;
     padding-top: 6px;
     color: black;
+    text-align: center;
 }
 
 .linkList>li:hover, .dropdown:hover .dropbtn {
@@ -198,6 +216,7 @@ li.dropdown {
     z-index: 1;
     margin-left: -30px;
 
+
 }
 
 .dropdown-content a {
@@ -216,6 +235,11 @@ li.dropdown {
 
 #huntList{
     list-style-type: none;
+    border: 2px solid black;
+    background-color: white;
+    margin-left: 60px;
+    margin-right: 60px;
+   float: left;
 }
 
 .accordion {
@@ -225,6 +249,8 @@ li.dropdown {
     /*padding: 18px;*/
     /*width: 18%;*/
     border: none;
+    border-radius: 50%;
+    margin-left: 10px;
     text-align: left;
     outline: none;
     font-size: 10px;
@@ -232,9 +258,13 @@ li.dropdown {
 }
 .dropInfo{
     width:45px;
+
 }
 #contentInfo{
     width: 370px;
+    border: 1px solid black;
+    margin-left: 10px;
+    margin-top: 3px;
 }
 .dropInfo:hover .panel{
     display: contents;
@@ -251,6 +281,9 @@ li.dropdown {
     height: 20px;
     background-color: #444444;
 }
+.tableRows{
+    background-color: #d9d9d9;
+}
 table {
     border-collapse: collapse;
     width: 100%;
@@ -266,6 +299,11 @@ tr:nth-child(even){background-color: #f2f2f2}
 th {
     background-color: #4CAF50;
     color: white;
+}
+#homepage{
+    float: right;
+    font-size: 34px;
+   background-color: #d8d6d6;
 }
 
 #qrCode{
