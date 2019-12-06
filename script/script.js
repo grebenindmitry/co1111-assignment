@@ -1,10 +1,9 @@
 const API = "https://codecyprus.org/th/api";
 const TEST_API = "https://codecyprus.org/th/test-api";
 let sessionID = "";
+let main = document.getElementsByTagName('main')[0];
 
 function getHuntList(isTesting, tNumberOfThs) {
-    console.log("I am in testing");
-    console.log(isTesting);
     let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/list";
@@ -12,19 +11,21 @@ function getHuntList(isTesting, tNumberOfThs) {
         fetchURL =   TEST_API + "/list?number-of-ths=" + tNumberOfThs;
 
     }
+    setTimeout(function () {
+        if (getCookie('gamePlaying') === 'true') {
+            if (confirm('A saved game was found.\nContinue that game?')) {
+                sessionID = getCookie('sessionID');
+                startHunt();
+            }
+        }
+    }, 100);
 
     fetch(fetchURL)
         .then(response => response.json())
         .then(responseJSON => {
+            document.getElementsByClassName('loader')[0].remove();
             let huntList = document.getElementById("huntList");
             let i = 0;
-            if (getCookie('gamePlaying') === 'true') {
-                let cookieSessionID = getCookie('sessionID');
-                let nameElement = document.createElement('li');
-                nameElement.id = 'savedHuntName';
-                nameElement.innerHTML = '<a style="font-weight: bold" href="javascript:resumeSession(\'' + cookieSessionID + '\')">Continue previous game</a>';
-                huntList.appendChild(nameElement);
-            }
 
             for (let treasureHunt of responseJSON.treasureHunts) {
                 let huntList = document.getElementById("huntList");
@@ -60,13 +61,8 @@ function getHuntList(isTesting, tNumberOfThs) {
             let errorBox = document.createElement('span');
             errorBox.classList.add('disable', 'outputMSG');
             errorBox.id = 'errorBox';
-            document.body.appendChild(errorBox);
+            main.appendChild(errorBox);
         });
-}
-// noinspection JSUnusedGlobalSymbols
-function resumeSession(uuid) {
-    sessionID = uuid;
-    getQuestion();
 }
 // noinspection JSUnusedGlobalSymbols
 function startSession(uuid, expiryDate, isTesting, player) {
@@ -104,7 +100,7 @@ function startSession(uuid, expiryDate, isTesting, player) {
                 sessionID = jsonResponse.session;
                 document.cookie = 'gamePlaying=true; expires=' + expiryDate;
                 document.cookie = 'sessionID=' + sessionID + ';expires=' + expiryDate;
-                getQuestion();
+                startHunt();
             }
         });
     // getQuestion();
@@ -137,9 +133,9 @@ function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
     }
 
     let scoreBox = document.createElement('span');
-    scoreBox.innerText = 'Loading...';
+    scoreBox.innerHTML = '<div class="loader loader-small loader-light"></div>';
     scoreBox.classList.add('scoreBox');
-    document.body.appendChild(scoreBox);
+    document.getElementById('skipDiv').appendChild(scoreBox);
     fetch(fetchURL)
         .then(response => response.json())
         .then(scoreJSON => {
@@ -147,6 +143,11 @@ function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
                 scoreBox.innerText = 'Your score is: ' + scoreJSON.score;
             }
         });
+}
+
+function startHunt() {
+    document.getElementsByTagName('main')[0].innerHTML = "";
+    getQuestion(false);
 }
 
 function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tRequireLocation) {
@@ -171,19 +172,18 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                 alert(errorMessageList);
             } else {
                 if (!responseJSON.completed) {
-                    document.body.innerHTML = "";
-                    document.body.classList.remove('margin-free');
-
-                    let skipField = document.createElement('div');
-                    skipField.style.minHeight = '80px';
-                    document.body.append(skipField);
+                    main.innerHTML = '';
+                    let skipDiv = document.createElement('div');
+                    skipDiv.id = 'skipDiv';
+                    skipDiv.style.minHeight = '80px';
+                    main.appendChild(skipDiv);
 
                     if (responseJSON.canBeSkipped === true) {
                         let skipBox = document.createElement("BUTTON");
                         skipBox.id = "skipBox";
                         skipBox.classList.add('button');
                         skipBox.innerText="SKIP";
-                        skipField.appendChild(skipBox);
+                        skipDiv.appendChild(skipBox);
                         document.getElementById("skipBox").value="SKIP";
                         document.getElementById("skipBox").name="SKIP";
                         skipBox.addEventListener('click', skipQuestion);
@@ -192,7 +192,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
                         errorSkip.style.display = 'inline-block';
                         errorSkip.style.maxWidth = '30%';
-                        skipField.appendChild(errorSkip);
+                        skipDiv.appendChild(errorSkip);
                     }
 
                     let qrCode = document.createElement("qrCode");
@@ -201,17 +201,21 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                     qrCode.innerText="QR Code";
                     qrCode.value="qrCode";
                     qrCode.name="qrCode";
-                    skipField.appendChild(qrCode);
+                    skipDiv.appendChild(qrCode);
                     qrCode.addEventListener('click', prepareQR);
 
-                    let questionName = document.createElement('h1');
-                    questionName.innerHTML = responseJSON.questionText;
-                    document.body.appendChild(questionName);
+                    let questionText = document.createElement('h2');
+                    questionText.style.textAlign = 'center';
+                    questionText.innerHTML = responseJSON.questionText;
+                    main.appendChild(questionText);
 
                     switch (responseJSON.questionType) {
                         case "BOOLEAN":
                             let booleanButtonTrue = document.createElement('button');
                             let booleanButtonFalse = document.createElement('button');
+                            let booleanButtons = document.createElement('div');
+                            booleanButtons.style.margin = 'auto';
+                            booleanButtons.style.width = 'fit-content';
 
                             booleanButtonFalse.innerHTML = "False";
                             booleanButtonTrue.innerHTML = "True";
@@ -222,16 +226,19 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                             booleanButtonTrue.addEventListener('click', function() {sendAnswer('true');});
                             booleanButtonFalse.addEventListener('click', function() {sendAnswer('false');});
 
-                            document.body.appendChild(booleanButtonTrue);
-                            document.body.appendChild(booleanButtonFalse);
+                            booleanButtons.appendChild(booleanButtonTrue);
+                            booleanButtons.appendChild(booleanButtonFalse);
+                            main.appendChild(booleanButtons);
                             break;
                         case "INTEGER":
                             let integerForm = document.createElement('form');
+                            integerForm.classList.add('answerForm');
                             integerForm.action = 'javascript:sendAnswer(document.getElementById("integerTextBox").value)';
 
                             let integerTextBox = document.createElement('input');
                             integerTextBox.id = 'integerTextBox';
                             integerTextBox.classList.add('inputField');
+                            integerTextBox.required = true;
                             integerTextBox.type = "number";
 
                             let integerSubmitButton = document.createElement('input');
@@ -239,17 +246,19 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                             integerSubmitButton.classList.add('button');
                             integerSubmitButton.value = "Submit";
 
-                            document.body.appendChild(integerForm);
+                            main.appendChild(integerForm);
                             integerForm.appendChild(integerTextBox);
                             integerForm.appendChild(integerSubmitButton);
                             break;
                         case "NUMERIC":
                             let numericForm = document.createElement('form');
+                            numericForm.classList.add('answerForm');
                             numericForm.action = 'javascript:sendAnswer(document.getElementById("numericTextBox").value)';
 
                             let numericTextBox = document.createElement('input');
                             numericTextBox.id = 'numericTextBox';
                             numericTextBox.classList.add('inputField');
+                            numericTextBox.required = true;
                             numericTextBox.type = 'number';
 
                             let numericSubmitButton = document.createElement('input');
@@ -257,15 +266,20 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                             numericSubmitButton.value = 'Submit';
                             numericSubmitButton.classList.add('button');
 
-                            document.body.appendChild(numericForm);
+                            main.appendChild(numericForm);
                             numericForm.appendChild(numericTextBox);
                             numericForm.appendChild(numericSubmitButton);
                             break;
                         case "MCQ":
+                            let mcqButtons = document.createElement('div');
                             let mcqA = document.createElement('button');
                             let mcqB = document.createElement('button');
                             let mcqC = document.createElement('button');
                             let mcqD = document.createElement('button');
+
+                            mcqButtons.style.margin = 'auto';
+                            mcqButtons.style.width = 'fit-content';
+
 
                             mcqA.classList.add('button');
                             mcqB.classList.add('button');
@@ -282,26 +296,30 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                             mcqC.addEventListener('click', function() {sendAnswer('C');});
                             mcqD.addEventListener('click', function() {sendAnswer('D');});
 
-                            document.body.appendChild(mcqA);
-                            document.body.appendChild(mcqB);
-                            document.body.appendChild(mcqC);
-                            document.body.appendChild(mcqD);
+                            mcqButtons.appendChild(mcqA);
+                            mcqButtons.appendChild(mcqB);
+                            mcqButtons.appendChild(mcqC);
+                            mcqButtons.appendChild(mcqD);
+                            main.appendChild(mcqButtons);
                             break;
                         case "TEXT":
                             let textForm = document.createElement('form');
+                            textForm.classList.add('answerForm');
                             textForm.action = 'javascript:sendAnswer(document.getElementById("textBox").value)';
 
                             let textBox = document.createElement('input');
                             textBox.id = 'textBox';
                             textBox.classList.add('inputField');
+                            textBox.required = true;
                             textBox.type = 'text';
                             
-                            let textSubmitButton = document.createElement('button');
+                            let textSubmitButton = document.createElement('input');
                             textSubmitButton.innerText = 'Submit';
+                            textSubmitButton.type = 'submit';
                             textSubmitButton.classList.add('button');
                             textSubmitButton.id = 'textButton';
 
-                            document.body.appendChild(textForm);
+                            main.appendChild(textForm);
                             textForm.appendChild(textBox);
                             textForm.appendChild(textSubmitButton);
                             break;
@@ -327,7 +345,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                     outputMSG.classList.add('disable', 'outputMSG');
                     questionInfo.appendChild(outputMSG);
 
-                    document.body.appendChild(questionInfo);
+                    main.appendChild(questionInfo);
 
                     showScore();
                 } else {
@@ -399,7 +417,7 @@ function skipQuestion() {
 function endSession() {
     document.cookie = 'gamePlaying=; expires=Thu 01 Jan 1970';
     document.cookie = 'sessionID=; expires=Thu 01 Jan 1970';
-    document.body.innerHTML = "End of treasure hunt. Loading the leaderboard...";
+    main.innerHTML = "End of treasure hunt. Loading the leaderboard...";
     console.log('end');
     getLeaderboard()
 }
@@ -483,8 +501,7 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
 
             tableOfScores += "</table>";
 
-            document.body = document.createElement("body");
-            document.body.innerHTML = tableOfScores;
+            main.innerHTML = tableOfScores;
 
 
         });
@@ -496,7 +513,7 @@ function prepareQR() {
     let qrWindow = document.createElement('div');
     qrWindow.id = 'qrWindow';
     qrWindow.classList.add('qrWindow');
-    document.body.append(qrWindow);
+    main.appendChild(qrWindow);
 
     let exitBtn = document.createElement('button');
     exitBtn.innerText = 'X';
@@ -506,15 +523,15 @@ function prepareQR() {
         qrWindow.remove();
     });
     exitBtn.classList.add('cameraExit');
-    qrWindow.append(exitBtn);
+    qrWindow.appendChild(exitBtn);
 
     let videoOut = document.createElement('video');
     videoOut.id = 'videoOut';
-    qrWindow.append(videoOut);
+    qrWindow.appendChild(videoOut);
 
     let sourceSelect = document.createElement('select');
     sourceSelect.classList.add('cameraSelect');
-    qrWindow.append(sourceSelect);
+    qrWindow.appendChild(sourceSelect);
 
     let deviceID;
     // noinspection JSUnresolvedFunction
@@ -579,7 +596,7 @@ function decode(codeReader, device) {
                         resultBox.id = 'resultBox';
                         resultBox.style.backgroundColor = 'black';
                         resultBox.style.color = 'white';
-                        resultDiv.append(resultBox);
+                        resultDiv.appendChild(resultBox);
 
                         let copyButton = document.createElement('button');
                         copyButton.innerText = 'Copy';
@@ -593,7 +610,7 @@ function decode(codeReader, device) {
                                     document.getElementById('outputMSG').innerText = 'Copied to clipboard';
                                 });
                         });
-                        resultDiv.append(copyButton);
+                        resultDiv.appendChild(copyButton);
 
                         if (isValidURL) {
                             let openURLButton = document.createElement('button');
@@ -602,16 +619,14 @@ function decode(codeReader, device) {
                             openURLButton.addEventListener('click', function () {
                                 window.open(result.text, '_blank').focus();
                             });
-                            resultDiv.append(openURLButton);
+                            resultDiv.appendChild(openURLButton);
                         }
 
-                        document.getElementById('qrWindow').append(resultDiv);
+                        document.getElementById('qrWindow').appendChild(resultDiv);
                     } else {
                         document.getElementById('resultBox').innerText = result.text;
                     }
                 }
-            } else {
-                console.error(err);
             }
         });
 }
