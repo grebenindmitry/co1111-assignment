@@ -24,6 +24,7 @@ function getHuntList(isTesting, tNumberOfThs) {
         .then(response => response.json())
         .then(responseJSON => {
             document.getElementsByClassName('loader')[0].remove();
+            // noinspection JSUnusedLocalSymbols
             let huntList = document.getElementById("huntList");
             let i = 0;
 
@@ -566,7 +567,7 @@ function prepareQR() {
 }
 
 function decode(codeReader, device) {
-    // noinspection JSUnresolvedFunction
+    // noinspection JSUnresolvedFunction,JSUnusedLocalSymbols
     codeReader.decodeFromInputVideoDeviceContinuously(device, 'videoOut', (result, err) => {
             if (result) {
                 let isValidURL;
