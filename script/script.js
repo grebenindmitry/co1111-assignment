@@ -9,7 +9,9 @@ function getHuntList(isTesting, tNumberOfThs) {
         fetchURL = API + "/list";
     } else {
         fetchURL =   TEST_API + "/list?number-of-ths=" + tNumberOfThs;
-
+        document.body.innerHTML += '<main></main>';
+        main = document.getElementsByTagName('main')[0];
+        main.innerHTML = '<div class="loader loader-big"></div>'
     }
     setTimeout(function () {
         if (getCookie('gamePlaying') === 'true') {
@@ -74,7 +76,9 @@ function startSession(uuid, expiryDate, isTesting, player) {
         fetchURL = API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid;
     } else {
         fetchURL =   API + "/start?player=" + player + "&app=dac-name&treasure-hunt-id=";
-
+        document.body.innerHTML += '<main></main>';
+        main = document.getElementsByTagName('main')[0];
+        main.innerHTML = '<div class="loader loader-big"></div>'
     }
 
     sendLocation();
@@ -130,7 +134,12 @@ function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
     } else {
         fetchURL =   TEST_API + "?score=" + tScore + "&completed=" + tCompleted + "&finished=" + tFinished +
             "&error=" + tError;
-
+        document.body.innerHTML += '<main></main>';
+        main = document.getElementsByTagName('main')[0];
+        main.innerHTML = '<div class="loader loader-big"></div>';
+        let scoreBox = document.createElement('div');
+        scoreBox.id = 'skipDiv';
+        main.appendChild(scoreBox);
     }
 
     let scoreBox = document.createElement('span');
@@ -158,7 +167,9 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
     } else {
         fetchURL =   TEST_API + "/question?session=" + sessionID + "?completed&question-type="
             + tQuestionType +"&can-be-skipped=" + tCanBeSkipped +  "&requires-location=" +tRequireLocation ;
-
+        document.body.innerHTML += '<main></main>';
+        main = document.getElementsByTagName('main')[0];
+        main.innerHTML = '<div class="loader loader-big"></div>'
     }
 
     fetch(fetchURL)
@@ -363,7 +374,9 @@ function sendAnswer(answer, isTesting, tCorrect, tCompleted) {
         fetchURL = API + "/answer?session=" + sessionID + "&answer=" + answer
     } else {
         fetchURL =   TEST_API + "/answer?" + "correct=" + tCorrect + "&completed=" + tCompleted;
-
+        document.body.innerHTML += '<main></main>';
+        main = document.getElementsByTagName('main')[0];
+        main.innerHTML = '<div class="loader loader-big"></div>'
     }
 
     fetch(fetchURL)
@@ -375,12 +388,16 @@ function sendAnswer(answer, isTesting, tCorrect, tCompleted) {
                     document.getElementById('outputMSG').classList.remove('disable', 'error');
                     document.getElementById('outputMSG').classList.add('done');
                     document.getElementById('outputMSG').innerText = responseJSON.message;
-                    window.setTimeout(getQuestion, 600);
+                    if (!isTesting) {
+                        window.setTimeout(getQuestion, 600);
+                    }
                 } else {
                     document.getElementById('outputMSG').classList.remove('disable', 'done');
                     document.getElementById('outputMSG').classList.add('error');
                     document.getElementById('outputMSG').innerText = responseJSON.message;
-                    window.setTimeout(getQuestion, 600);
+                    if (!isTesting) {
+                        window.setTimeout(getQuestion, 600);
+                    }
                 }
             } else {
                 document.getElementById('outputMSG').classList.remove('disable', 'done');
@@ -394,28 +411,29 @@ function sendAnswer(answer, isTesting, tCorrect, tCompleted) {
 }
 
 function skipQuestion() {
-    fetch("https://codecyprus.org/th/api/skip?session=" + sessionID)
-        .then(response => response.json())
-        .then(responseJSON => {
-            // noinspection EqualityComparisonWithCoercionJS
-            confirm("-5 Points for skip, OK?");
-            if (responseJSON.status != 'ERROR'){
-                if (!responseJSON.completed) {
+    if (confirm("You will lose 5 points by skipping.\nAre you sure you want to continue?")) {
+        fetch("https://codecyprus.org/th/api/skip?session=" + sessionID)
+            .then(response => response.json())
+            .then(responseJSON => {
+                // noinspection EqualityComparisonWithCoercionJS
+                if (responseJSON.status !== 'ERROR') {
+                    if (!responseJSON.completed) {
 
-                    document.getElementById('outputMSG').classList.remove('disable', 'error');
-                    document.getElementById('outputMSG').classList.add('done');
-                    document.getElementById('outputMSG').innerText = responseJSON.message;
+                        document.getElementById('outputMSG').classList.remove('disable', 'error');
+                        document.getElementById('outputMSG').classList.add('done');
+                        document.getElementById('outputMSG').innerText = responseJSON.message;
 
-                    getQuestion();    
+                        getQuestion();
+                    } else {
+                        endSession();
+                    }
                 } else {
-                    endSession();
+                    document.getElementById('outputMSG').classList.remove('disable', 'done');
+                    document.getElementById('outputMSG').classList.add('error');
+                    document.getElementById('outputMSG').innerText = responseJSON.errorMessages[0];
                 }
-            } else {
-                document.getElementById('outputMSG').classList.remove('disable', 'done');
-                document.getElementById('outputMSG').classList.add('error');
-                document.getElementById('outputMSG').innerText = responseJSON.errorMessages[0];
-            }
-        });
+            });
+    }
 }
 
 function endSession() {
@@ -463,22 +481,6 @@ function getCookie(cookieName) {
     return "";
 }
 
-
-function timeConverter(UNIX_timestamp){
-    let a = new Date(UNIX_timestamp * 1000);
-    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    let year = a.getFullYear();
-    let month = months[a.getMonth()];
-    let date = a.getDate();
-    let hour = a.getHours();
-    let min = a.getMinutes();
-    let sec = a.getSeconds();
-    let timing =  hour + ':' + min + ':' + sec ;
-   // let timing = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-    return timing;
-}
-
-
 function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
 
     let fetchURL;
@@ -486,6 +488,9 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
         fetchURL = API + "/leaderboard?session=" + sessionID + "&sorted&limit=20";
     } else {
         fetchURL = TEST_API + "/leaderboard?sorted=" + tSorted + "&hasPrize=" + tHasPrize + "&size=" + tSize;
+        document.body.innerHTML += '<main></main>';
+        main = document.getElementsByTagName('main')[0];
+        main.innerHTML = '<div class="loader loader-big"></div>'
     }
 
     fetch(fetchURL)
@@ -498,10 +503,7 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
             let position = 'Pos.';
             let time = 'Time';
             let points = 'Score';
-
-
             let tableOfScores = "<table>";
-
 
             tableOfScores += "<tr style='border: 2px solid black; background-color:#666666;font-weight: bold; color: white;'>" +
                 "<td>" + position + "</td>" +
@@ -512,10 +514,11 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
 
             let i = 1;
             for (score of scores) {
+                let compTime = new Date(score.completionTime);
                 tableOfScores += "<tr>" +
                     "<td>" + i + "</td>" +
                     "<td>" + score.player + "</td>" +
-                    "<td>" + timeConverter(score.completionTime) + "</td>" +
+                    "<td>" + moment(compTime).format('MMM D YYYY, HH:mm:ss') + "</td>" +
                     "<td>" + score.score + "</td>" +
                     "</tr>";
                 i++;
@@ -524,8 +527,6 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
             tableOfScores += "</table>";
 
             main.innerHTML = tableOfScores;
-
-
         });
 }
 
