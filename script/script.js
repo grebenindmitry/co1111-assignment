@@ -398,11 +398,14 @@ function skipQuestion() {
         .then(response => response.json())
         .then(responseJSON => {
             // noinspection EqualityComparisonWithCoercionJS
+            confirm("-5 Points for skip, OK?");
             if (responseJSON.status != 'ERROR'){
                 if (!responseJSON.completed) {
+
                     document.getElementById('outputMSG').classList.remove('disable', 'error');
                     document.getElementById('outputMSG').classList.add('done');
                     document.getElementById('outputMSG').innerText = responseJSON.message;
+
                     getQuestion();    
                 } else {
                     endSession();
@@ -460,6 +463,22 @@ function getCookie(cookieName) {
     return "";
 }
 
+
+function timeConverter(UNIX_timestamp){
+    let a = new Date(UNIX_timestamp * 1000);
+    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    let year = a.getFullYear();
+    let month = months[a.getMonth()];
+    let date = a.getDate();
+    let hour = a.getHours();
+    let min = a.getMinutes();
+    let sec = a.getSeconds();
+    let timing =  hour + ':' + min + ':' + sec ;
+   // let timing = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+    return timing;
+}
+
+
 function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
 
     let fetchURL;
@@ -479,9 +498,11 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
             let position = 'Pos.';
             let time = 'Time';
             let points = 'Score';
+
+
             let tableOfScores = "<table>";
 
-           // tableOfScores += "<tr class='styling'>" +
+
             tableOfScores += "<tr style='border: 2px solid black; background-color:#666666;font-weight: bold; color: white;'>" +
                 "<td>" + position + "</td>" +
                 "<td>" + players + "</td>" +
@@ -489,12 +510,12 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
                 "<td>" + points + "</td>" +
                 "</tr>";
 
-            let i = 0;
+            let i = 1;
             for (score of scores) {
                 tableOfScores += "<tr>" +
-                    "<td>" + (i+1) + "</td>" +
+                    "<td>" + i + "</td>" +
                     "<td>" + score.player + "</td>" +
-                    "<td>" + score.completionTime + "</td>" +
+                    "<td>" + timeConverter(score.completionTime) + "</td>" +
                     "<td>" + score.score + "</td>" +
                     "</tr>";
                 i++;
