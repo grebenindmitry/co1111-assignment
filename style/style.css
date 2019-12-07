@@ -92,12 +92,9 @@ input[type='text'], input[type='number'] {
 .titleHeading {
     color: white;
     text-shadow: 4px 4px 4px black;
-    text-transform: uppercase;
     text-align: center;
-    border: 2px solid white;
-    padding: 1px;
-    background-color: #e68a00;
     margin: 3% 10%;
+    font-size:3em;
 }
 
 #treasure {
@@ -109,16 +106,16 @@ input[type='text'], input[type='number'] {
     margin-top: 10px;
 }
 
-#introduction {
-    font-size: 20px;
-    border: 2px solid black;
+#instructions {
+    font-size: 35px;
     background-color: #fcffbe;
     color: black;
     text-shadow: 2px 2px #bfbfbf;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-    width: 50%
+    margin-bottom: 0px;
+    text-decoration:underline;
 }
 
 #welcoming {
