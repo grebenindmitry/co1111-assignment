@@ -121,7 +121,7 @@ function enterUsername(uuid, targetID, huntEndDate) {
     usernameInput.style.display = "inline-block";
     usernameInput.style.marginLeft = "10px";
     usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\", \"" + huntEndDate + "\", false)'>" +
-                                        "<input id='usernameBox' type='text' placeholder='Enter your username'>" +
+                                        "<input id='usernameBox' type='text' placeholder='Enter your username' autofocus>" +
                                         "<input type='submit' value='Submit' style='' class='submitButton'>" +
                                 "</form>";
     target.appendChild(usernameInput);
