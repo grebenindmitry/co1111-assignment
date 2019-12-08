@@ -2,6 +2,7 @@ const API = "https://codecyprus.org/th/api";
 const TEST_API = "https://codecyprus.org/th/test-api";
 let sessionID = "";
 let main = document.getElementsByTagName('main')[0];
+let geoLoop;
 
 function getHuntList(isTesting, tNumberOfThs) {
     let fetchURL;
@@ -13,59 +14,60 @@ function getHuntList(isTesting, tNumberOfThs) {
         main = document.getElementsByTagName('main')[0];
         main.innerHTML = '<div class="loader loader-big"></div>'
     }
-    setTimeout(function () {
-        if (getCookie('gamePlaying') === 'true') {
+
+    if (getCookie('gamePlaying') === 'true') {
+        setTimeout(function () {
             if (confirm('A saved game was found.\nContinue that game?')) {
                 sessionID = getCookie('sessionID');
                 startHunt();
             }
-        }
-    }, 100);
-
-    fetch(fetchURL)
-        .then(response => response.json())
-        .then(responseJSON => {
-            document.getElementsByClassName('loader')[0].remove();
-            // noinspection JSUnusedLocalSymbols
-            let huntList = document.getElementById("huntList");
-            let i = 0;
-
-            for (let treasureHunt of responseJSON.treasureHunts) {
+        }, 100);
+    } else {
+        fetch(fetchURL)
+            .then(response => response.json())
+            .then(responseJSON => {
+                document.getElementsByClassName('loader')[0].remove();
+                // noinspection JSUnusedLocalSymbols
                 let huntList = document.getElementById("huntList");
-                let startDateObj = new Date(treasureHunt.startsOn);
-                let dateOptions = {
-                    day: 'numeric',
-                    month: 'numeric',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false
-                };
-                let endDateObj = new Date(treasureHunt.endsOn);
+                let i = 0;
 
-                //Create and append hunt name
-                let nameElement = document.createElement("li");
-                nameElement.id = "thName" + i;
-                huntList.appendChild(nameElement);
-                nameElement.innerHTML = ("<a style='font-weight: bold;' href='javascript:enterUsername(\"" +
-                    treasureHunt.uuid + "\", \"" + nameElement.id + "\", \"" + endDateObj.toUTCString() + "\")'>" + treasureHunt.name + "</a>");
+                for (let treasureHunt of responseJSON.treasureHunts) {
+                    let huntList = document.getElementById("huntList");
+                    let startDateObj = new Date(treasureHunt.startsOn);
+                    let dateOptions = {
+                        day: 'numeric',
+                        month: 'numeric',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: false
+                    };
+                    let endDateObj = new Date(treasureHunt.endsOn);
 
-                //Create and append sublist for hunt info
-                let subList  = document.createElement("ul");
-                huntList.appendChild(subList);
+                    //Create and append hunt name
+                    let nameElement = document.createElement("li");
+                    nameElement.id = "thName" + i;
+                    huntList.appendChild(nameElement);
+                    nameElement.innerHTML = ("<a style='font-weight: bold;' href='javascript:enterUsername(\"" +
+                        treasureHunt.uuid + "\", \"" + nameElement.id + "\", \"" + endDateObj.toUTCString() + "\")'>" + treasureHunt.name + "</a>");
 
-                //Append hunt info
-                subList.innerHTML += ("<li><b>Description: </b>" + treasureHunt.description + "</li>");
-                subList.innerHTML += ("<li><b>Starts On: </b>" + startDateObj.toLocaleDateString('en-US', dateOptions) + "</li>");
-                subList.innerHTML += ("<li><b>Ends On: </b>" + endDateObj.toLocaleDateString('en-US', dateOptions) + "</li>");
-                i++;
-            }
-            let errorBox = document.createElement('span');
-            errorBox.classList.add('disable', 'outputMSG');
-            errorBox.id = 'errorBox';
-            main.appendChild(errorBox);
-        });
+                    //Create and append sublist for hunt info
+                    let subList  = document.createElement("ul");
+                    huntList.appendChild(subList);
+
+                    //Append hunt info
+                    subList.innerHTML += ("<li><b>Description: </b>" + treasureHunt.description + "</li>");
+                    subList.innerHTML += ("<li><b>Starts On: </b>" + startDateObj.toLocaleDateString('en-US', dateOptions) + "</li>");
+                    subList.innerHTML += ("<li><b>Ends On: </b>" + endDateObj.toLocaleDateString('en-US', dateOptions) + "</li>");
+                    i++;
+                }
+                let errorBox = document.createElement('span');
+                errorBox.classList.add('disable', 'outputMSG');
+                errorBox.id = 'errorBox';
+                main.appendChild(errorBox);
+            });
+    }
 }
 // noinspection JSUnusedGlobalSymbols
 function startSession(uuid, expiryDate, isTesting, player) {
@@ -80,9 +82,6 @@ function startSession(uuid, expiryDate, isTesting, player) {
         main = document.getElementsByTagName('main')[0];
         main.innerHTML = '<div class="loader loader-big"></div>'
     }
-
-    sendLocation();
-    setInterval(sendLocation, 31000);
 
     document.getElementById('errorBox').classList.remove('done', 'error', 'disable');
     document.getElementById('errorBox').classList.add('loading');
@@ -250,6 +249,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                             let integerTextBox = document.createElement('input');
                             integerTextBox.id = 'integerTextBox';
                             integerTextBox.classList.add('inputField');
+                            integerTextBox.autofocus = true;
                             integerTextBox.required = true;
                             integerTextBox.type = "number";
 
@@ -270,6 +270,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                             let numericTextBox = document.createElement('input');
                             numericTextBox.id = 'numericTextBox';
                             numericTextBox.classList.add('inputField');
+                            numericTextBox.autofocus = true;
                             numericTextBox.required = true;
                             numericTextBox.type = 'number';
 
@@ -322,6 +323,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                             let textBox = document.createElement('input');
                             textBox.id = 'textBox';
                             textBox.classList.add('inputField');
+                            textBox.autofocus = true;
                             textBox.required = true;
                             textBox.type = 'text';
                             
@@ -346,6 +348,12 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                         "/" + responseJSON.numOfQuestions;
                     questionInfo.appendChild(questionNumBox);
 
+                    let scoresBox = document.createElement('p');
+                    scoresBox.innerText = 'Correct answer: ' + responseJSON.correctScore + ' points\n' +
+                        'Incorrect answer: ' + responseJSON.wrongScore + ' points\n' +
+                        'Skip: ' + responseJSON.skipScore + ' points';
+                    questionInfo.appendChild(scoresBox);
+
                     let outputMSG = document.createElement('span');
                     outputMSG.id = 'outputMSG';
                     outputMSG.classList.add('disable', 'outputMSG');
@@ -354,6 +362,11 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                     main.appendChild(questionInfo);
 
                     showScore();
+
+                    if (geoLoop === undefined) {
+                        sendLocation();
+                        geoLoop = setInterval(sendLocation, 31000);
+                    }
                 } else {
                     endSession();
                 }

@@ -4,9 +4,7 @@
     font-family: Ubuntu, sans-serif;
 }
 #media{
-    margin-left: 20px;
-    margin-top: 20px;
-    margin-right: 150px;
+    margin: 20px;
     text-shadow: 1px 1px 1px dodgerblue;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
@@ -78,8 +76,7 @@
     position: absolute;
     bottom: 0;
     width: 95%;
-    margin-bottom: 0px;
-    bottom: 0px;
+    margin-bottom: 0;
     padding-bottom: 15px;
 }
 
@@ -90,7 +87,7 @@
 @media screen and (max-width: 600px) {
     .scoreBox {
         position: absolute;
-        left: 0px;
+        left: 2%;
         margin-top: 330px;
         float: left;
         bottom: 10px;
@@ -99,10 +96,7 @@
         font-size: 2em;
     }
     #skipBox, #errorSkip {
-        padding-bottom: 40px;
-        padding-top: 40px;
-        padding-left: 30px;
-        padding-right: 30px;
+        padding: 40px 30px;
     }
 }
 @media screen and (min-width: 992px) {
@@ -113,17 +107,19 @@
         float: left;
         bottom: 10px;
     }
+
     .titleHeading{
         font-size: 3em;
     }
-        #qrCode {
-        /*background-color:#d8d6d6;*/
+
+    #qrCode {
         position: absolute;
         float:right;
         margin-right:500px;
         top:200px;
-        background:url(./images/qrCode.png) no-repeat;
+        background: #d8d6d6 url(../images/icons/qrcode.png) no-repeat;
     }
+
     #skipBox, #errorSkip {
         display: inline-block;
         margin-left: 500px;
@@ -131,16 +127,20 @@
         height: 90px;
     }
 }
+
 #questionText{
     margin-top:35px;
     text-align: center;
 }
+
 input[type='text'], input[type='number'] {
     font-size: large;
 }
+
 .margin-free {
     margin: 0;
 }
+
 .titleHeading {
     color: white;
     text-shadow: 4px 4px 4px black;
@@ -165,7 +165,7 @@ input[type='text'], input[type='number'] {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     text-decoration:underline;
 }
 
@@ -205,7 +205,7 @@ input[type='text'], input[type='number'] {
     transform: translate(3px, 3px);
 }
 
-.header {
+header {
     overflow: hidden;
     background-color: #865114;
     box-shadow: 1px 1px 10px black;
@@ -294,10 +294,12 @@ li.dropdown {
     font-size: 10px;
     transition: 0.4s;
 }
+
 .dropInfo {
     width:45px;
 
 }
+
 #contentInfo {
     width: 370px;
     border: 1px solid black;
@@ -348,12 +350,11 @@ th {
 }
 
 #qrCode {
-    /*background-color:#d8d6d6;*/
     position: absolute;
     float:right;
-    right:0px;
+    right:0;
     border:10px solid #d8d6d6;
-    background:url(./images/qrCode.png) no-repeat;
+    background: #d8d6d6 url(../images/icons/qrcode.png) no-repeat;
     background-size: 85px;
     padding:40px;
 
