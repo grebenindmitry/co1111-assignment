@@ -137,9 +137,9 @@ function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
         document.body.innerHTML += '<main></main>';
         main = document.getElementsByTagName('main')[0];
         main.innerHTML = '<div class="loader loader-big"></div>';
-        let scoreBox = document.createElement('div');
-        scoreBox.id = 'skipDiv';
-        main.appendChild(scoreBox);
+        // let scoreBox = document.createElement('div');
+        // scoreBox.id = 'skipDiv';
+        // main.appendChild(scoreBox);
     }
 
     let scoreBox = document.createElement('span');
@@ -345,12 +345,6 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                     questionNumBox.innerText = 'Question: ' + (responseJSON.currentQuestionIndex + 1) +
                         "/" + responseJSON.numOfQuestions;
                     questionInfo.appendChild(questionNumBox);
-
-                    let scoresBox = document.createElement('p');
-                    scoresBox.innerText = 'Correct answer: ' + responseJSON.correctScore + ' points\n' +
-                        'Incorrect answer: ' + responseJSON.wrongScore + ' points\n' +
-                        'Skip: ' + responseJSON.skipScore + ' points';
-                    questionInfo.appendChild(scoresBox);
 
                     let outputMSG = document.createElement('span');
                     outputMSG.id = 'outputMSG';
