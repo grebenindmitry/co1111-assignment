@@ -8,7 +8,7 @@ function getHuntList(isTesting, tNumberOfThs) {
     if (!isTesting) {
         fetchURL = API + "/list";
     } else {
-        fetchURL =   TEST_API + "/list?number-of-ths=" + tNumberOfThs;
+        fetchURL = TEST_API + "/list?number-of-ths=" + tNumberOfThs;
         document.body.innerHTML += '<main></main>';
         main = document.getElementsByTagName('main')[0];
         main.innerHTML = '<div class="loader loader-big"></div>'
@@ -75,7 +75,7 @@ function startSession(uuid, expiryDate, isTesting, player) {
     if (!isTesting) {
         fetchURL = API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid;
     } else {
-        fetchURL =   API + "/start?player=" + player + "&app=dac-name&treasure-hunt-id=";
+        fetchURL = TEST_API + "/start?player=" + player + "&app=dac-name&treasure-hunt-id=";
         document.body.innerHTML += '<main></main>';
         main = document.getElementsByTagName('main')[0];
         main.innerHTML = '<div class="loader loader-big"></div>'
@@ -132,11 +132,14 @@ function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
     if (!isTesting) {
         fetchURL = API + '/score?session=' + sessionID;
     } else {
-        fetchURL =   TEST_API + "?score=" + tScore + "&completed=" + tCompleted + "&finished=" + tFinished +
+        fetchURL = TEST_API + "/score?score=" + tScore + "&completed=" + tCompleted + "&finished=" + tFinished +
             "&error=" + tError;
         document.body.innerHTML += '<main></main>';
         main = document.getElementsByTagName('main')[0];
         main.innerHTML = '<div class="loader loader-big"></div>';
+        let scoreBox = document.createElement('div');
+        scoreBox.id = 'skipDiv';
+        main.appendChild(scoreBox);
     }
 
     let scoreBox = document.createElement('span');
@@ -162,11 +165,11 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
     if (!isTesting) {
         fetchURL = API + "/question?session=" + sessionID;
     } else {
-        fetchURL =   TEST_API + "/question?session=" + sessionID + "?completed&question-type="
+        fetchURL = TEST_API + "/question?session=" + sessionID + "?completed&question-type="
             + tQuestionType +"&can-be-skipped=" + tCanBeSkipped +  "&requires-location=" +tRequireLocation ;
         document.body.innerHTML += '<main></main>';
         main = document.getElementsByTagName('main')[0];
-        main.innerHTML = '<div class="loader loader-big"></div>'
+        main.innerHTML = '<div class="loader loader-big"></div>';
     }
 
     fetch(fetchURL)
@@ -364,7 +367,7 @@ function sendAnswer(answer, isTesting, tCorrect, tCompleted) {
     if (!isTesting) {
         fetchURL = API + "/answer?session=" + sessionID + "&answer=" + answer
     } else {
-        fetchURL =   TEST_API + "/answer?" + "correct=" + tCorrect + "&completed=" + tCompleted;
+        fetchURL = TEST_API + "/answer?correct=" + tCorrect + "&completed=" + tCompleted;
         document.body.innerHTML += '<main></main>';
         main = document.getElementsByTagName('main')[0];
         main.innerHTML = '<div class="loader loader-big"></div>'
