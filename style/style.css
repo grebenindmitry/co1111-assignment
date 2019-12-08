@@ -1,11 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu&display=swap');
 
-.ladningPagecolo {
-    border: 2px solid black;
-    background: white;
-    padding: 2px;
-    margin: 20px 70px 5px;
-}
 * {
     font-family: Ubuntu, sans-serif;
 }
@@ -104,6 +98,12 @@
     .titleHeading{
         font-size: 2em;
     }
+    #skipBox, #errorSkip {
+        padding-bottom: 40px;
+        padding-top: 40px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
 }
 @media screen and (min-width: 992px) {
     .scoreBox {
@@ -116,20 +116,24 @@
     .titleHeading{
         font-size: 3em;
     }
-    #qrCode {
-        background-color:#d8d6d6;
+        #qrCode {
+        /*background-color:#d8d6d6;*/
         position: absolute;
         float:right;
         margin-right:500px;
-        width: 70px;
-        height: 20px;
+        top:200px;
+        background:url(./images/qrCode.png) no-repeat;
     }
     #skipBox, #errorSkip {
         display: inline-block;
         margin-left: 500px;
-        width: 120px;
-        height: 70px;
+        width: 100px;
+        height: 90px;
     }
+}
+#questionText{
+    margin-top:35px;
+    text-align: center;
 }
 input[type='text'], input[type='number'] {
     font-size: large;
@@ -344,10 +348,15 @@ th {
 }
 
 #qrCode {
-    background-color:#d8d6d6;
+    /*background-color:#d8d6d6;*/
     position: absolute;
     float:right;
     right:0px;
+    border:10px solid #d8d6d6;
+    background:url(./images/qrCode.png) no-repeat;
+    background-size: 85px;
+    padding:40px;
+
 }
 
 #preview {

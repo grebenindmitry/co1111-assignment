@@ -137,9 +137,6 @@ function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
         document.body.innerHTML += '<main></main>';
         main = document.getElementsByTagName('main')[0];
         main.innerHTML = '<div class="loader loader-big"></div>';
-        // let scoreBox = document.createElement('div');
-        // scoreBox.id = 'skipDiv';
-        // main.appendChild(scoreBox);
     }
 
     let scoreBox = document.createElement('span');
@@ -207,17 +204,17 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                         skipDiv.appendChild(errorSkip);
                     }
 
-                    let qrCode = document.createElement("qrCode");
+                    let qrCode = document.createElement("button");
                     qrCode.id = "qrCode";
                     qrCode.classList.add('button');
-                    qrCode.innerText="QR Code";
                     qrCode.value="qrCode";
                     qrCode.name="qrCode";
                     skipDiv.appendChild(qrCode);
                     qrCode.addEventListener('click', prepareQR);
 
+
                     let questionText = document.createElement('h2');
-                    questionText.style.textAlign = 'center';
+                    questionText.id="questionText";
                     questionText.innerHTML = responseJSON.questionText;
                     main.appendChild(questionText);
 
