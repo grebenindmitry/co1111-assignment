@@ -9,7 +9,21 @@
 * {
     font-family: Ubuntu, sans-serif;
 }
+#media{
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-right: 150px;
+    text-shadow: 1px 1px 1px dodgerblue;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
 
+.twitter{
+    border: 1px solid black;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 30px;
+}
 .done {
     display: block;
     background-color: green;
@@ -382,11 +396,13 @@ th {
 .loader-big {
     width: 120px;
     height: 120px;
+
 }
 
 .loader-small {
     width: 20px;
     height: 20px;
+
 }
 
 .loader-dark {
