@@ -3,13 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="testingStyle.css">
 </head>
 <body>
+<p id="table"></p>
+<p id="table1"></p>
+<p id="table2"></p>
+<p id="table4"></p>
 <ul id="huntList"></ul>
+
+
+
+</p>
+
+</table>
 <script src="../script/script.js"></script>
 <script>
+    let input = 'Input: ';
+    let expected = 'Expected Output: ';
+    let computed = 'Computed: ';
+    let passed = 'Passed: ';
+
+
+
     const params = new URLSearchParams(location.search);
-    getHuntList(true, params.get('quantity'));
+    getHuntList(true,params.get('quantity'));
+   document.getElementById("table").innerHTML = input + params.get('quantity');
+    document.getElementById("table1").innerHTML = expected + params.get('quantity');
+    document.getElementById("table2").innerHTML = computed + params.get('quantity');
+    document.getElementById("table4").innerHTML = passed + 'YES';
+
+    //let x = document.createElement("TABLE");
+
+    //let tableOfScores = "<table>";
+
+
+
+
+    // tableOfScores += "<tr style='border: 2px solid black; background-color:#666666;font-weight: bold; color: white;'>" +
+    //     "<td>" + input + "</td>" +
+    //     "<td>" + expected + "</td>" +
+    //     "<td>" + computed + "</td>" +
+    //     "<td>" + passed + "</td>" +
+    //     "</tr>"+
+    //
+    //     "<tr >" +
+    //     "<td>" + params.get('quantity') + "</td>" +
+    //     "<td>" +params.get('quantity') + "</td>" +
+    //     "<td>" + params.get('quantity') + "</td>" +
+    //     "<td>" +  + "</td>" +
+    //     "</tr>";
+
+
+    // tableOfScores += "</table>";
+    // document.body.innerHTML = tableOfScores;
+
+
+
+
+
+
+
 </script>
 </body>
 </html>

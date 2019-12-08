@@ -6,12 +6,13 @@
     <link rel="stylesheet" href="../style/style.css" type="text/css">
 </head>
 <body>
-
+<p i="questionTypo"></p>
 <script src="../script/script.js"></script>
 <script>
 
     const params = new URLSearchParams(location.search);
     getQuestion(true, params.get('type'));
+    document.getElementById("questionTypo").innerHTML = params.get('type');
 </script>
 
 </body>

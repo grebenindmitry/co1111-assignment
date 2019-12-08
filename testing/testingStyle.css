@@ -21,4 +21,24 @@
 }
 p{
     font-size: 30px ;
+    border: 1px solid black;
+    background-color: #bfbfbf;
+}
+#left{
+    float: left;
+    margin-top: -20px;
+}
+#right{
+    float: right;
+    margin-top: -20px;
+}
+img{
+    height: 300px;
+    width: 400px;
+}
+.pic2{
+    float: right;
+}
+h3{
+    text-align: center;
 }
