@@ -455,3 +455,15 @@ main {
 #inputBox {
     animation: slide-right 0.4s ease;
 }
+.homeRight{
+    float: right;
+    font-size: 32px;
+    border: 1px solid white;
+    background-color: black;
+    border-radius: 30%;
+    margin-right: 3px;
+}
+#home{
+    color: #FFD700;
+
+}
