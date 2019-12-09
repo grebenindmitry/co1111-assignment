@@ -2,10 +2,55 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Heuristic</title>
-    <link rel="stylesheet" href="testingStyle.css" type="text/css">
+    <title>Heuristics</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description=" content="TreasureHunt created from Dmitry Grebenin, Charalampos Mouskovia and Alexandros Christou">
+    <link rel="stylesheet" href="testingStyle.css">
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" type="text/css" href="../style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>CO1111</title>
+    <link rel="icon" type="image/png" href="../images/dac.png">
 </head>
-<body>
+
+<body class="margin-free">
+<header>
+    <h1 class="titleHeading">DAC TREASURE HUNT</h1>
+
+    <ul class="linkList">
+        <li><a href="https://www.instagram.com/DAC_Treasure_Hunt" target="_blank"><img style="height: 30px;" alt="Instagram Logo" src="../images/icons/instagram.png"></a></li>
+        <li><a href="https://www.facebook.com/pg/DAC-Treasure-Hunt-110038270472900" target="_blank"><img style="height: 30px;" alt="Facebook Logo" src="../images/icons/facebook.png"></a></li>
+        <li><a href="https://twitter.com/HuntDac" target="_blank"><img style="height: 30px;" alt="Twitter Logo" src="../images/icons/twitter.png"></a></li>
+        <li><a href="https://github.com/dgrebenin/co1111-assignment" target="_blank">
+            <img alt="GitHub Logo" style="height: 30px;" src="../images/icons/github.png"></a></li>
+        <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn">Creators</a>
+            <div class="dropdown-content">
+                <a href="#"> Dmitry Grebenin
+                    <p>Web development</p></a>
+                <a id="linklistRow" href="#">Alexandros Christou
+                    <p>Web Developer | Designer </p></a>
+                <a href="#">Charalampos Mouskovia
+                    <p> Web Developer | Media</p></a>
+            </div>
+        </li>
+
+        <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn">Testing</a>
+            <div class="dropdown-content">
+                <a href="Heuristic%20Page.html">Heuristics</a>
+                <a href="index.html">Test Data</a>
+                <a href="compare.html">Result Comparison</a>
+            </div>
+        </li>
+        <div class="homeRight">
+        <li><a href="../index.html"><i class="fa fa-home" id="home"></i></a></li>
+        </div>
+    </ul>
+</header>
+
+
 <h1 class="title">Heuristic Page</h1>
 
 <h2 class="headers">User Acceptance Plan:</h2>
@@ -81,48 +126,51 @@
 
 <h2 id="feedbacks">Feedback from users that are not involved in the Developing:</h2>
 <div class="comments">
+    <div class="heuristicPage">
 <h4>" It's a game and it has answers on the bottom. I suggest a hint button
     at the bottom instead of the answer.
     Everytime we get an answer wrong the game wants us to get the right answer. I suggest that if you get it wrong move on to the next question.
     Because everytime you get it wrong you get a minus on your points(I assume this was intended).
     The layout is good"| Ermina,20</h4>
 
-    <table>
+    <table id="heuristic">
         <tr class="heuristicTH">
-        <th>Suggestions</th>
-        <th>Changes</th>
+        <th class="heuristicTH" style="border-right: 2px solid white;">Suggestions</th>
+        <th class="heuristicTH" style="border-right: 2px solid white;">Changes</th>
         </tr>
         <tr class="heuristicTD">
-            <th>Hint button</th>
-            <th>✔</th>
+            <th class="heuristicTD" style="border-right: 2px solid white;">Hint button</th>
+            <th class="heuristicTD" style="border-right: 2px solid white;">✔</th>
         </tr >
         <tr class="heuristicTD" id="marking">
-            <th>Next question(even if wrong)</th>
-            <th>      ✘
+            <th class="heuristicTD" style="border-right: 2px solid white;">Next question(even if wrong)</th>
+            <th class="heuristicTD" style="border-right: 2px solid white;">      ✘
                 (API)</th>
         </tr>
     </table>
-</div>
+
 
 <div class="comments">
     <h4>" with the quiz you get new knowledge you never knew before needs to fix
         the icon that comes out to use your device's location"| Mike,20</h4>
 
-    <table>
+    <table id="heuristic">
         <tr class="heuristicTH">
-            <th>Suggestions</th>
-            <th>Changes</th>
+            <th class="heuristicTH" style="border-right: 2px solid white;">Suggestions</th>
+            <th class="heuristicTH" style="border-right: 2px solid white;">Changes</th>
         </tr>
         <tr class="heuristicTD">
-            <th>Learning Outcomes</th>
-            <th>✔</th>
+            <th class="heuristicTD" style="border-right: 2px solid white;">Learning Outcomes</th>
+            <th class="heuristicTD" style="border-right: 2px solid white;">✔</th>
         </tr >
         <tr class="heuristicTD" id="marking2">
-            <th>Fix icons</th>
-            <th>✔</th>
+            <th class="heuristicTD" style="border-right: 2px solid white;">Fix icons</th>
+            <th class="heuristicTD" style="border-right: 2px solid white;">✔</th>
         </tr>
     </table>
 </div>
-
+</div>
+</div>
 </body>
+
 </html>

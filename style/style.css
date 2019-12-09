@@ -126,6 +126,7 @@ input[type='text'], input[type='number'] {
     color: white;
     text-shadow: 4px 4px 4px black;
     text-align: center;
+    margin: 3%;
 }
 
 #treasure {
@@ -183,10 +184,6 @@ input[type='text'], input[type='number'] {
 #goQuiz:active {
     box-shadow: none;
     transform: translate(3px, 3px);
-}
-
-.titleHeading {
-    margin: 3%;
 }
 
 header {
@@ -523,4 +520,13 @@ main {
 
 #formLabel {
     font-weight: bold;
+}
+.homeRight{
+    float: right;
+    font-size: 32px;
+
+}
+#home{
+    color: black;
+
 }

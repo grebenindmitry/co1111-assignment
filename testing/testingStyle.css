@@ -6,6 +6,12 @@
 }
 .heuristicTD{
     background-color:#fcffbe;
+    border-bottom: 2px solid white;
+}
+.heuristicPage{
+    color:black;
+    text-shadow: 2px 2px 8px black;
+
 }
 #marking{
     text-align: right;
@@ -27,8 +33,8 @@
     border-bottom: 1px solid black;
 }
 .comments{
-    border-top: 2px solid dodgerblue;
-    border-bottom: 2px solid dodgerblue;
+    border-top: 2px solid #FFD700;
+    border-bottom: 2px solid #FFD700;
     text-align: justify;
 
 }
@@ -56,7 +62,7 @@ p{
     text-shadow: 1px 1px 1px white;
 
 }
-img{
+.pics img{
     height: 40%;
     width: 40%;
 }
@@ -67,3 +73,4 @@ img{
 h3{
     text-align: center;
 }
+
