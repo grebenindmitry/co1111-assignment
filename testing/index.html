@@ -2,13 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Testing - TreasureHunt</title>
-    <link rel="stylesheet" href="../style/style.css" type="text/css">
-    <link rel="stylesheet" href="testingStyle.css" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description=" content="TreasureHunt created from Dmitry Grebenin, Charalampos Mouskovia and Alexandros Christou">
+    <link rel="stylesheet" type="text/css" href="../style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>CO1111</title>
+    <link rel="icon" type="image/png" href="../images/dac.png">
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153482744-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-153482744-1');
+    </script>
+    <meta charset="UTF-8">
 </head>
-<body>
+<body class="margin-free">
+<header>
+    <h1 class="titleHeading">DAC TREASURE HUNT</h1>
 
+    <ul class="linkList">
+        <li><a href="https://www.instagram.com/DAC_Treasure_Hunt" target="_blank"><img style="height: 30px;" alt="Instagram Logo" src="../images/icons/instagram.png"></a></li>
+        <li><a href="https://www.facebook.com/pg/DAC-Treasure-Hunt-110038270472900" target="_blank"><img style="height: 30px;" alt="Facebook Logo" src="../images/icons/facebook.png"></a></li>
+        <li><a href="https://twitter.com/HuntDac" target="_blank"><img style="height: 30px;" alt="Twitter Logo" src="../images/icons/twitter.png"></a></li>
+        <li><a href="https://github.com/dgrebenin/co1111-assignment" target="_blank">
+            <img alt="GitHub Logo" style="height: 30px;" src="../images/icons/github.png"></a></li>
+        <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn">Creators</a>
+            <div class="dropdown-content">
+                <a href="#"> Dmitry Grebenin
+                    <p>Web development</p></a>
+                <a id="linklistRow" href="#">Alexandros Christou
+                    <p>Web Developer | Designer </p></a>
+                <a href="#">Charalampos Mouskovia
+                    <p> Web Developer | Media</p></a>
+            </div>
+        </li>
+
+        <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn">Testing</a>
+            <div class="dropdown-content">
+                <a href="Heuristic%20Page.html">Heuristics</a>
+                <a href="index.html">Test Data</a>
+                <a id="linklistRow" href="compare.html">Result Comparison</a>
+            </div>
+        </li>
+        </li>
+        <div class="homeRight">
+            <li><a href="../index.html"><i class="fa fa-home" id="home"></i></a></li>
+        </div>
+    </ul>
+</header>
 <h1 class="title">Testing page</h1>
 
 <h2 class="headers">Description of testing page:</h2>
@@ -20,7 +67,7 @@
     that we enter, the code will run without any bugs.
 </p>
 <hr>
-    <div style="font-size: 40px">
+<div style="font-size: 40px">
     <p>Enter number of TreasureHunts : </p>
     <form action="./list.html">
         Quantity : <input type="number" name="quantity">
@@ -54,24 +101,24 @@
     </form>
     <br>
     <hr>
-     <p>Check leaderboard's functionaliies</p>
-        <span>Size: </span><input type="number" id="sizes" name="sizes">
-        <span>Table sorted:</span>
-        <select id="sort">
-            <option>TRUE</option>
-            <option>FALSE</option>
-        </select>
-        <span>Has Prize:</span>
-        <select id="prize">
-            <option>TRUE</option>
-            <option>FALSE</option>
-        </select>
-        <br>
-        <button onclick="StartLeadeboardTest()">Try it</button>
+    <p>Check leaderboard's functionaliies</p>
+    <span>Size: </span><input type="number" id="sizes" name="sizes">
+    <span>Table sorted:</span>
+    <select id="sort">
+        <option>TRUE</option>
+        <option>FALSE</option>
+    </select>
+    <span>Has Prize:</span>
+    <select id="prize">
+        <option>TRUE</option>
+        <option>FALSE</option>
+    </select>
+    <br>
+    <button onclick="StartLeadeboardTest()">Try it</button>
 
-    </div>
-    <script src="../script/moment.js"></script>
-    <script src="../script/script.js"></script>
+</div>
+<script src="../script/moment.js"></script>
+<script src="../script/script.js"></script>
 <script>
     function startQuestionTest() {
         let type = document.getElementById('type').value;

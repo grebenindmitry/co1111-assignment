@@ -207,7 +207,7 @@ header {
     margin: 0 5px;
 }
 #linklistRow {
-    background-color: #bfbfbf;
+    /*background-color: #bfbfbf;*/
     border-top: 1px solid black;
     border-bottom: 1px solid black;
 }
@@ -454,4 +454,16 @@ main {
 
 #inputBox {
     animation: slide-right 0.4s ease;
+}
+#home{
+    color: black;
+    border: 1px solid dimgrey;
+    border-radius: 50%;
+    background-color: #d8d6d6;
+}
+.homeRight{
+    float: right;
+    font-size: 36px;
+    margin-top: -1px;
+    color: black;
 }
