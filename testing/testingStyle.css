@@ -1,5 +1,10 @@
-#heuristic {
+.heuristic {
     font-size: x-large;
+}
+@media only screen and (max-width: 600px) {
+    .heuristic {
+        font-size: inherit;
+    }
 }
 .heuristicTH{
     background-color:#865114;
@@ -7,11 +12,17 @@
 .heuristicTD{
     background-color:#fcffbe;
     border-bottom: 2px solid white;
+    color:black;
 }
 .heuristicPage{
     color:black;
     text-shadow: 2px 2px 8px black;
-
+}
+#feedbacklist{
+    margin: 8px;
+}
+#feedbackPar{
+    margin:8px;
 }
 #marking{
     text-align: right;
