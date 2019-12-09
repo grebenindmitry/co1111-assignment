@@ -121,7 +121,7 @@ function enterUsername(uuid, targetID, huntDuration) {
     target.appendChild(usernameInput);
 }
 
-function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
+function showScore(isTesting, questionInfo, tScore, tCompleted, tFinished, tError) {
     let fetchURL;
     if (!isTesting) {
         fetchURL = API + '/score?session=' + sessionID;
@@ -139,7 +139,7 @@ function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
     let scoreBox = document.createElement('span');
     scoreBox.innerHTML = '<div class="loader loader-small loader-light"></div>';
     scoreBox.classList.add('scoreBox');
-    document.getElementById('questionInfo').appendChild(scoreBox);
+    questionInfo.appendChild(scoreBox);
     fetch(fetchURL)
         .then(response => response.json())
         .then(scoreJSON => {
@@ -190,9 +190,10 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                         let skipBox = document.createElement("BUTTON");
                         skipBox.id = "skipBox";
                         skipBox.classList.add('button');
+                        skipBox.innerText = 'SKIP >>';
                         skipDiv.appendChild(skipBox);
-                        document.getElementById("skipBox").value="SKIP";
-                        document.getElementById("skipBox").name="SKIP";
+                        skipBox.value="SKIP";
+                        skipBox.name="SKIP";
                         skipBox.addEventListener('click', skipQuestion);
                     } else {
                         let errorSkip = document.createElement("span");
@@ -242,7 +243,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
 
                     main.appendChild(questionInfo);
 
-                    showScore();
+                    showScore(false, questionInfo);
 
                     if (geoLoop === undefined) {
                         sendLocation();
@@ -447,7 +448,7 @@ function skipQuestion() {
 function endSession() {
     document.cookie = 'gamePlaying=; expires=Thu 01 Jan 1970';
     document.cookie = 'sessionID=; expires=Thu 01 Jan 1970';
-    main.innerHTML = "End of treasure hunt. Loading the leaderboard...";
+    main.innerHTML = "End of treasure hunt. Loading the leaderboard... <div style='margin-top: 30%' class=\"loader loader-big loader-dark\"></div>";
     console.log('end');
     getLeaderboard()
 }
@@ -551,8 +552,10 @@ function prepareQR() {
     exitBtn.id = 'exitBtn';
     exitBtn.addEventListener('click', function () {
         codeReader.reset();
+        qrWindow.addEventListener('animationend', function () {
+            qrWindow.remove();
+        });
         qrWindow.classList.add('removing');
-        setTimeout(qrWindow.remove, 400);
     });
     exitBtn.classList.add('cameraExit');
     qrWindow.appendChild(exitBtn);
