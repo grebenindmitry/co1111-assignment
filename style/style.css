@@ -207,7 +207,7 @@ header {
     margin: 0 5px;
 }
 #linklistRow {
-    background-color: #bfbfbf;
+    /*background-color: #bfbfbf;*/
     border-top: 1px solid black;
     border-bottom: 1px solid black;
 }
@@ -458,12 +458,9 @@ main {
 .homeRight{
     float: right;
     font-size: 32px;
-    border: 1px solid white;
-    background-color: black;
-    border-radius: 30%;
-    margin-right: 3px;
+
 }
 #home{
-    color: #FFD700;
+    color: black;
 
 }
