@@ -140,7 +140,7 @@ function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
     let scoreBox = document.createElement('span');
     scoreBox.innerHTML = '<div class="loader loader-small loader-light"></div>';
     scoreBox.classList.add('scoreBox');
-    document.getElementById('skipDiv').appendChild(scoreBox);
+    document.getElementById('questionInfo').appendChild(scoreBox);
     fetch(fetchURL)
         .then(response => response.json())
         .then(scoreJSON => {
@@ -189,7 +189,6 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                         let skipBox = document.createElement("BUTTON");
                         skipBox.id = "skipBox";
                         skipBox.classList.add('button');
-                        skipBox.innerText="SKIP";
                         skipDiv.appendChild(skipBox);
                         document.getElementById("skipBox").value="SKIP";
                         document.getElementById("skipBox").name="SKIP";
@@ -198,7 +197,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                         let errorSkip = document.createElement("span");
                         errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
                         errorSkip.style.display = 'inline-block';
-                        errorSkip.style.maxWidth = '30%';
+                        errorSkip.style.maxWidth = '60%';
                         skipDiv.appendChild(errorSkip);
                     }
 
@@ -211,133 +210,16 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                     qrCode.addEventListener('click', prepareQR);
 
 
-                    let questionText = document.createElement('h2');
+                    let questionText = document.createElement('h3');
                     questionText.id="questionText";
                     questionText.innerHTML = responseJSON.questionText;
                     main.appendChild(questionText);
 
-                    switch (responseJSON.questionType) {
-                        case "BOOLEAN":
-                            let booleanButtonTrue = document.createElement('button');
-                            let booleanButtonFalse = document.createElement('button');
-                            let booleanButtons = document.createElement('div');
-                            booleanButtons.style.margin = 'auto';
-                            booleanButtons.style.width = 'fit-content';
-
-                            booleanButtonFalse.innerHTML = "False";
-                            booleanButtonTrue.innerHTML = "True";
-
-                            booleanButtonFalse.classList.add('button');
-                            booleanButtonTrue.classList.add('button');
-
-                            booleanButtonTrue.addEventListener('click', function() {sendAnswer('true');});
-                            booleanButtonFalse.addEventListener('click', function() {sendAnswer('false');});
-
-                            booleanButtons.appendChild(booleanButtonTrue);
-                            booleanButtons.appendChild(booleanButtonFalse);
-                            main.appendChild(booleanButtons);
-                            break;
-                        case "INTEGER":
-                            let integerForm = document.createElement('form');
-                            integerForm.classList.add('answerForm');
-                            integerForm.action = 'javascript:sendAnswer(document.getElementById("integerTextBox").value)';
-
-                            let integerTextBox = document.createElement('input');
-                            integerTextBox.id = 'integerTextBox';
-                            integerTextBox.classList.add('inputField');
-                            integerTextBox.autofocus = true;
-                            integerTextBox.required = true;
-                            integerTextBox.type = "number";
-
-                            let integerSubmitButton = document.createElement('input');
-                            integerSubmitButton.type = 'submit';
-                            integerSubmitButton.classList.add('button');
-                            integerSubmitButton.value = "Submit";
-
-                            main.appendChild(integerForm);
-                            integerForm.appendChild(integerTextBox);
-                            integerForm.appendChild(integerSubmitButton);
-                            break;
-                        case "NUMERIC":
-                            let numericForm = document.createElement('form');
-                            numericForm.classList.add('answerForm');
-                            numericForm.action = 'javascript:sendAnswer(document.getElementById("numericTextBox").value)';
-
-                            let numericTextBox = document.createElement('input');
-                            numericTextBox.id = 'numericTextBox';
-                            numericTextBox.classList.add('inputField');
-                            numericTextBox.autofocus = true;
-                            numericTextBox.required = true;
-                            numericTextBox.type = 'number';
-
-                            let numericSubmitButton = document.createElement('input');
-                            numericSubmitButton.type = 'submit';
-                            numericSubmitButton.value = 'Submit';
-                            numericSubmitButton.classList.add('button');
-
-                            main.appendChild(numericForm);
-                            numericForm.appendChild(numericTextBox);
-                            numericForm.appendChild(numericSubmitButton);
-                            break;
-                        case "MCQ":
-                            let mcqButtons = document.createElement('div');
-                            let mcqA = document.createElement('button');
-                            let mcqB = document.createElement('button');
-                            let mcqC = document.createElement('button');
-                            let mcqD = document.createElement('button');
-
-                            mcqButtons.style.margin = 'auto';
-                            mcqButtons.style.width = 'fit-content';
-
-
-                            mcqA.classList.add('button');
-                            mcqB.classList.add('button');
-                            mcqC.classList.add('button');
-                            mcqD.classList.add('button');
-
-                            mcqA.innerText = 'A';
-                            mcqB.innerText = 'B';
-                            mcqC.innerText = 'C';
-                            mcqD.innerText = 'D';
-
-                            mcqA.addEventListener('click', function() {sendAnswer('A');});
-                            mcqB.addEventListener('click', function() {sendAnswer('B');});
-                            mcqC.addEventListener('click', function() {sendAnswer('C');});
-                            mcqD.addEventListener('click', function() {sendAnswer('D');});
-
-                            mcqButtons.appendChild(mcqA);
-                            mcqButtons.appendChild(mcqB);
-                            mcqButtons.appendChild(mcqC);
-                            mcqButtons.appendChild(mcqD);
-                            main.appendChild(mcqButtons);
-                            break;
-                        case "TEXT":
-                            let textForm = document.createElement('form');
-                            textForm.classList.add('answerForm');
-                            textForm.action = 'javascript:sendAnswer(document.getElementById("textBox").value)';
-
-                            let textBox = document.createElement('input');
-                            textBox.id = 'textBox';
-                            textBox.classList.add('inputField');
-                            textBox.autofocus = true;
-                            textBox.required = true;
-                            textBox.type = 'text';
-                            
-                            let textSubmitButton = document.createElement('input');
-                            textSubmitButton.innerText = 'Submit';
-                            textSubmitButton.type = 'submit';
-                            textSubmitButton.classList.add('button');
-                            textSubmitButton.id = 'textButton';
-
-                            main.appendChild(textForm);
-                            textForm.appendChild(textBox);
-                            textForm.appendChild(textSubmitButton);
-                            break;
-                    }
+                    createAnswer(responseJSON.questionType);
 
                     let questionInfo = document.createElement('div');
-
                     questionInfo.classList.add('questionInfo');
+                    questionInfo.id = 'questionInfo';
 
                     let questionNumBox = document.createElement('p');
                     questionNumBox.innerText = 'Question: ' + (responseJSON.currentQuestionIndex + 1) +
@@ -368,6 +250,127 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                 }
             }
         });
+}
+
+function createAnswer(qType) {
+    switch (qType) {
+        case "BOOLEAN":
+            let booleanButtonTrue = document.createElement('button');
+            let booleanButtonFalse = document.createElement('button');
+            let booleanButtons = document.createElement('div');
+            booleanButtons.style.margin = 'auto';
+            booleanButtons.style.width = 'fit-content';
+
+            booleanButtonFalse.innerHTML = "False";
+            booleanButtonTrue.innerHTML = "True";
+
+            booleanButtonFalse.classList.add('button');
+            booleanButtonTrue.classList.add('button');
+
+            booleanButtonTrue.addEventListener('click', function() {sendAnswer('true');});
+            booleanButtonFalse.addEventListener('click', function() {sendAnswer('false');});
+
+            booleanButtons.appendChild(booleanButtonTrue);
+            booleanButtons.appendChild(booleanButtonFalse);
+            main.appendChild(booleanButtons);
+            break;
+        case "INTEGER":
+            let integerForm = document.createElement('form');
+            integerForm.classList.add('answerForm');
+            integerForm.action = 'javascript:sendAnswer(document.getElementById("integerTextBox").value)';
+
+            let integerTextBox = document.createElement('input');
+            integerTextBox.id = 'integerTextBox';
+            integerTextBox.classList.add('inputField');
+            integerTextBox.autofocus = true;
+            integerTextBox.required = true;
+            integerTextBox.type = "number";
+
+            let integerSubmitButton = document.createElement('input');
+            integerSubmitButton.type = 'submit';
+            integerSubmitButton.classList.add('button');
+            integerSubmitButton.value = "Submit";
+
+            main.appendChild(integerForm);
+            integerForm.appendChild(integerTextBox);
+            integerForm.appendChild(integerSubmitButton);
+            break;
+        case "NUMERIC":
+            let numericForm = document.createElement('form');
+            numericForm.classList.add('answerForm');
+            numericForm.action = 'javascript:sendAnswer(document.getElementById("numericTextBox").value)';
+
+            let numericTextBox = document.createElement('input');
+            numericTextBox.id = 'numericTextBox';
+            numericTextBox.classList.add('inputField');
+            numericTextBox.autofocus = true;
+            numericTextBox.required = true;
+            numericTextBox.type = 'number';
+
+            let numericSubmitButton = document.createElement('input');
+            numericSubmitButton.type = 'submit';
+            numericSubmitButton.value = 'Submit';
+            numericSubmitButton.classList.add('button');
+
+            main.appendChild(numericForm);
+            numericForm.appendChild(numericTextBox);
+            numericForm.appendChild(numericSubmitButton);
+            break;
+        case "MCQ":
+            let mcqButtons = document.createElement('div');
+            let mcqA = document.createElement('button');
+            let mcqB = document.createElement('button');
+            let mcqC = document.createElement('button');
+            let mcqD = document.createElement('button');
+
+            mcqButtons.style.margin = 'auto';
+            mcqButtons.style.width = 'fit-content';
+
+
+            mcqA.classList.add('button');
+            mcqB.classList.add('button');
+            mcqC.classList.add('button');
+            mcqD.classList.add('button');
+
+            mcqA.innerText = 'A';
+            mcqB.innerText = 'B';
+            mcqC.innerText = 'C';
+            mcqD.innerText = 'D';
+
+            mcqA.addEventListener('click', function() {sendAnswer('A');});
+            mcqB.addEventListener('click', function() {sendAnswer('B');});
+            mcqC.addEventListener('click', function() {sendAnswer('C');});
+            mcqD.addEventListener('click', function() {sendAnswer('D');});
+
+            mcqButtons.appendChild(mcqA);
+            mcqButtons.appendChild(mcqB);
+            mcqButtons.appendChild(mcqC);
+            mcqButtons.appendChild(mcqD);
+            main.appendChild(mcqButtons);
+            break;
+        case "TEXT":
+            let textForm = document.createElement('form');
+            textForm.classList.add('answerForm');
+            textForm.action = 'javascript:sendAnswer(document.getElementById("textBox").value)';
+
+            let textBox = document.createElement('input');
+            textBox.id = 'textBox';
+            textBox.classList.add('inputField');
+            textBox.autofocus = true;
+            textBox.required = true;
+            textBox.type = 'text';
+
+            let textSubmitButton = document.createElement('input');
+            textSubmitButton.innerText = 'Submit';
+            textSubmitButton.type = 'submit';
+            textSubmitButton.classList.add('button');
+            textSubmitButton.id = 'textButton';
+
+            main.appendChild(textForm);
+            textForm.appendChild(textBox);
+            textForm.appendChild(textSubmitButton);
+            break;
+    }
 }
 
 function sendAnswer(answer, isTesting, tCorrect, tCompleted) {

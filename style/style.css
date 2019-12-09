@@ -80,54 +80,31 @@
     padding-bottom: 15px;
 }
 
+#qrCode {
+    border: 7px solid #d8d6d6;
+    background: #d8d6d6 url(../images/icons/qrcode.png) no-repeat;
+    background-size: 50px;
+}
+
 .questionInfo>p {
     max-width: 100%;
     margin: 15px 0;
 }
-@media screen and (max-width: 600px) {
-    .scoreBox {
-        position: absolute;
-        left: 2%;
-        margin-top: 330px;
-        float: left;
-        bottom: 10px;
-    }
-    .titleHeading{
-        font-size: 2em;
-    }
-    #skipBox, #errorSkip {
-        padding: 40px 30px;
-    }
+
+.scoreBox {
+    position: absolute;
+    margin-top: 400px;
+    float: left;
+    bottom: 10px;
 }
-@media screen and (min-width: 992px) {
-    .scoreBox {
-        position: absolute;
-        left: 20px;
-        margin-top: 400px;
-        float: left;
-        bottom: 10px;
-    }
 
-    .titleHeading{
-        font-size: 3em;
-    }
-
-    #qrCode {
-        float: right;
-        top: 200px;
-        background: #d8d6d6 url(../images/icons/qrcode.png) no-repeat;
-    }
-
-    #skipBox, #errorSkip {
-        display: inline-block;
-        margin-left: 500px;
-        width: 100px;
-        height: 90px;
-    }
+#qrCode {
+    float: right;
+    top: 200px;
 }
 
 #questionText{
-    margin-top:35px;
+    margin-top:10px;
     text-align: center;
 }
 
@@ -347,17 +324,6 @@ th {
       background-color: #d8d6d6;
 }
 
-#qrCode {
-    position: absolute;
-    float:right;
-    right:0;
-    border:10px solid #d8d6d6;
-    background: #d8d6d6 url(../images/icons/qrcode.png) no-repeat;
-    background-size: 85px;
-    padding:40px;
-
-}
-
 #preview {
     width: 300px;
     height: 300px;
@@ -383,7 +349,12 @@ th {
 #skipBox, #errorSkip {
     display: inline-block;
     left: 0;
-    max-width: 30%;
+}
+
+#skipBox {
+    background: #d8d6d6 url("../images/icons/skip1.png") no-repeat;
+    background-size: 50px;
+    border: 7px solid #d8d6d6;
 }
 
 #videoOut {
@@ -427,7 +398,7 @@ th {
 }
 
 main {
-    margin: 2%;
+    margin: 10px;
 }
 
 .answerForm>input {
