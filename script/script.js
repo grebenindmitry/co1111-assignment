@@ -159,7 +159,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
     if (!isTesting) {
         fetchURL = API + "/question?session=" + sessionID;
     } else {
-        fetchURL = TEST_API + "/question?session=" + sessionID + "?completed&question-type="
+        fetchURL = TEST_API + "/question?session=" + sessionID + "&question-type="
             + tQuestionType +"&can-be-skipped=" + tCanBeSkipped +  "&requires-location=" +tRequireLocation ;
         document.body.innerHTML += '<main></main>';
         main = document.getElementsByTagName('main')[0];
@@ -194,7 +194,9 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                         skipBox.addEventListener('click', skipQuestion);
                     } else {
                         let errorSkip = document.createElement("span");
-                        errorSkip.innerText = "Cannot skip. This questions is defined as one that cannot be skipped.";
+                        errorSkip.innerText = "This question cannot be skipped.";
+                        errorSkip.id = 'errorSkip';
+                        errorSkip.style.textAlign = 'right';
                         errorSkip.style.display = 'inline-block';
                         errorSkip.style.maxWidth = '60%';
                         skipDiv.appendChild(errorSkip);
