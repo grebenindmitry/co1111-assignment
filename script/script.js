@@ -121,7 +121,7 @@ function enterUsername(uuid, targetID, huntDuration) {
     target.appendChild(usernameInput);
 }
 
-function showScore(isTesting, questionInfo, tScore, tCompleted, tFinished, tError) {
+function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
     let fetchURL;
     if (!isTesting) {
         fetchURL = API + '/score?session=' + sessionID;
@@ -130,16 +130,15 @@ function showScore(isTesting, questionInfo, tScore, tCompleted, tFinished, tErro
             "&error=" + tError;
         document.body.innerHTML += '<main></main>';
         main = document.getElementsByTagName('main')[0];
-        main.innerHTML = '<div class="loader loader-big"></div>';
-        let scoreBox = document.createElement('div');
-        scoreBox.id = 'skipDiv';
-        main.appendChild(scoreBox);
+        let questionInfo = document.createElement('div');
+        questionInfo.id = 'questionInfo';
+        main.appendChild(questionInfo);
     }
 
     let scoreBox = document.createElement('span');
     scoreBox.innerHTML = '<div class="loader loader-small loader-light"></div>';
     scoreBox.classList.add('scoreBox');
-    questionInfo.appendChild(scoreBox);
+    document.getElementById('questionInfo').appendChild(scoreBox);
     fetch(fetchURL)
         .then(response => response.json())
         .then(scoreJSON => {
@@ -243,7 +242,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
 
                     main.appendChild(questionInfo);
 
-                    showScore(false, questionInfo);
+                    showScore(false);
 
                     if (geoLoop === undefined) {
                         sendLocation();
