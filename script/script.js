@@ -15,13 +15,9 @@ function getHuntList(isTesting, tNumberOfThs) {
         main.innerHTML = '<div class="loader loader-big"></div>'
     }
 
-    if (getCookie('gamePlaying') === 'true') {
-        setTimeout(function () {
-            if (confirm('A saved game was found.\nContinue that game?')) {
-                sessionID = getCookie('sessionID');
-                startHunt();
-            }
-        }, 100);
+    if (getCookie('gamePlaying') === 'true' && confirm('A saved game was found.\nContinue that game?')) {
+        sessionID = getCookie('sessionID');
+        startHunt();
     } else {
         fetch(fetchURL)
             .then(response => response.json())

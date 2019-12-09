@@ -13,5 +13,6 @@
     <orderEntry type="library" name="font-awesome" level="application" />
     <orderEntry type="library" name="font-awesome" level="application" />
     <orderEntry type="library" name="widgets" level="application" />
+    <orderEntry type="library" name="widgets" level="application" />
   </component>
 </module>
