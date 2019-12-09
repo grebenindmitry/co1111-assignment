@@ -45,6 +45,7 @@
     right: 0;
     opacity: 80%;
     max-width: 35%;
+    animation: slide-up 0.4s ease;
 }
 .button {
     border: none;
@@ -340,7 +341,35 @@ th {
     right: 10px;
     background-color: #a8a8a8;
     box-shadow: 2px 2px 2px black;
-    padding: 5px
+    padding: 5px;
+    animation: slide-up 0.4s ease;
+}
+
+@keyframes slide-up {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.qrWindow.removing {
+    animation: slide-down 0.4s ease;
+    opacity: 0;
+}
+
+@keyframes slide-down {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 }
 
 .cameraExit {
@@ -401,6 +430,7 @@ th {
 
 main {
     margin: 10px;
+    animation: slide-up 0.4s ease;
 }
 
 .answerForm>input {

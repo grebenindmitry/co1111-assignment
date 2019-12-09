@@ -175,7 +175,9 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                 for (let errorMessage of responseJSON.errorMessages) {
                     errorMessageList += errorMessage + "\n";
                 }
-                alert(errorMessageList);
+                if (responseJSON.errorMessages[0] === 'Finished session. The specified session has run out of time.') {
+                    endSession();
+                }
             } else {
                 if (!responseJSON.completed) {
                     main.innerHTML = '';
@@ -549,7 +551,8 @@ function prepareQR() {
     exitBtn.id = 'exitBtn';
     exitBtn.addEventListener('click', function () {
         codeReader.reset();
-        qrWindow.remove();
+        qrWindow.classList.add('removing');
+        setTimeout(qrWindow.remove, 400);
     });
     exitBtn.classList.add('cameraExit');
     qrWindow.appendChild(exitBtn);
