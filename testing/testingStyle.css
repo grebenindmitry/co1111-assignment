@@ -3,7 +3,7 @@
 }
 @media only screen and (max-width: 600px) {
     .heuristic {
-        font-size: inherit;
+        font-size: 20px;
     }
 }
 .heuristicTH{
