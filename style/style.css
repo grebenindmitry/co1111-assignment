@@ -84,6 +84,7 @@
     border: 7px solid #d8d6d6;
     background: #d8d6d6 url(../images/icons/qrcode.png) no-repeat;
     background-size: 50px;
+    float: right;
 }
 
 .questionInfo>p {
@@ -99,7 +100,7 @@
 }
 
 #qrCode {
-    float: right;
+    float: left;
     top: 200px;
 }
 
@@ -349,10 +350,11 @@ th {
 #skipBox, #errorSkip {
     display: inline-block;
     left: 0;
+    float: right;
 }
 
 #skipBox {
-    background: #d8d6d6 url("../images/icons/skip1.png") no-repeat;
+    background: #d8d6d6 url("../images/icons/skip.png") no-repeat;
     background-size: 50px;
     border: 7px solid #d8d6d6;
 }
