@@ -42,37 +42,52 @@ function getHuntList(isTesting, tNumberOfThs) {
                     let endDateObj = new Date(treasureHunt.endsOn);
 
                     //Create and append hunt name
-                    let nameElement = document.createElement("li");
-                    nameElement.id = "thName" + i;
-                    huntList.appendChild(nameElement);
-                    nameElement.innerHTML = ("<a style='font-weight: bold;' href='javascript:enterUsername(\"" +
-                        treasureHunt.uuid + "\", \"" + nameElement.id + "\", \"" + treasureHunt.maxDuration + "\")'>" + treasureHunt.name + "</a>");
+                    let thCard = document.createElement("li");
+                    thCard.id = "thCard" + i;
+                    thCard.classList.add('treasureHuntCard');
+                    huntList.appendChild(thCard);
 
-                    //Create and append sublist for hunt info
-                    let subList  = document.createElement("ul");
-                    huntList.appendChild(subList);
+                    let thName = document.createElement('p');
+                    thName.classList.add('thName');
+                    thName.innerHTML = treasureHunt.name;
+                    thCard.appendChild(thName);
 
-                    //Append hunt info
+                    let subList = document.createElement("ul");
+                    subList.classList.add('thInfo');
                     subList.innerHTML += ("<li><b>Description: </b>" + treasureHunt.description + "</li>");
                     subList.innerHTML += ("<li><b>Starts On: </b>" + startDateObj.toLocaleDateString('en-US', dateOptions) + "</li>");
                     subList.innerHTML += ("<li><b>Ends On: </b>" + endDateObj.toLocaleDateString('en-US', dateOptions) + "</li>");
+                    subList.innerHTML += ("<li><b>Duration: </b>" + (treasureHunt.maxDuration / 1000 / 60) + " minutes" + "</li>");
+                    thCard.appendChild(subList);
+
+                    let joinTH = document.createElement('button');
+                    joinTH.innerText = 'Join Treasure Hunt';
+                    joinTH.id = 'join' + treasureHunt.uuid + treasureHunt.maxDuration;
+                    joinTH.classList.add('submitButton');
+                    joinTH.addEventListener('click', enterUsername);
+                    thCard.appendChild(joinTH);
+
                     i++;
                 }
                 let errorBox = document.createElement('span');
                 errorBox.classList.add('disable', 'outputMSG');
+                errorBox.addEventListener('click', function () {
+                    document.getElementById('errorBox').classList.remove('done', 'error', 'loading');
+                    document.getElementById('errorBox').classList.add('disable');
+                    document.getElementById('errorBox').innerText = "";
+                });
                 errorBox.id = 'errorBox';
                 main.appendChild(errorBox);
             });
     }
 }
 // noinspection JSUnusedGlobalSymbols
-function startSession(uuid, huntDuration, isTesting, player) {
-    let username = document.getElementById('usernameBox').value;
+function startSession(uuid, huntDuration, username, isTesting, tPlayer) {
     let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid;
     } else {
-        fetchURL = TEST_API + "/start?player=" + player + "&app=dac-name&treasure-hunt-id=";
+        fetchURL = TEST_API + "/start?player=" + tPlayer + "&app=dac-name&treasure-hunt-id=";
         document.body.innerHTML += '<main></main>';
         main = document.getElementsByTagName('main')[0];
         main.innerHTML = '<div class="loader loader-big"></div>'
@@ -105,20 +120,54 @@ function startSession(uuid, huntDuration, isTesting, player) {
     // getQuestion();
 }
 // noinspection JSUnusedGlobalSymbols
-function enterUsername(uuid, targetID, huntDuration) {
-    let target = document.getElementById(targetID);
-    if (document.getElementById('inputBox') !== null) {
-        document.getElementById('inputBox').remove();
-    }
-    let usernameInput = document.createElement("div");
-    usernameInput.id = "inputBox";
-    usernameInput.style.display = "inline-block";
-    usernameInput.style.marginLeft = "10px";
-    usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\", \"" + huntDuration + "\", false)'>" +
-                                        "<input id='usernameBox' type='text' placeholder='Enter your username' autofocus>" +
-                                        "<input type='submit' value='Submit' style='' class='submitButton'>" +
-                                "</form>";
-    target.appendChild(usernameInput);
+function enterUsername(event) {
+    let usernamePopupBG = document.createElement('div');
+    usernamePopupBG.id = 'usernamePopupBG';
+
+    let usernamePopup = document.createElement('div');
+    usernamePopup.id = 'usernamePopup';
+
+    let closePopup = document.createElement('button');
+    closePopup.innerText = '\u2573';
+    closePopup.classList.add('closeButton');
+    closePopup.addEventListener('click', function () {
+        usernamePopupBG.remove();
+    });
+    usernamePopup.appendChild(closePopup);
+
+    let usernameForm = document.createElement('form');
+    usernameForm.id = 'usernameForm';
+    usernameForm.action = 'javascript:void(0);';
+    usernameForm.addEventListener('submit', function () {
+        let uuid = event.target.id.substring(4, 63);
+        let huntDuration = event.target.id.substring(63);
+        let username = document.getElementById('usernameField').value;
+        startSession(uuid, huntDuration, username, false);
+    });
+
+    let formLabel = document.createElement('label');
+    formLabel.innerText = 'Please choose a username: ';
+    formLabel.id = 'formLabel';
+    usernameForm.appendChild(formLabel);
+
+    let usernameField = document.createElement('input');
+    usernameField.type = 'text';
+    usernameField.id = 'usernameField';
+    usernameField.required = true;
+    usernameField.placeholder = 'Username';
+    usernameForm.appendChild(usernameField);
+
+    let usernameSubmit = document.createElement('input');
+    usernameSubmit.innerText = 'Submit';
+    usernameSubmit.classList.add('submitButton');
+    usernameSubmit.type = 'submit';
+    usernameForm.appendChild(usernameSubmit);
+
+    usernamePopup.appendChild(usernameForm);
+
+    usernamePopupBG.appendChild(usernamePopup);
+
+    main.appendChild(usernamePopupBG);
 }
 
 function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
@@ -193,7 +242,9 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                         skipDiv.appendChild(skipBox);
                         skipBox.value="SKIP";
                         skipBox.name="SKIP";
-                        skipBox.addEventListener('click', skipQuestion);
+                        skipBox.addEventListener('click', function () {
+                            skipQuestion();
+                        });
                     } else {
                         let errorSkip = document.createElement("span");
                         errorSkip.innerText = "This question cannot be skipped.";
@@ -418,8 +469,8 @@ function sendAnswer(answer, isTesting, tCorrect, tCompleted) {
         });
 }
 
-function skipQuestion() {
-    if (confirm("You will lose 5 points by skipping.\nAre you sure you want to continue?")) {
+function skipQuestion(pointLoss) {
+    if (confirm("You will lose " + Math.abs(pointLoss) + "points by skipping.\nAre you sure you want to continue?")) {
         fetch("https://codecyprus.org/th/api/skip?session=" + sessionID)
             .then(response => response.json())
             .then(responseJSON => {
@@ -547,7 +598,7 @@ function prepareQR() {
     main.appendChild(qrWindow);
 
     let exitBtn = document.createElement('button');
-    exitBtn.innerText = 'X';
+    exitBtn.innerText = '\u2573';
     exitBtn.id = 'exitBtn';
     exitBtn.addEventListener('click', function () {
         codeReader.reset();

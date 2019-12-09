@@ -40,12 +40,13 @@
 
 .outputMSG {
     padding: 10px;
-    position: absolute;
+    position: fixed;
     bottom: 10px;
-    right: 0;
+    right: 10px;
     opacity: 80%;
     max-width: 27%;
     animation: slide-up 0.4s ease;
+    z-index: 11;
 }
 .button {
     border: none;
@@ -62,12 +63,13 @@
 
 .submitButton {
     border: none;
-    margin: 3px 0;
+    border-radius: 5px;
+    width: 200px;
+    margin: 0 auto;
     padding: 15px 0;
-    width: 75%;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
+    display: block;
     font-size: 16px;
     cursor: pointer;
 }
@@ -124,7 +126,6 @@ input[type='text'], input[type='number'] {
     color: white;
     text-shadow: 4px 4px 4px black;
     text-align: center;
-    margin: 3% 10%;
 }
 
 #treasure {
@@ -182,6 +183,10 @@ input[type='text'], input[type='number'] {
 #goQuiz:active {
     box-shadow: none;
     transform: translate(3px, 3px);
+}
+
+.titleHeading {
+    margin: 3%;
 }
 
 header {
@@ -254,9 +259,9 @@ li.dropdown {
 
 #huntList {
     list-style-type: none;
-    margin: 0 10%;
+    margin: auto;
     padding: 0;
-    float: left;
+    max-width: 500px;
 }
 
 .accordion {
@@ -347,9 +352,8 @@ th {
     animation: slide-up 0.4s ease;
 }
 
-.qrWindow.removing {
+.removing {
     animation: slide-down 0.4s ease;
-    opacity: 0;
 }
 
 @keyframes slide-down {
@@ -406,10 +410,6 @@ th {
     max-width: 100%;
 }
 
-#usernameBox {
-    max-width: 80%;
-}
-
 .loader {
     margin: auto;
     border: solid #f3f3f3; /* Light grey */
@@ -421,14 +421,12 @@ th {
     border-width: 16px;
     width: 120px;
     height: 120px;
-
 }
 
 .loader-small {
     border-width: 4px;
     width: 20px;
     height: 20px;
-
 }
 
 .loader-dark {
@@ -454,6 +452,75 @@ main {
     margin: 3px auto;
 }
 
-#inputBox {
-    animation: slide-right 0.4s ease;
+.treasureHunt {
+    text-decoration: none;
+    color: black;
+}
+
+.treasureHuntCard {
+    background-color: #d8d6d6;
+    box-shadow: 5px 5px 9px #00000080;
+    margin: 10px 0;
+    border-radius: 5px;
+    padding-bottom: 5px;
+}
+
+.thName {
+    background-color: #e68a00;
+    margin: 0;
+    border-radius: 5px 5px 0 0;
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: large;
+}
+
+.thInfo {
+    list-style-type: none;
+    padding: 10px;
+}
+
+#usernamePopupBG {
+    position: fixed;
+    background-color: rgba(64, 64, 64, 0.3);
+    backdrop-filter: blur(2px);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+}
+
+#usernamePopup {
+    margin: 50% 15px;
+    background-color: #d8d6d6;
+    box-shadow: 5px 5px 9px #00000080;
+    max-width: 500px;
+    min-width: 250px;
+    min-height: 150px;
+    border-radius: 5px;
+    animation: slide-up 0.4s ease;
+}
+
+.closeButton {
+    float: right;
+    background: none;
+    border: none;
+    font-size: large;
+}
+
+#usernameForm {
+    padding: 30px;
+    margin: auto;
+}
+
+#usernameField {
+    margin-bottom: 10px;
+    width: -moz-available;
+    /*noinspection CssInvalidPropertyValue*/
+    width: -webkit-fill-available;
+}
+
+#formLabel {
+    font-weight: bold;
 }
