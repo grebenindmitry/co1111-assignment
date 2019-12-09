@@ -44,7 +44,7 @@
     bottom: 10px;
     right: 0;
     opacity: 80%;
-    max-width: 35%;
+    max-width: 27%;
     animation: slide-up 0.4s ease;
 }
 .button {
@@ -206,7 +206,7 @@ header {
     text-decoration: none;
     margin: 0 5px;
 }
-#linklistRow {
+.linklistRow {
     background-color: #bfbfbf;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
@@ -412,29 +412,31 @@ th {
 
 .loader {
     margin: auto;
-    border: 16px solid #f3f3f3; /* Light grey */
+    border: solid #f3f3f3; /* Light grey */
     border-radius: 50%;
     animation: spin 2s linear infinite;
 }
 
 .loader-big {
+    border-width: 16px;
     width: 120px;
     height: 120px;
 
 }
 
 .loader-small {
+    border-width: 4px;
     width: 20px;
     height: 20px;
 
 }
 
 .loader-dark {
-    border-top: 16px solid #865114;
+    border-top-color: #865114;
 }
 
 .loader-light {
-    border-top: 16px solid #e59d14;
+    border-top-color: #e59d14;
 }
 
 @keyframes spin {
