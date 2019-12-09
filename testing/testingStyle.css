@@ -7,6 +7,12 @@
 .heuristicTD{
     background-color:#fcffbe;
 }
+#marking{
+    text-align: right;
+}
+#marking2{
+    text-align: justify-all;
+}
 .exist{
     text-align: center;
     background-color:#fcffbe;
@@ -15,6 +21,16 @@
     text-align: center;
     text-decoration: underline;
     font-size: 65px;
+}
+#feedbacks{
+
+    border-bottom: 1px solid black;
+}
+.comments{
+    border-top: 2px solid dodgerblue;
+    border-bottom: 2px solid dodgerblue;
+    text-align: justify;
+
 }
 .headers{
     font-size: 50px;
@@ -32,10 +48,19 @@ p{
     float: right;
     margin-top: -20px;
 }
-img{
-    height: 300px;
-    width: 400px;
+.headings{
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    background-color: #bfbfbf;
+    color: black;
+    text-shadow: 1px 1px 1px white;
+
 }
+img{
+    height: 40%;
+    width: 40%;
+}
+
 .pic2{
     float: right;
 }
