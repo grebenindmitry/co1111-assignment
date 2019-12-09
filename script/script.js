@@ -395,16 +395,15 @@ function sendAnswer(answer, isTesting, tCorrect, tCompleted) {
                     document.getElementById('outputMSG').classList.remove('disable', 'error');
                     document.getElementById('outputMSG').classList.add('done');
                     document.getElementById('outputMSG').innerText = responseJSON.message;
-                    if (!isTesting) {
-                        window.setTimeout(getQuestion, 600);
-                    }
                 } else {
                     document.getElementById('outputMSG').classList.remove('disable', 'done');
                     document.getElementById('outputMSG').classList.add('error');
                     document.getElementById('outputMSG').innerText = responseJSON.message;
-                    if (!isTesting) {
-                        window.setTimeout(getQuestion, 600);
-                    }
+                }
+                if (!isTesting) {
+                    window.setTimeout(getQuestion, 600);
+                } else {
+                    document.getElementById('outputMSG').innerText += "\nLoad the question";
                 }
             } else {
                 document.getElementById('outputMSG').classList.remove('disable', 'done');
