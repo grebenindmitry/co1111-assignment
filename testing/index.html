@@ -5,13 +5,20 @@
     <title>Testing - TreasureHunt</title>
     <link rel="stylesheet" href="../style/style.css" type="text/css">
     <link rel="stylesheet" href="testingStyle.css" type="text/css">
+
 </head>
 <body>
+
 <h1 class="title">Testing page</h1>
 
 <h2 class="headers">Description of testing page:</h2>
 <p>We test all the sections of the Treasure Hunt.
-    We request and get data from the server and we implement the required functionalities.</p>
+    The user inputs data depends in which sector wants to test. After he enters the data
+    the results are output depending user's inputs. The 'Javascript' that is used for both
+    Testing & Actual page is the same. Before reaching each function, the function checkes
+    if it's in testing page or not. In this way, we can confirm that for each different input
+    that we enter, the code will run without any bugs.
+</p>
 <hr>
     <div style="font-size: 40px">
     <p>Enter number of TreasureHunts : </p>
@@ -49,12 +56,12 @@
     <hr>
      <p>Check leaderboard's functionaliies</p>
         <span>Size: </span><input type="number" id="sizes" name="sizes">
-        <p>Table sorted:</p>
+        <span>Table sorted:</span>
         <select id="sort">
             <option>TRUE</option>
             <option>FALSE</option>
         </select>
-        <p>Has Prize:</p>
+        <span>Has Prize:</span>
         <select id="prize">
             <option>TRUE</option>
             <option>FALSE</option>
