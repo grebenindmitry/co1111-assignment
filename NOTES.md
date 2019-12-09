@@ -73,3 +73,7 @@
  - Alexandros: testing
  - Charalambos: qr code
  - Dmitry: qr code
+ 
+ ### 09/12/2019
+ - Alexandros, Charalambos, Dmitry : fixes last changes (fuctionalities on buttons, stylings, testing plans)
+
