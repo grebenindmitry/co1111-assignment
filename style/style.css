@@ -490,8 +490,7 @@ main {
 }
 
 #usernamePopup {
-    margin: 50% auto;
-
+    margin: 40vh auto;
     background-color: #d8d6d6;
     box-shadow: 5px 5px 9px #00000080;
     max-width: 500px;
