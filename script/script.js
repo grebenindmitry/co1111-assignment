@@ -46,7 +46,7 @@ function getHuntList(isTesting, tNumberOfThs) {
                     nameElement.id = "thName" + i;
                     huntList.appendChild(nameElement);
                     nameElement.innerHTML = ("<a style='font-weight: bold;' href='javascript:enterUsername(\"" +
-                        treasureHunt.uuid + "\", \"" + nameElement.id + "\", \"" + endDateObj.toUTCString() + "\")'>" + treasureHunt.name + "</a>");
+                        treasureHunt.uuid + "\", \"" + nameElement.id + "\", \"" + treasureHunt.maxDuration + "\")'>" + treasureHunt.name + "</a>");
 
                     //Create and append sublist for hunt info
                     let subList  = document.createElement("ul");
@@ -66,8 +66,7 @@ function getHuntList(isTesting, tNumberOfThs) {
     }
 }
 // noinspection JSUnusedGlobalSymbols
-function startSession(uuid, expiryDate, isTesting, player) {
-
+function startSession(uuid, huntDuration, isTesting, player) {
     let username = document.getElementById('usernameBox').value;
     let fetchURL;
     if (!isTesting) {
@@ -98,15 +97,15 @@ function startSession(uuid, expiryDate, isTesting, player) {
                 document.getElementById('errorBox').classList.add('done');
                 document.getElementById('errorBox').innerText = "Session created!";
                 sessionID = jsonResponse.session;
-                document.cookie = 'gamePlaying=true; expires=' + expiryDate;
-                document.cookie = 'sessionID=' + sessionID + ';expires=' + expiryDate;
+                document.cookie = 'gamePlaying=true; max-age=' + (huntDuration / 1000);
+                document.cookie = 'sessionID=' + sessionID + ';max-age=' + (huntDuration / 1000);
                 startHunt();
             }
         });
     // getQuestion();
 }
 // noinspection JSUnusedGlobalSymbols
-function enterUsername(uuid, targetID, huntEndDate) {
+function enterUsername(uuid, targetID, huntDuration) {
     let target = document.getElementById(targetID);
     if (document.getElementById('inputBox') !== null) {
         document.getElementById('inputBox').remove();
@@ -115,7 +114,7 @@ function enterUsername(uuid, targetID, huntEndDate) {
     usernameInput.id = "inputBox";
     usernameInput.style.display = "inline-block";
     usernameInput.style.marginLeft = "10px";
-    usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\", \"" + huntEndDate + "\", false)'>" +
+    usernameInput.innerHTML =   "<form action='javascript:startSession(\"" + uuid + "\", \"" + huntDuration + "\", false)'>" +
                                         "<input id='usernameBox' type='text' placeholder='Enter your username' autofocus>" +
                                         "<input type='submit' value='Submit' style='' class='submitButton'>" +
                                 "</form>";
