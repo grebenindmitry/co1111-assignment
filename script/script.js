@@ -508,7 +508,7 @@ function endSession() {
     finalScore = document.getElementById('scoreBox').innerHTML.substring(15);
     clearInterval(geoLoop);
     main.innerHTML = "End of treasure hunt. Loading the leaderboard... <div style='margin-top: 30%' class=\"loader loader-big loader-dark\"></div>";
-    getLeaderboard()
+    getLeaderboard(false, 20)
 }
 
 function sendLocation() {
@@ -548,16 +548,16 @@ function getCookie(cookieName) {
     return "";
 }
 
-function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
+function getLeaderboard(isTesting, size, tSorted, tHasPrize) {
 
     let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/leaderboard?session=" + sessionID + "&sorted&limit=1000";
     } else {
-        fetchURL = TEST_API + "/leaderboard?sorted=" + tSorted + "&hasPrize=" + tHasPrize + "&size=" + tSize;
+        fetchURL = TEST_API + "/leaderboard?sorted=" + tSorted + "&hasPrize=" + tHasPrize + "&size=" + size;
         document.body.innerHTML += '<main></main>';
         main = document.getElementsByTagName('main')[0];
-        main.innerHTML = '<div class="loader loader-big"></div>'
+        main.innerHTML = '<div class="loader loader-big"></div>';
     }
 
     fetch(fetchURL)
@@ -596,7 +596,7 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
                 "<td>" + points + "</td>" +
                 "</tr>";
 
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < size; i++) {
                 let compTime = new Date(scores[i].completionTime);
                 tableOfScores += "<tr>" +
                     "<td>" + (i + 1) + "</td>" +
