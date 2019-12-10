@@ -158,7 +158,7 @@ function enterUsername(event) {
     usernameForm.appendChild(usernameField);
 
     let usernameSubmit = document.createElement('input');
-    usernameSubmit.innerText = 'Submit';
+    usernameSubmit.value = 'Submit';
     usernameSubmit.classList.add('submitButton');
     usernameSubmit.type = 'submit';
     usernameForm.appendChild(usernameSubmit);
@@ -313,7 +313,7 @@ function createAnswer(qType) {
             let booleanButtonFalse = document.createElement('button');
             let booleanButtons = document.createElement('div');
             booleanButtons.style.margin = 'auto';
-            booleanButtons.style.width = 'fit-content';
+            booleanButtons.style.width = 'max-content';
 
             booleanButtonFalse.innerHTML = "False";
             booleanButtonTrue.innerHTML = "True";
@@ -378,8 +378,7 @@ function createAnswer(qType) {
             let mcqD = document.createElement('button');
 
             mcqButtons.style.margin = 'auto';
-            mcqButtons.style.width = 'fit-content';
-
+            mcqButtons.style.width = 'max-content';
 
             mcqA.classList.add('button');
             mcqB.classList.add('button');
@@ -415,7 +414,7 @@ function createAnswer(qType) {
             textBox.type = 'text';
 
             let textSubmitButton = document.createElement('input');
-            textSubmitButton.innerText = 'Submit';
+            textSubmitButton.value = 'Submit';
             textSubmitButton.type = 'submit';
             textSubmitButton.classList.add('button');
             textSubmitButton.id = 'textButton';

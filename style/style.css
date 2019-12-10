@@ -155,8 +155,8 @@ input[type='text'], input[type='number'] {
     background-color: #fcffbe;
     border: 2px solid black;
     margin: auto;
+    padding: 10px;
     width: 80%;
-    padding-left: 2px;
 }
 
 #joker {
@@ -389,6 +389,10 @@ th {
 
 .cameraExit {
     display: block;
+    background: none;
+    border: none;
+    font-weight: bold;
+    font-size: x-large;
 }
 
 #skipBox, #errorSkip {
@@ -530,5 +534,10 @@ main {
 }
 #home{
     color: black;
+}
 
+@media screen and (max-width: 265px) {
+    #creators {
+        display: none;
+    }
 }
