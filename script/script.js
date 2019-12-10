@@ -1,6 +1,7 @@
 const API = "https://codecyprus.org/th/api";
 const TEST_API = "https://codecyprus.org/th/test-api";
-let sessionID = "";
+let sessionID;
+let username;
 let main = document.getElementsByTagName('main')[0];
 let geoLoop;
 
@@ -82,7 +83,7 @@ function getHuntList(isTesting, tNumberOfThs) {
     }
 }
 // noinspection JSUnusedGlobalSymbols
-function startSession(uuid, huntDuration, username, isTesting, tPlayer) {
+function startSession(uuid, huntDuration, isTesting, tPlayer) {
     let fetchURL;
     if (!isTesting) {
         fetchURL = API + "/start?player=" + username + "&app=dac-name&treasure-hunt-id=" + uuid;
@@ -114,6 +115,7 @@ function startSession(uuid, huntDuration, username, isTesting, tPlayer) {
                 sessionID = jsonResponse.session;
                 document.cookie = 'gamePlaying=true; max-age=' + (huntDuration / 1000);
                 document.cookie = 'sessionID=' + sessionID + ';max-age=' + (huntDuration / 1000);
+                document.cookie = 'username=' + username + ';max-age=' + (huntDuration / 1000);
                 startHunt();
             }
         });
@@ -141,8 +143,8 @@ function enterUsername(event) {
     usernameForm.addEventListener('submit', function () {
         let uuid = event.target.id.substring(4, 63);
         let huntDuration = event.target.id.substring(63);
-        let username = document.getElementById('usernameField').value;
-        startSession(uuid, huntDuration, username, false);
+        username = document.getElementById('usernameField').value;
+        startSession(uuid, huntDuration, false);
     });
 
     let formLabel = document.createElement('label');
@@ -546,7 +548,7 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
 
     let fetchURL;
     if (!isTesting) {
-        fetchURL = API + "/leaderboard?session=" + sessionID + "&sorted&limit=20";
+        fetchURL = API + "/leaderboard?session=" + sessionID + "&sorted&limit=1000";
     } else {
         fetchURL = TEST_API + "/leaderboard?sorted=" + tSorted + "&hasPrize=" + tHasPrize + "&size=" + tSize;
         document.body.innerHTML += '<main></main>';
@@ -564,6 +566,25 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
             let position = 'Pos.';
             let time = 'Time';
             let points = 'Score';
+            main.innerHTML = '';
+
+            let userPosition = 'below 1000';
+
+            for (let i = 0; i < scores.length; i++) {
+                if (scores[i].player === username) {
+                    if (i % 10 === 1) userPosition = i + 'st';
+                    else if (i % 10 === 2) userPosition = i + 'nd';
+                    else if (i % 10 === 3) userPosition = i + 'rd';
+                    else userPosition = i + 'th';
+                }
+            }
+
+            let congratulationsMSG = document.createElement('div');
+            congratulationsMSG.innerHTML = '<h3>Congratualtions, ' + getCookie('username') + '! You have completed the treasure hunt.</h3>';
+            congratulationsMSG.innerHTML += '<h4>You have placed ' + userPosition + '!</h4>';
+
+            main.appendChild(congratulationsMSG);
+
             let tableOfScores = "<table>";
 
             tableOfScores += "<tr style='border: 2px solid black; background-color:#666666;font-weight: bold; color: white;'>" +
@@ -573,21 +594,19 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
                 "<td>" + points + "</td>" +
                 "</tr>";
 
-            let i = 1;
-            for (score of scores) {
-                let compTime = new Date(score.completionTime);
+            for (let i = 0; i < 20; i++) {
+                let compTime = new Date(scores[i].completionTime);
                 tableOfScores += "<tr>" +
-                    "<td>" + i + "</td>" +
-                    "<td>" + score.player + "</td>" +
+                    "<td>" + (i + 1) + "</td>" +
+                    "<td>" + scores[i].player + "</td>" +
                     "<td>" + moment(compTime).format('MMM D YYYY, HH:mm:ss') + "</td>" +
-                    "<td>" + score.score + "</td>" +
+                    "<td>" + scores[i].score + "</td>" +
                     "</tr>";
-                i++;
             }
 
             tableOfScores += "</table>";
 
-            main.innerHTML = tableOfScores;
+            main.innerHTML += tableOfScores;
         });
 }
 

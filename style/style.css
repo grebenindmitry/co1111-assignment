@@ -527,13 +527,12 @@ main {
 #formLabel {
     font-weight: bold;
 }
-.homeRight{
+#homeRight{
     float: right;
-    font-size: 32px;
-
 }
 #home{
     color: black;
+    font-size: 32px;
 }
 
 @media screen and (max-width: 265px) {
