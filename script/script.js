@@ -184,15 +184,11 @@ function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
         main.appendChild(questionInfo);
     }
 
-    let scoreBox = document.createElement('span');
-    scoreBox.innerHTML = '<div class="loader loader-small loader-light"></div>';
-    scoreBox.classList.add('scoreBox');
-    document.getElementById('questionInfo').appendChild(scoreBox);
     fetch(fetchURL)
         .then(response => response.json())
         .then(scoreJSON => {
             if (scoreJSON.status !== 'ERROR') {
-                scoreBox.innerText = 'Your score is: ' + scoreJSON.score;
+                document.getElementById('scoreBox').innerText = 'Your score is: ' + scoreJSON.score;
             }
         });
 }
@@ -285,6 +281,12 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                         'Incorrect answer: ' + responseJSON.wrongScore + ' points\n' +
                         'Skip: ' + responseJSON.skipScore + ' points';
                     questionInfo.appendChild(scoresBox);
+
+                    let scoreBox = document.createElement('span');
+                    scoreBox.innerHTML = '<div class="loader loader-small loader-light"></div>';
+                    scoreBox.classList.add('scoreBox');
+                    scoreBox.id = 'scoreBox';
+                    questionInfo.appendChild(scoreBox);
 
                     let outputMSG = document.createElement('span');
                     outputMSG.id = 'outputMSG';
@@ -456,6 +458,7 @@ function sendAnswer(answer, isTesting, tCorrect, tCompleted) {
                     document.getElementById('outputMSG').classList.remove('disable', 'done');
                     document.getElementById('outputMSG').classList.add('error');
                     document.getElementById('outputMSG').innerText = responseJSON.message;
+                    showScore(false);
                 }
             } else {
                 document.getElementById('outputMSG').classList.remove('disable', 'done');
