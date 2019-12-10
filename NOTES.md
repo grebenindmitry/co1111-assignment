@@ -59,18 +59,9 @@
  - Charalambos: create and manage social media accounts(Twitter, Facebook, Instagram), 
      create and complete heuristic table on testing page.
  - Dmitry: fixes QR code and some bugs.
-          
-   
-### 04/12/2019
-
-   - Alexandros: new testing, created testing for all sectors(same js),new page testing
-     all the testings fuctionalities
-     - Charalambos: create and manage social media accounts(Twitter, Facebook, Instagram), 
-     create and complete heuristic table on testing page.
-    -Dmitry : fixes QR code and some bugs.
-    
+              
  ### 05/12/2019
- - Alexandros: testing
+ - Alexandros: further work on testing
  - Charalambos: qr code
  - Dmitry: qr code
  
