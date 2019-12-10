@@ -3,7 +3,7 @@
 ## Roles
 - Alexandros Christou: Social media, web development, CSS design
 - Dmitry Grebenin: Web development
-- Charalampos Mouskovia: Web development, design
+- Charalampos Mouskovia: Web development, media
 
 
 ### 07/11/2019
