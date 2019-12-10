@@ -3,6 +3,7 @@ const TEST_API = "https://codecyprus.org/th/test-api";
 let sessionID;
 let username;
 let main = document.getElementsByTagName('main')[0];
+let finalScore;
 let geoLoop;
 
 function getHuntList(isTesting, tNumberOfThs) {
@@ -183,6 +184,11 @@ function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
         main = document.getElementsByTagName('main')[0];
         let questionInfo = document.createElement('div');
         questionInfo.id = 'questionInfo';
+        let scoreBox = document.createElement('span');
+        scoreBox.innerHTML = '<div class="loader loader-small loader-light"></div>';
+        scoreBox.classList.add('scoreBox');
+        scoreBox.id = 'scoreBox';
+        questionInfo.appendChild(scoreBox);
         main.appendChild(questionInfo);
     }
 
@@ -198,6 +204,8 @@ function showScore(isTesting, tScore, tCompleted, tFinished, tError) {
 function startHunt() {
     document.getElementsByTagName('main')[0].innerHTML = "";
     getQuestion(false);
+    sendLocation();
+    geoLoop = setInterval(sendLocation, 31000);
 }
 
 function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tRequireLocation) {
@@ -298,11 +306,6 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                     main.appendChild(questionInfo);
 
                     showScore(false);
-
-                    if (geoLoop === undefined) {
-                        sendLocation();
-                        geoLoop = setInterval(sendLocation, 31000);
-                    }
                 } else {
                     endSession();
                 }
@@ -502,8 +505,9 @@ function skipQuestion(pointLoss) {
 function endSession() {
     document.cookie = 'gamePlaying=; expires=Thu 01 Jan 1970';
     document.cookie = 'sessionID=; expires=Thu 01 Jan 1970';
+    finalScore = document.getElementById('scoreBox').innerHTML.substring(15);
+    clearInterval(geoLoop);
     main.innerHTML = "End of treasure hunt. Loading the leaderboard... <div style='margin-top: 30%' class=\"loader loader-big loader-dark\"></div>";
-    console.log('end');
     getLeaderboard()
 }
 
@@ -559,9 +563,7 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
     fetch(fetchURL)
         .then(response => response.json())
         .then(responseJSON => {
-            console.log(responseJSON);
             let scores = responseJSON.leaderboard;
-            //console.log(score);
             let players ='Player';
             let position = 'Pos.';
             let time = 'Time';
@@ -581,7 +583,7 @@ function getLeaderboard(isTesting, tSize, tSorted, tHasPrize) {
 
             let congratulationsMSG = document.createElement('div');
             congratulationsMSG.innerHTML = '<h3>Congratualtions, ' + getCookie('username') + '! You have completed the treasure hunt.</h3>';
-            congratulationsMSG.innerHTML += '<h4>You have placed ' + userPosition + '!</h4>';
+            congratulationsMSG.innerHTML += '<h4>You have placed ' + userPosition + ', with a score of ' + finalScore + '!</h4>';
 
             main.appendChild(congratulationsMSG);
 
