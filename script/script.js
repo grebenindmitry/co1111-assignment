@@ -243,7 +243,7 @@ function getQuestion(isTesting, tQuestionType, tIsCompleted, tCanBeSkipped, tReq
                         skipBox.value="SKIP";
                         skipBox.name="SKIP";
                         skipBox.addEventListener('click', function () {
-                            skipQuestion();
+                            skipQuestion(responseJSON.skipScore);
                         });
                     } else {
                         let errorSkip = document.createElement("span");
@@ -470,7 +470,7 @@ function sendAnswer(answer, isTesting, tCorrect, tCompleted) {
 }
 
 function skipQuestion(pointLoss) {
-    if (confirm("You will lose " + Math.abs(pointLoss) + "points by skipping.\nAre you sure you want to continue?")) {
+    if (confirm("You will lose " + Math.abs(pointLoss) + " points by skipping.\nAre you sure you want to continue?")) {
         fetch("https://codecyprus.org/th/api/skip?session=" + sessionID)
             .then(response => response.json())
             .then(responseJSON => {
